@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2 - Raices de Ecuaciones</title>
+  <link rel="stylesheet" href="Raicesstyle.css">
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../index.html" class="back-link">← Volver al inicio</a>
+      <span class="badge">Persona 2</span>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Desafio Final de Metodos Numericos</p>
+      <h1>Modulo 2: Raices de Ecuaciones</h1>
+
+      <p class="hero-text">
+        Este modulo busca encontrar el dia exacto donde una crisis de precios,
+        abastecimiento y gasto familiar llega a un punto critico.
+      </p>
+
+      <div class="formula-box">
+        f(x) = ∫ C(t) dt - L = 0
+      </div>
+
+      <p class="hero-text">
+        La raiz representa el dia donde el costo acumulado alcanza el limite
+        permitido. Para resolverlo se usaran Biseccion, Newton-Raphson y Secante.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card context-card">
+      <p class="eyebrow dark">Contexto del ejercicio</p>
+      <h2>¿De que trata este modulo?</h2>
+
+      <p>
+        El problema representa una situacion donde los precios de productos
+        basicos aumentan con el paso de los dias. Este aumento puede deberse a
+        escasez, rumores de desabastecimiento, compras por panico, bloqueo de
+        rutas, reduccion de stock y perdida del poder adquisitivo familiar.
+      </p>
+
+      <p>
+        Para analizar esta situacion no se usa una funcion simple. Se usa un
+        modelo mas completo basado en el costo diario C(x), su acumulacion por
+        medio de una integral y su derivada para aplicar Newton-Raphson.
+      </p>
+
+      <div class="context-grid">
+        <div class="context-box">
+          <h3>Funcion diaria</h3>
+          <p>
+            C(x) representa el gasto diario en el dia x. Puede crecer por
+            aumento de precios, rumores, escasez o panico de compra.
+          </p>
+        </div>
+
+        <div class="context-box">
+          <h3>Funcion acumulada</h3>
+          <p>
+            f(x) = ∫ C(t) dt - L representa el gasto acumulado menos el limite
+            economico permitido.
+          </p>
+        </div>
+
+        <div class="context-box">
+          <h3>Punto critico</h3>
+          <p>
+            Cuando f(x)=0, el gasto acumulado iguala al limite. Ese valor de x
+            es el dia critico.
+          </p>
+        </div>
+      </div>
+
+      <div class="model-box">
+        <h3>Modelo general</h3>
+        <p class="model-formula">f(x) = ∫ C(t) dt - L</p>
+        <p class="model-formula green">f'(x) = C(x)</p>
+
+        <ul>
+          <li><strong>x:</strong> dias transcurridos desde el inicio de la crisis.</li>
+          <li><strong>C(x):</strong> costo diario instantaneo.</li>
+          <li><strong>∫ C(t) dt:</strong> costo acumulado hasta el dia x.</li>
+          <li><strong>L:</strong> limite economico permitido.</li>
+          <li><strong>f(x)=0:</strong> punto critico del sistema.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card intro-card">
+      <div>
+        <p class="eyebrow dark">Presentacion</p>
+        <h2>¿Que se realizara?</h2>
+        <p>
+          Se compararan tres escenarios: estado ideal, crisis moderada y crisis
+          critica. Cada caso tendra una funcion diferente, pero todos buscan el
+          mismo objetivo: encontrar el valor de x donde f(x)=0.
+        </p>
+      </div>
+
+      <div class="summary-grid">
+        <div class="mini-card">
+          <span>3</span>
+          <p>Casos</p>
+        </div>
+        <div class="mini-card">
+          <span>3</span>
+          <p>Metodos</p>
+        </div>
+        <div class="mini-card">
+          <span>∫ + f'</span>
+          <p>Integral y derivada</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Casos del modulo</p>
+      <h2>Escenarios que se analizaran</h2>
+
+      <div class="case-selector">
+        <button class="case-button active" data-case="ideal">Caso I: Estado ideal</button>
+        <button class="case-button" data-case="moderado">Caso II: Crisis moderada</button>
+        <button class="case-button" data-case="critico">Caso III: Crisis critica</button>
+      </div>
+
+      <div class="case-detail">
+        <div class="case-info">
+          <h3 id="caseTitle"></h3>
+          <p id="caseDescription"></p>
+
+          <div class="function-card">
+            <p>Funcion diaria C(x)</p>
+            <h4 id="dailyFunction"></h4>
+          </div>
+
+          <div class="function-card blue-card">
+            <p>Funcion acumulada f(x)</p>
+            <h4 id="caseFunction"></h4>
+          </div>
+
+          <div class="function-card green-card">
+            <p>Derivada para Newton-Raphson</p>
+            <h4 id="caseDerivative"></h4>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <h3>Resultado aproximado</h3>
+          <p class="big-number" id="approxRoot"></p>
+          <p id="rootInterpretation"></p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="card justification-card">
+      <p class="eyebrow dark">Justificacion de datos</p>
+      <h2>¿Por que se eligieron estos numeros?</h2>
+
+      <p id="justificationText"></p>
+
+      <div class="numbers-grid">
+        <div class="number-card">
+          <span id="valueBase"></span>
+          <p id="textBase"></p>
+        </div>
+
+        <div class="number-card">
+          <span id="valueLineal"></span>
+          <p id="textLineal"></p>
+        </div>
+
+        <div class="number-card">
+          <span id="valueAceleracion"></span>
+          <p id="textAceleracion"></p>
+        </div>
+
+        <div class="number-card">
+          <span id="valueLog"></span>
+          <p id="textLog"></p>
+        </div>
+
+        <div class="number-card">
+          <span id="valueExp"></span>
+          <p id="textExp"></p>
+        </div>
+
+        <div class="number-card">
+          <span id="valueSin"></span>
+          <p id="textSin"></p>
+        </div>
+
+        <div class="number-card limit-card">
+          <span id="valueLimit"></span>
+          <p id="textLimit"></p>
+        </div>
+      </div>
+
+      <div class="conclusion-box">
+        <h3>Interpretacion del caso</h3>
+        <p id="caseConclusion"></p>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Visualizacion</p>
+      <h2>Grafica 3D aproximada del punto critico</h2>
+
+      <div class="graph-card">
+        <canvas id="rootGraph"></canvas>
+      </div>
+
+      <p class="graph-note">
+        La grafica representa la funcion acumulada f(x). El punto rojo marca
+        la raiz aproximada, es decir, el dia donde el sistema llega al limite.
+      </p>
+    </section>
+<section class="card comparison-card">
+  <p class="eyebrow dark">Comparativa de Metodos Numericos</p>
+  <h2>Comparacion de resultados por escenario</h2>
+
+  <p>
+    En esta seccion se comparan los tres metodos de raices aplicados al mismo
+    escenario. La raiz representa el dia aproximado donde el gasto acumulado
+    llega al limite permitido.
+  </p>
+
+  <div class="compare-toolbar">
+    <label for="comparisonCase">Escenario:</label>
+
+    <select id="comparisonCase">
+      <option value="ideal">Caso I: Estado ideal</option>
+      <option value="moderado">Caso II: Crisis moderada</option>
+      <option value="critico" selected>Caso III: Crisis critica</option>
+    </select>
+
+    <button id="btnCompararMetodos" class="compare-btn">
+      Comparar todos los metodos
+    </button>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Metodo</th>
+          <th>Iteraciones</th>
+          <th>Convergio</th>
+          <th>Raiz x</th>
+          <th>f(x)</th>
+          <th>Error</th>
+        </tr>
+      </thead>
+
+      <tbody id="tablaComparacionMetodos">
+        <!-- Se llena con JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comparison-summary" id="comparisonSummary">
+    Selecciona un escenario y presiona comparar.
+  </div>
+</section>
+    
+
+    <section class="card">
+      <p class="eyebrow dark">Metodos obligatorios</p>
+      <h2>Selecciona el metodo</h2>
+
+      <div class="methods-grid">
+        <article class="method-card">
+          <div class="method-icon">1</div>
+          <h3>Biseccion</h3>
+          <p>
+            Metodo seguro que trabaja con un intervalo [a,b] donde existe
+            cambio de signo.
+          </p>
+          <ul>
+            <li>Usa intervalo inicial.</li>
+            <li>Es estable.</li>
+            <li>Puede ser mas lento.</li>
+          </ul>
+          <a href="BISECCION/Biseccionindex.html" class="btn">Abrir Biseccion</a>
+        </article>
+
+        <article class="method-card">
+          <div class="method-icon">2</div>
+          <h3>Newton-Raphson</h3>
+          <p>
+            Metodo rapido que usa la derivada f'(x). En este modelo,
+            f'(x)=C(x), o sea el costo diario.
+          </p>
+          <ul>
+            <li>Usa un valor inicial.</li>
+            <li>Necesita derivada.</li>
+            <li>Converge rapido.</li>
+          </ul>
+          <a href="NEWTON_RAPHSON/Newtonindex.html" class="btn">Abrir Newton</a>
+        </article>
+
+        <article class="method-card">
+          <div class="method-icon">3</div>
+          <h3>Secante</h3>
+          <p>
+            Metodo parecido a Newton, pero no necesita derivada. Usa dos
+            puntos iniciales.
+          </p>
+          <ul>
+            <li>Usa dos valores iniciales.</li>
+            <li>No requiere derivada.</li>
+            <li>Sirve para comparar.</li>
+          </ul>
+          <a href="SECANTE/Secanteindex.html" class="btn">Abrir Secante</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Comparacion</p>
+      <h2>Comparativa teorica de metodos</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Metodo</th>
+              <th>Datos que necesita</th>
+              <th>Ventaja</th>
+              <th>Desventaja</th>
+              <th>Aplicacion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Biseccion</td>
+              <td>Intervalo [a,b]</td>
+              <td>Muy seguro</td>
+              <td>Mas lento</td>
+              <td>Verificar punto critico</td>
+            </tr>
+            <tr>
+              <td>Newton-Raphson</td>
+              <td>x inicial y f'(x)</td>
+              <td>Rapido</td>
+              <td>Depende del valor inicial</td>
+              <td>Usa f'(x)=C(x)</td>
+            </tr>
+            <tr>
+              <td>Secante</td>
+              <td>Dos puntos iniciales</td>
+              <td>No necesita derivada</td>
+              <td>Puede fallar si los puntos son malos</td>
+              <td>Comparar convergencia</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card analysis-card">
+      <h2>Analisis general</h2>
+      <p>
+        Este modulo permite encontrar puntos criticos usando raices de
+        ecuaciones. El modelo es mas completo porque usa integral, derivada,
+        logaritmos, exponenciales y seno para representar mejor una crisis real.
+      </p>
+      <p>
+        Mientras menor sea el valor de la raiz, mas rapido llega el sistema al
+        limite. Por eso el caso critico es el mas peligroso.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Modulo 2 - Raices de Ecuaciones | Biseccion, Newton-Raphson y Secante</p>
+  </footer>
+
+  <script src="Raicesapp.js"></script>
+</body>
+</html>

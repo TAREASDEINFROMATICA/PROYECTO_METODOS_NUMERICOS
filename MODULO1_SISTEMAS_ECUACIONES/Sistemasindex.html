@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Métodos Numéricos – Crisis de Abastecimiento Bolivia 2026</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- HEADER -->
+      <header>
+        <h1>🔢 Métodos Numéricos</h1>
+        <p class="subtitle">
+          Simulación de la Crisis de Abastecimiento en Bolivia – 2026
+        </p>
+        <p class="contexto">
+          Proyecto Final • Módulo 2: Jacobi, Gauss‑Seidel, SOR, LU, Gradiente
+          Conjugado
+        </p>
+      </header>
+
+      <!-- MAPA DE NODOS -->
+      <div class="map-container">
+        <div class="map-title">
+          📍 Red de Distribución de Combustibles – La Paz, Bolivia
+        </div>
+        <svg
+          viewBox="0 0 700 350"
+          width="100%"
+          style="max-width: 750px; margin: 0 auto"
+        >
+          <defs>
+            <marker
+              id="arrow"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="5"
+              markerHeight="5"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#3498db" />
+            </marker>
+          </defs>
+          <!-- Rutas -->
+          <line
+            class="flow-line"
+            x1="130"
+            y1="100"
+            x2="320"
+            y2="140"
+            stroke="#3498db"
+            stroke-width="2.5"
+            fill="none"
+            marker-end="url(#arrow)"
+          />
+          <line
+            class="flow-line"
+            x1="130"
+            y1="100"
+            x2="320"
+            y2="210"
+            stroke="#3498db"
+            stroke-width="2"
+            fill="none"
+            marker-end="url(#arrow)"
+          />
+          <line
+            class="flow-line"
+            x1="130"
+            y1="210"
+            x2="320"
+            y2="140"
+            stroke="#f39c12"
+            stroke-width="2.5"
+            fill="none"
+            marker-end="url(#arrow)"
+          />
+          <line
+            class="flow-line"
+            x1="130"
+            y1="210"
+            x2="320"
+            y2="280"
+            stroke="#f39c12"
+            stroke-width="2"
+            fill="none"
+            marker-end="url(#arrow)"
+          />
+          <line
+            class="flow-line"
+            x1="250"
+            y1="280"
+            x2="320"
+            y2="210"
+            stroke="#2ecc71"
+            stroke-width="2.5"
+            fill="none"
+            marker-end="url(#arrow)"
+          />
+          <line
+            class="flow-line"
+            x1="250"
+            y1="280"
+            x2="320"
+            y2="140"
+            stroke="#2ecc71"
+            stroke-width="2"
+            fill="none"
+            marker-end="url(#arrow)"
+          />
+
+          <!-- Plantas -->
+          <g class="plant-node">
+            <circle
+              cx="130"
+              cy="100"
+              r="30"
+              fill="#eaf2f8"
+              stroke="#3498db"
+              stroke-width="2"
+            />
+            <text
+              x="130"
+              y="95"
+              text-anchor="middle"
+              font-size="12"
+              font-weight="bold"
+              fill="#2980b9"
+            >
+              ⛽
+            </text>
+            <text
+              x="130"
+              y="110"
+              text-anchor="middle"
+              font-size="10"
+              font-weight="600"
+              fill="#2c3e50"
+            >
+              SENKATA
+            </text>
+            <text
+              x="130"
+              y="135"
+              text-anchor="middle"
+              font-size="9"
+              fill="#7f8c8d"
+            >
+              El Alto
+            </text>
+          </g>
+          <g class="plant-node">
+            <circle
+              cx="130"
+              cy="210"
+              r="30"
+              fill="#fef5e7"
+              stroke="#f39c12"
+              stroke-width="2"
+            />
+            <text
+              x="130"
+              y="205"
+              text-anchor="middle"
+              font-size="12"
+              font-weight="bold"
+              fill="#d68910"
+            >
+              🚛
+            </text>
+            <text
+              x="130"
+              y="220"
+              text-anchor="middle"
+              font-size="10"
+              font-weight="600"
+              fill="#2c3e50"
+            >
+              PALMASOLA
+            </text>
+            <text
+              x="130"
+              y="245"
+              text-anchor="middle"
+              font-size="9"
+              fill="#7f8c8d"
+            >
+              Santa Cruz
+            </text>
+          </g>
+          <g class="plant-node">
+            <circle
+              cx="250"
+              cy="280"
+              r="30"
+              fill="#e8f8f5"
+              stroke="#2ecc71"
+              stroke-width="2"
+            />
+            <text
+              x="250"
+              y="275"
+              text-anchor="middle"
+              font-size="12"
+              font-weight="bold"
+              fill="#27ae60"
+            >
+              🔥
+            </text>
+            <text
+              x="250"
+              y="290"
+              text-anchor="middle"
+              font-size="10"
+              font-weight="600"
+              fill="#2c3e50"
+            >
+              G. VILLARROEL
+            </text>
+            <text
+              x="250"
+              y="315"
+              text-anchor="middle"
+              font-size="9"
+              fill="#7f8c8d"
+            >
+              Cochabamba
+            </text>
+          </g>
+
+          <!-- Zonas La Paz -->
+          <g class="zone-node">
+            <rect
+              x="318"
+              y="115"
+              width="95"
+              height="50"
+              rx="8"
+              fill="#e8f8f5"
+              stroke="#2ecc71"
+              stroke-width="1.5"
+            />
+            <text
+              x="365"
+              y="136"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#27ae60"
+            >
+              NORTE
+            </text>
+            <text
+              x="365"
+              y="152"
+              text-anchor="middle"
+              font-size="10"
+              fill="#555"
+            >
+              Zona Norte
+            </text>
+          </g>
+          <g class="zone-node">
+            <rect
+              x="318"
+              y="185"
+              width="95"
+              height="50"
+              rx="8"
+              fill="#eaf2f8"
+              stroke="#3498db"
+              stroke-width="1.5"
+            />
+            <text
+              x="365"
+              y="206"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#2980b9"
+            >
+              CENTRO
+            </text>
+            <text
+              x="365"
+              y="222"
+              text-anchor="middle"
+              font-size="10"
+              fill="#555"
+            >
+              Centro
+            </text>
+          </g>
+          <g class="zone-node">
+            <rect
+              x="318"
+              y="255"
+              width="95"
+              height="50"
+              rx="8"
+              fill="#fdedec"
+              stroke="#e74c3c"
+              stroke-width="1.5"
+            />
+            <text
+              x="365"
+              y="276"
+              text-anchor="middle"
+              font-weight="bold"
+              fill="#c0392b"
+            >
+              SUR
+            </text>
+            <text
+              x="365"
+              y="292"
+              text-anchor="middle"
+              font-size="10"
+              fill="#555"
+            >
+              Zona Sur
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- ESCENARIOS -->
+      <div class="card">
+        <h2>📋 Escenarios de Crisis</h2>
+        <div class="scenario-tabs">
+          <div class="scenario-tab active" onclick="switchScenario(0)">
+            ✅ Caso I: Ideal
+          </div>
+          <div class="scenario-tab" onclick="switchScenario(1)">
+            ⚠️ Caso II: Moderado
+          </div>
+          <div class="scenario-tab" onclick="switchScenario(2)">
+            🚨 Caso III: Crítico
+          </div>
+        </div>
+
+        <div class="scenario-content active" id="scenario0">
+          <p>
+            <strong>Sin bloqueos.</strong> Plantas operando normalmente. Matriz
+            con dominancia diagonal estricta.
+          </p>
+          <div class="matrix-eq">
+            <div>
+              <span class="coeff">5</span><span class="var">x₁</span> +
+              <span class="coeff">1</span><span class="var">x₂</span> +
+              <span class="coeff">1</span><span class="var">x₃</span> =
+              <span class="rhs">23</span> &nbsp;(Senkata)
+            </div>
+            <div>
+              <span class="coeff">1</span><span class="var">x₁</span> +
+              <span class="coeff">4</span><span class="var">x₂</span> +
+              <span class="coeff">1</span><span class="var">x₃</span> =
+              <span class="rhs">24</span> &nbsp;(Palmasola)
+            </div>
+            <div>
+              <span class="coeff">2</span><span class="var">x₁</span> +
+              <span class="coeff">1</span><span class="var">x₂</span> +
+              <span class="coeff">6</span><span class="var">x₃</span> =
+              <span class="rhs">31</span> &nbsp;(G. Villarroel)
+            </div>
+          </div>
+          <p style="margin-top: 10px">
+            <strong>Variables:</strong> <span class="var">x₁</span> = Gasolina
+            (mil m³), <span class="var">x₂</span> = Diésel,
+            <span class="var">x₃</span> = GNV.
+          </p>
+        </div>
+        <div class="scenario-content" id="scenario1">
+          <p>
+            <strong>Bloqueo parcial en Senkata.</strong> Su capacidad se reduce
+            significativamente. La matriz pierde dominancia diagonal.
+          </p>
+          <div class="matrix-eq">
+            <div>
+              <span class="coeff">2</span><span class="var">x₁</span> +
+              <span class="coeff">1</span><span class="var">x₂</span> +
+              <span class="coeff">1</span><span class="var">x₃</span> =
+              <span class="rhs">14</span> &nbsp;(Senkata afectada)
+            </div>
+            <div>
+              <span class="coeff">1</span><span class="var">x₁</span> +
+              <span class="coeff">4</span><span class="var">x₂</span> +
+              <span class="coeff">1</span><span class="var">x₃</span> =
+              <span class="rhs">24</span> &nbsp;(Palmasola)
+            </div>
+            <div>
+              <span class="coeff">2</span><span class="var">x₁</span> +
+              <span class="coeff">1</span><span class="var">x₂</span> +
+              <span class="coeff">6</span><span class="var">x₃</span> =
+              <span class="rhs">31</span> &nbsp;(G. Villarroel)
+            </div>
+          </div>
+        </div>
+        <div class="scenario-content" id="scenario2">
+          <p>
+            <strong>Bloqueo total – Crisis nacional.</strong> Los coeficientes
+            son casi idénticos (matriz mal condicionada). Los métodos iterativos
+            estándar fallan.
+          </p>
+          <div class="matrix-eq">
+            <div>
+              <span class="coeff">1.00</span><span class="var">x₁</span> +
+              <span class="coeff">0.99</span><span class="var">x₂</span> +
+              <span class="coeff">0.98</span><span class="var">x₃</span> =
+              <span class="rhs">2.97</span>
+            </div>
+            <div>
+              <span class="coeff">0.99</span><span class="var">x₁</span> +
+              <span class="coeff">1.00</span><span class="var">x₂</span> +
+              <span class="coeff">0.99</span><span class="var">x₃</span> =
+              <span class="rhs">2.98</span>
+            </div>
+            <div>
+              <span class="coeff">0.98</span><span class="var">x₁</span> +
+              <span class="coeff">0.99</span><span class="var">x₂</span> +
+              <span class="coeff">1.00</span><span class="var">x₃</span> =
+              <span class="rhs">2.97</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARATIVA DE MÉTODOS -->
+      <div class="card">
+        <h2>📊 Comparativa de Métodos Numéricos</h2>
+        <div class="control-row">
+          <div class="control-group">
+            <label>Escenario</label>
+            <select id="compScenario">
+              <option value="0">Caso I: Ideal</option>
+              <option value="1">Caso II: Moderado</option>
+              <option value="2">Caso III: Crítico</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="runComparison()">
+            🔄 Comparar todos los métodos
+          </button>
+        </div>
+        <div style="overflow-x: auto">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Método</th>
+                <th>Iteraciones</th>
+                <th>Convergió</th>
+                <th>x₁ Gasolina</th>
+                <th>x₂ Diésel</th>
+                <th>x₃ GNV</th>
+              </tr>
+            </thead>
+            <tbody id="comparisonBody">
+              <tr>
+                <td colspan="6">
+                  Presiona "Comparar todos los métodos" para ver resultados.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ANÁLISIS LU -->
+      <div class="card" id="luCard" style="display: none">
+        <h2>🔍 Análisis del Método LU (Factorización Doolittle)</h2>
+        <div class="lu-grid">
+          <div>
+            <h3>Matriz L</h3>
+            <div class="matrix-print" id="matrizL"></div>
+          </div>
+          <div>
+            <h3>Matriz U</h3>
+            <div class="matrix-print" id="matrizU"></div>
+          </div>
+        </div>
+        <div class="interpretacion" id="analisisLU"></div>
+      </div>
+
+      <!-- ACCESO A MÓDULOS -->
+      <div class="card">
+        <h2>📁 Módulos del Proyecto</h2>
+        <div class="method-grid">
+          <div
+            class="method-card"
+            onclick="window.open('JACOBI/Jacobiindex.html', '_blank')"
+          >
+            <h3>🔢 Jacobi</h3>
+            <p>Método iterativo clásico</p>
+          </div>
+          <div
+            class="method-card"
+            onclick="window.open('SEIDEL/Seidelindex.html', '_blank')"
+          >
+            <h3>⚡ Gauss‑Seidel</h3>
+            <p>Convergencia acelerada</p>
+          </div>
+          <div
+            class="method-card"
+            onclick="window.open('SOR/Sorindex.html', '_blank')"
+          >
+            <h3>🔄 SOR</h3>
+            <p>Sobrerelajación óptima</p>
+          </div>
+          <div
+            class="method-card"
+            onclick="window.open('LU/LU.html', '_blank')"
+          >
+            <h3>🔺 Factorización LU</h3>
+            <p>Solución directa exacta</p>
+          </div>
+          <div
+            class="method-card"
+            onclick="window.open('GCP/Gradienteindex.html', '_blank')"
+          >
+            <h3>🧠 Gradiente Conjugado</h3>
+            <p>Para sistemas mal condicionados</p>
+          </div>
+        </div>
+        <p style="margin-top: 15px; font-size: 0.9rem; color: #666">
+          Haz clic en cualquier tarjeta para abrir el módulo correspondiente en
+          una nueva pestaña.
+        </p>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

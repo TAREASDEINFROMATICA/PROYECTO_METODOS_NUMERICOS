@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>
+      Método de Gauss-Seidel - Crisis de Abastecimiento Bolivia 2026
+    </title>
+
+    <link rel="stylesheet" href="Seidelstyle.css" />
+
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>Escenario A: Optimización del Abastecimiento de Combustible</h1>
+
+        <p class="subtitle">
+          Resolución mediante Método Iterativo de Gauss-Seidel
+        </p>
+      </header>
+
+      <section class="config-panel">
+        <h2>Configuración de la Red de Suministro</h2>
+
+        <p>
+          Analice el comportamiento del método de Gauss-Seidel bajo diferentes
+          condiciones logísticas inspiradas en la crisis de abastecimiento
+          ocurrida en Bolivia.
+        </p>
+
+        <div class="preset-buttons">
+          <button id="btn-ideal" class="btn active">
+            Caso I: Estado Ideal
+          </button>
+
+          <button id="btn-moderado" class="btn btn-warning">
+            Caso II: Crisis Moderada
+          </button>
+
+          <button id="btn-critico" class="btn btn-danger">
+            Caso III: Crisis Crítica
+          </button>
+        </div>
+
+        <div class="matrix-container">
+          <div class="matrix-row">
+            <span>Planta Senkata</span>
+
+            <input type="number" id="a11" value="5" />
+
+            x₁ +
+
+            <input type="number" id="a12" value="1" />
+
+            x₂ +
+
+            <input type="number" id="a13" value="1" />
+
+            x₃ =
+
+            <input type="number" id="b1" value="23" class="b-vector" />
+          </div>
+
+          <div class="matrix-row">
+            <span>Planta Palmasola</span>
+
+            <input type="number" id="a21" value="1" />
+
+            x₁ +
+
+            <input type="number" id="a22" value="4" />
+
+            x₂ +
+
+            <input type="number" id="a23" value="1" />
+
+            x₃ =
+
+            <input type="number" id="b2" value="24" class="b-vector" />
+          </div>
+
+          <div class="matrix-row">
+            <span>Planta G. Villarroel</span>
+
+            <input type="number" id="a31" value="2" />
+
+            x₁ +
+
+            <input type="number" id="a32" value="1" />
+
+            x₂ +
+
+            <input type="number" id="a33" value="6" />
+
+            x₃ =
+
+            <input type="number" id="b3" value="31" class="b-vector" />
+          </div>
+        </div>
+
+        <button id="btn-calcular" class="btn btn-success">
+          Ejecutar Simulación Gauss-Seidel
+        </button>
+      </section>
+
+      <main class="results-layout">
+        <section class="panel-left">
+          <div class="card alpha">
+            <h2>Resultados del Abastecimiento</h2>
+
+            <div id="solucion-output"></div>
+          </div>
+
+          <div class="card">
+            <h2>Información de Convergencia</h2>
+
+            <div id="info-iteraciones"></div>
+          </div>
+
+          <div class="card">
+            <h2>Fundamento del Método</h2>
+
+            <p>
+              A diferencia del método de Jacobi, Gauss-Seidel utiliza
+              inmediatamente los valores calculados en la misma iteración.
+            </p>
+
+            <p>
+              Esto generalmente permite alcanzar la convergencia con menos
+              iteraciones y un menor costo computacional.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>Proceso Iterativo de Gauss-Seidel</h2>
+
+            <div class="tabla-container">
+              <table id="tabla-iteraciones">
+                <thead>
+                  <tr>
+                    <th>Iteración</th>
+
+                    <th>x₁ Gasolina</th>
+
+                    <th>x₂ Diésel</th>
+
+                    <th>x₃ GNV</th>
+
+                    <th>Error</th>
+                  </tr>
+                </thead>
+
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-right">
+          <div class="card graph-card">
+            <h2>Visualización Geométrica del Sistema</h2>
+
+            <div id="plotly-chart"></div>
+          </div>
+        </section>
+      </main>
+
+      <section class="card Respuestas-academica">
+        <h2>Respuestas al Cuestionario Académico</h2>
+
+        <div id="analisis-texto"></div>
+      </section>
+
+      <section class="card">
+        <h2>Interpretación del Modelo Matemático</h2>
+
+        <p>
+          El sistema representa la distribución de combustibles desde tres
+          plantas estratégicas hacia los principales centros de consumo.
+        </p>
+
+        <ul>
+          <li>
+            <strong>x₁:</strong>
+            Gasolina distribuida (mil m³)
+          </li>
+
+          <li>
+            <strong>x₂:</strong>
+            Diésel distribuido (mil m³)
+          </li>
+
+          <li>
+            <strong>x₃:</strong>
+            GNV distribuido (mil m³)
+          </li>
+        </ul>
+
+        <h3>Plantas consideradas</h3>
+
+        <ul>
+          <li>Planta Senkata (El Alto)</li>
+
+          <li>Planta Palmasola (Santa Cruz)</li>
+
+          <li>Planta Gualberto Villarroel (Cochabamba)</li>
+        </ul>
+
+        <h3>Escenarios Analizados</h3>
+
+        <ul>
+          <li>Estado Ideal: operación normal del sistema.</li>
+
+          <li>Crisis Moderada: bloqueo parcial de rutas.</li>
+
+          <li>Crisis Crítica: aislamiento logístico de La Paz y El Alto.</li>
+        </ul>
+      </section>
+    </div>
+
+    <script src="Seidelapp.js"></script>
+  </body>
+</html>

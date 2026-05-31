@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Gradiente Conjugado Preacondicionado de Suñagua</title>
+
+    <link rel="stylesheet" href="GCPstyle.css" />
+
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>Escenario A: Optimización del Abastecimiento de Combustible</h1>
+
+        <p class="subtitle">
+          Método de Gradiente Conjugado Preacondicionado de Suñagua
+        </p>
+      </header>
+
+      <section class="config-panel">
+        <h2>Configuración de la Red de Suministro</h2>
+
+        <p>
+          Este módulo analiza el comportamiento del Método de Gradiente
+          Conjugado Preacondicionado de Suñagua aplicado al problema de
+          distribución de combustibles durante la crisis de abastecimiento en
+          Bolivia.
+        </p>
+
+        <div class="preset-buttons">
+          <button id="btn-ideal" class="btn active">
+            Caso I: Estado Ideal
+          </button>
+
+          <button id="btn-moderado" class="btn btn-warning">
+            Caso II: Crisis Moderada
+          </button>
+
+          <button id="btn-critico" class="btn btn-danger">
+            Caso III: Crisis Crítica
+          </button>
+        </div>
+
+        <div class="matrix-container">
+          <div class="matrix-row">
+            <span>Planta Senkata</span>
+
+            <input type="number" id="a11" value="5" />
+
+            x₁ +
+
+            <input type="number" id="a12" value="1" />
+
+            x₂ +
+
+            <input type="number" id="a13" value="1" />
+
+            x₃ =
+
+            <input type="number" id="b1" value="23" class="b-vector" />
+          </div>
+
+          <div class="matrix-row">
+            <span>Planta Palmasola</span>
+
+            <input type="number" id="a21" value="1" />
+
+            x₁ +
+
+            <input type="number" id="a22" value="4" />
+
+            x₂ +
+
+            <input type="number" id="a23" value="1" />
+
+            x₃ =
+
+            <input type="number" id="b2" value="24" class="b-vector" />
+          </div>
+
+          <div class="matrix-row">
+            <span>Planta G. Villarroel</span>
+
+            <input type="number" id="a31" value="2" />
+
+            x₁ +
+
+            <input type="number" id="a32" value="1" />
+
+            x₂ +
+
+            <input type="number" id="a33" value="6" />
+
+            x₃ =
+
+            <input type="number" id="b3" value="31" class="b-vector" />
+          </div>
+        </div>
+
+        <button id="btn-calcular" class="btn btn-success">
+          Ejecutar Simulación GCP
+        </button>
+      </section>
+
+      <main class="results-layout">
+        <section class="panel-left">
+          <div class="card alpha">
+            <h2>Resultados del Abastecimiento</h2>
+
+            <div id="solucion-output"></div>
+          </div>
+
+          <div class="card">
+            <h2>Información de Convergencia</h2>
+
+            <div id="info-iteraciones"></div>
+          </div>
+
+          <div class="card">
+            <h2>Fundamento del Método</h2>
+
+            <p>
+              El método de Gradiente Conjugado Preacondicionado utiliza un
+              preacondicionador para mejorar las propiedades numéricas de la
+              matriz.
+            </p>
+
+            <p>
+              En este proyecto se utiliza un preacondicionador diagonal,
+              permitiendo acelerar la convergencia en sistemas mal
+              condicionados.
+            </p>
+
+            <p>
+              Este método resulta especialmente útil durante escenarios críticos
+              donde Jacobi, Gauss-Seidel y SOR presentan dificultades de
+              convergencia.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>Proceso Iterativo del Método</h2>
+
+            <div class="tabla-container">
+              <table id="tabla-iteraciones">
+                <thead>
+                  <tr>
+                    <th>Iteración</th>
+                    <th>x₁ Gasolina</th>
+                    <th>x₂ Diésel</th>
+                    <th>x₃ GNV</th>
+                    <th>Error</th>
+                  </tr>
+                </thead>
+
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-right">
+          <div class="card graph-card">
+            <h2>Visualización Geométrica del Sistema</h2>
+
+            <div id="plotly-chart"></div>
+          </div>
+        </section>
+      </main>
+
+      <section class="card Respuestas-academica">
+        <h2>Respuestas al Cuestionario Académico</h2>
+
+        <div id="analisis-texto"></div>
+      </section>
+
+      <section class="card">
+        <h2>Interpretación del Modelo Matemático</h2>
+
+        <p>
+          El sistema representa la distribución de combustibles desde las
+          principales plantas de almacenamiento hacia los centros de consumo
+          urbano.
+        </p>
+
+        <ul>
+          <li>
+            <strong>x₁:</strong>
+            Gasolina distribuida (mil m³)
+          </li>
+
+          <li>
+            <strong>x₂:</strong>
+            Diésel distribuido (mil m³)
+          </li>
+
+          <li>
+            <strong>x₃:</strong>
+            GNV distribuido (mil m³)
+          </li>
+        </ul>
+
+        <h3>Plantas Consideradas</h3>
+
+        <ul>
+          <li>Planta Senkata (El Alto)</li>
+
+          <li>Planta Palmasola (Santa Cruz)</li>
+
+          <li>Planta Gualberto Villarroel (Cochabamba)</li>
+        </ul>
+
+        <h3>Escenarios Analizados</h3>
+
+        <ul>
+          <li>Estado Ideal: funcionamiento normal del sistema.</li>
+
+          <li>Crisis Moderada: reducción parcial de capacidad logística.</li>
+
+          <li>Crisis Crítica: bloqueo severo y matriz mal condicionada.</li>
+        </ul>
+
+        <h3>Objetivo Académico</h3>
+
+        <p>
+          Comparar el desempeño del Método de Gradiente Conjugado
+          Preacondicionado frente a LU, Jacobi, Gauss-Seidel y SOR bajo las
+          mismas condiciones de abastecimiento.
+        </p>
+      </section>
+    </div>
+
+    <script src="GCPapp.js"></script>
+  </body>
+</html>

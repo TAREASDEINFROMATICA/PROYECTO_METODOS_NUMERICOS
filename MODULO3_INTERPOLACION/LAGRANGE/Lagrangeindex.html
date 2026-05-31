@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lagrange - Modulo 3</title>
+  <link rel="stylesheet" href="Lagrangestyle.css">
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Interpolacionindex.html" class="back-link">← Volver a Interpolacion</a>
+      <span class="badge">Metodo: Lagrange</span>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Modulo 3 - Interpolacion</p>
+      <h1>Metodo de Interpolacion de Lagrange</h1>
+
+      <p class="hero-text">
+        El metodo de Lagrange permite estimar precios faltantes usando datos
+        conocidos de dias anteriores. En este modulo se aplica a precios de
+        alimentos durante una crisis.
+      </p>
+
+      <div class="formula-box">
+        P(x) = Σ yᵢ · Lᵢ(x)
+      </div>
+
+      <p class="hero-text">
+        Cada Lᵢ(x) es un polinomio base que usa todos los puntos conocidos para
+        calcular el precio aproximado en un dia sin registro.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card context-card">
+      <p class="eyebrow dark">Contexto del ejercicio</p>
+      <h2>¿Que estamos calculando?</h2>
+
+      <p>
+        En una situacion de crisis, no siempre se tiene el precio de un producto
+        para todos los dias. Por eso se usan datos dispersos y se estima el
+        precio faltante mediante interpolacion.
+      </p>
+
+      <p>
+        En este caso, x representa el dia del mes y y representa el precio del
+        producto en bolivianos. El objetivo es calcular P(x), que es el precio
+        aproximado en el dia que no tiene dato.
+      </p>
+
+      <div class="context-grid">
+        <div class="context-box">
+          <h3>Dato conocido</h3>
+          <p>Es un par (dia, precio) registrado durante el mes.</p>
+        </div>
+
+        <div class="context-box">
+          <h3>Dato faltante</h3>
+          <p>Es el precio que se desea estimar en un dia sin registro.</p>
+        </div>
+
+        <div class="context-box">
+          <h3>Resultado</h3>
+          <p>P(x) representa el precio interpolado por el metodo de Lagrange.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Seleccion del escenario</p>
+      <h2>Casos de analisis</h2>
+
+      <div class="case-selector">
+        <button class="case-button active" data-case="ideal">Caso I: Estado ideal</button>
+        <button class="case-button" data-case="moderado">Caso II: Crisis moderada</button>
+        <button class="case-button" data-case="critico">Caso III: Crisis critica</button>
+      </div>
+
+      <div class="case-detail">
+        <div class="case-info">
+          <h3 id="caseTitle"></h3>
+          <p id="caseDescription"></p>
+
+          <div class="function-card">
+            <p>Producto analizado</p>
+            <h4 id="productName"></h4>
+          </div>
+
+          <div class="function-card blue-card">
+            <p>Funcion del caso</p>
+            <h4 id="caseFunction"></h4>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <h3>Interpretacion del escenario</h3>
+          <p id="caseInterpretation"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card input-card">
+      <p class="eyebrow dark">Datos de entrada</p>
+      <h2>Parametros para interpolar con Lagrange</h2>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="inputDias">Dias conocidos</label>
+          <input type="text" id="inputDias" value="1,5,10,15,20,30">
+        </div>
+
+        <div class="form-group">
+          <label for="inputPrecios">Precios conocidos</label>
+          <input type="text" id="inputPrecios" value="8,9,10,11.2,12.1,13.5">
+        </div>
+
+        <div class="form-group">
+          <label for="inputX">Dia a estimar</label>
+          <input type="number" id="inputX" step="0.01" value="12">
+        </div>
+      </div>
+
+      <button class="calculate-btn" id="btnCalcular">Calcular por Lagrange</button>
+
+      <div class="note-box">
+        <strong>Condicion importante:</strong> la cantidad de dias debe ser igual
+        a la cantidad de precios. Ademas, el dia a estimar debe estar dentro del
+        rango de datos para evitar extrapolaciones exageradas.
+      </div>
+    </section>
+
+    <section class="card result-card">
+      <p class="eyebrow dark">Resultado del calculo</p>
+      <h2>Precio estimado</h2>
+
+      <div class="result-grid">
+        <div class="result-item">
+          <span>Dia estimado</span>
+          <strong id="resultadoX">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Precio P(x)</span>
+          <strong id="resultadoPrecio">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Puntos usados</span>
+          <strong id="resultadoPuntos">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Estado</span>
+          <strong id="resultadoEstado">-</strong>
+        </div>
+      </div>
+
+      <div class="interpretation-box">
+        <h3>Analisis del resultado</h3>
+        <p id="analisisResultado">
+          Presiona calcular para obtener la interpretacion del caso.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Visualizacion</p>
+      <h2>Grafica 3D aproximada de Lagrange</h2>
+
+      <div class="graph-card">
+        <canvas id="lagrangeGraph"></canvas>
+      </div>
+
+      <p class="graph-note">
+        La curva verde representa el polinomio interpolante de Lagrange. Los
+        puntos azules son los datos conocidos y el punto rojo es el precio
+        estimado.
+      </p>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Tabla del metodo</p>
+      <h2>Calculo de los polinomios base Lᵢ(x)</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>i</th>
+              <th>xᵢ</th>
+              <th>yᵢ</th>
+              <th>Lᵢ(x)</th>
+              <th>yᵢ · Lᵢ(x)</th>
+            </tr>
+          </thead>
+          <tbody id="tablaLagrange">
+            <tr>
+              <td colspan="5">Presiona calcular para ver el proceso.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card comparison-card">
+      <p class="eyebrow dark">Comparacion de casos</p>
+      <h2>Lagrange aplicado a los tres escenarios</h2>
+
+      <button class="compare-btn" id="btnCompararCasos">Comparar los tres casos</button>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Caso</th>
+              <th>Producto</th>
+              <th>Dia estimado</th>
+              <th>Precio estimado</th>
+              <th>Incremento total</th>
+              <th>Interpretacion</th>
+            </tr>
+          </thead>
+          <tbody id="tablaComparacionCasos">
+            <tr>
+              <td colspan="6">Presiona comparar para ver los resultados.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card variables-card">
+      <p class="eyebrow dark">Interpretacion de variables</p>
+      <h2>Variables usadas en el metodo de Lagrange</h2>
+
+      <div class="variables-layout">
+        <div class="variables-box">
+          <h3 id="variablesCaseTitle">Caso I: Estado ideal</h3>
+          <p id="variablesCaseText">
+            En este caso se analiza un mercado estable con precios que suben lentamente.
+          </p>
+
+          <div class="formula-variable">
+            <strong>Funcion del modelo:</strong>
+            <span>P(x) = Σ yᵢ · Lᵢ(x)</span>
+          </div>
+        </div>
+
+        <div class="variables-box method-box">
+          <h3>Variables del metodo</h3>
+
+          <ul>
+            <li><strong>x:</strong> dia donde se quiere estimar el precio.</li>
+            <li><strong>xᵢ:</strong> dia conocido dentro de los datos.</li>
+            <li><strong>yᵢ:</strong> precio conocido correspondiente al dia xᵢ.</li>
+            <li><strong>Lᵢ(x):</strong> polinomio base de Lagrange.</li>
+            <li><strong>P(x):</strong> precio interpolado en el dia x.</li>
+            <li><strong>n:</strong> cantidad de datos conocidos.</li>
+            <li><strong>yᵢ · Lᵢ(x):</strong> aporte de cada dato al resultado final.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="variables-interpretation">
+        <h3>Interpretacion final</h3>
+        <p id="variablesConclusion">
+          Lagrange combina todos los puntos conocidos para estimar el precio faltante.
+        </p>
+      </div>
+    </section>
+
+    <section class="card method-interpretation-card">
+      <p class="eyebrow dark">Interpretacion del metodo</p>
+      <h2>¿Que tan estable y util fue Lagrange?</h2>
+
+      <p>
+        El metodo de Lagrange fue util porque permite calcular directamente el
+        precio aproximado en un dia sin construir una tabla de diferencias.
+      </p>
+
+      <div class="method-interpretation-grid">
+        <div class="method-interpretation-box">
+          <h3>Utilidad</h3>
+          <p>
+            Es practico cuando se quiere estimar un valor puntual usando datos
+            conocidos.
+          </p>
+        </div>
+
+        <div class="method-interpretation-box">
+          <h3>Ventaja</h3>
+          <p>
+            No necesita derivadas ni sistemas de ecuaciones. Solo usa los puntos
+            conocidos.
+          </p>
+        </div>
+
+        <div class="method-interpretation-box">
+          <h3>Limitacion</h3>
+          <p>
+            Con muchos puntos puede generar oscilaciones. Por eso se compara
+            despues con Newton y Splines.
+          </p>
+        </div>
+      </div>
+
+      <div class="final-note">
+        <h3>Conclusion</h3>
+        <p>
+          Lagrange es muy util para estimaciones puntuales de precios. Sin
+          embargo, para representar una curva mas suave, Splines puede ser mas
+          estable visualmente.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Metodo de Lagrange | Modulo 3 - Interpolacion</p>
+  </footer>
+
+  <script src="Lagrangeapp.js"></script>
+</body>
+</html>

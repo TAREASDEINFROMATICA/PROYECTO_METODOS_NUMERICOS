@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Factorización LU - Crisis de Abastecimiento Bolivia 2026</title>
+
+    <link rel="stylesheet" href="LUstyle.css" />
+
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>Optimización del Abastecimiento de Combustible</h1>
+
+        <p class="subtitle">Método Directo: Factorización LU (Doolittle)</p>
+
+        <p class="contexto">
+          Simulación basada en la crisis de abastecimiento y bloqueos en Bolivia
+          (2026)
+        </p>
+      </header>
+
+      <!-- ESCENARIOS -->
+
+      <section class="config-panel">
+        <h2>Escenarios de Simulación</h2>
+
+        <p>
+          Seleccione un escenario para analizar el comportamiento del sistema.
+        </p>
+
+        <div class="preset-buttons">
+          <button id="btn-ideal" class="btn active">
+            🟢 Caso I: Estado Ideal
+          </button>
+
+          <button id="btn-moderado" class="btn">
+            🟡 Caso II: Crisis Moderada
+          </button>
+
+          <button id="btn-critico" class="btn btn-danger">
+            🔴 Caso III: Crisis Crítica
+          </button>
+        </div>
+      </section>
+
+      <!-- MATRIZ -->
+
+      <section class="card">
+        <h2>Sistema de Ecuaciones</h2>
+
+        <div class="matrix-container">
+          <div class="matrix-row">
+            <span>Planta Senkata</span>
+
+            <input id="a11" type="number" step="any" />
+            x₁ +
+
+            <input id="a12" type="number" step="any" />
+            x₂ +
+
+            <input id="a13" type="number" step="any" />
+            x₃ =
+
+            <input id="b1" class="b-vector" type="number" step="any" />
+          </div>
+
+          <div class="matrix-row">
+            <span>Palmasola</span>
+
+            <input id="a21" type="number" step="any" />
+            x₁ +
+
+            <input id="a22" type="number" step="any" />
+            x₂ +
+
+            <input id="a23" type="number" step="any" />
+            x₃ =
+
+            <input id="b2" class="b-vector" type="number" step="any" />
+          </div>
+
+          <div class="matrix-row">
+            <span>G. Villarroel</span>
+
+            <input id="a31" type="number" step="any" />
+            x₁ +
+
+            <input id="a32" type="number" step="any" />
+            x₂ +
+
+            <input id="a33" type="number" step="any" />
+            x₃ =
+
+            <input id="b3" class="b-vector" type="number" step="any" />
+          </div>
+        </div>
+
+        <button id="btn-calcular" class="btn-success">
+          Ejecutar Método LU
+        </button>
+      </section>
+
+      <!-- ESTADO -->
+
+      <section class="card estado-card">
+        <h2>Diagnóstico Numérico</h2>
+
+        <div id="estado-sistema"></div>
+      </section>
+
+      <!-- RESULTADOS -->
+
+      <div class="results-layout">
+        <section>
+          <div class="card alpha">
+            <h2>Solución del Sistema</h2>
+
+            <div id="solucion-output"></div>
+          </div>
+
+          <div class="card">
+            <h2>Matriz L</h2>
+
+            <div id="matriz-l" class="matrix-print"></div>
+          </div>
+
+          <div class="card">
+            <h2>Matriz U</h2>
+
+            <div id="matriz-u" class="matrix-print"></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="card graph-card">
+            <h2>Visualización Geométrica</h2>
+
+            <div id="plotly-chart"></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ANALISIS -->
+
+      <section class="card respuestas-academicas">
+        <h2>Respuestas al Cuestionario Académico</h2>
+
+        <div id="analisis-texto"></div>
+      </section>
+
+      <!-- INFORMACION DEL METODO -->
+
+      <section class="card">
+        <h2>Interpretación Matemática del Método LU</h2>
+
+        <p>
+          La factorización LU descompone la matriz A en una matriz triangular
+          inferior (L) y una matriz triangular superior (U).
+        </p>
+
+        <p>
+          A diferencia de Jacobi, Gauss-Seidel, SOR y Gradiente Conjugado, LU es
+          un método directo.
+        </p>
+
+        <p>
+          Esto significa que no depende de iteraciones para converger. Siempre
+          que la matriz sea invertible, la solución puede obtenerse mediante
+          sustitución hacia adelante y hacia atrás.
+        </p>
+      </section>
+    </div>
+
+    <script src="LUapp.js"></script>
+  </body>
+</html>

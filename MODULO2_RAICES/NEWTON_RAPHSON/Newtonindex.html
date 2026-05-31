@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton-Raphson - Modulo 2</title>
+  <link rel="stylesheet" href="Newtonstyle.css">
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Raicesindex.html" class="back-link">← Volver a Raices</a>
+      <span class="badge">Metodo: Newton-Raphson</span>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Modulo 2 - Raices de Ecuaciones</p>
+      <h1>Metodo de Newton-Raphson</h1>
+
+      <p class="hero-text">
+        El metodo de Newton-Raphson permite encontrar el dia critico donde el
+        gasto acumulado alcanza el limite economico permitido. A diferencia de
+        Biseccion, este metodo usa una aproximacion inicial y la derivada.
+      </p>
+
+      <div class="formula-box">
+        x<sub>n+1</sub> = x<sub>n</sub> - f(x<sub>n</sub>) / f'(x<sub>n</sub>)
+      </div>
+
+      <p class="hero-text">
+        En este modelo, f'(x) representa el costo diario C(x). Por eso el metodo
+        tiene una interpretacion real dentro del problema.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card context-card">
+      <p class="eyebrow dark">Contexto del ejercicio</p>
+      <h2>¿Que estamos calculando?</h2>
+
+      <p>
+        El problema analiza una crisis de precios, abastecimiento y gasto
+        familiar. La variable x representa los dias transcurridos desde el
+        inicio de la crisis.
+      </p>
+
+      <p>
+        La funcion f(x) representa el gasto acumulado menos el limite economico
+        permitido. La raiz de f(x) indica el dia exacto donde el sistema llega
+        al punto critico.
+      </p>
+
+      <div class="context-grid">
+        <div class="context-box">
+          <h3>Funcion acumulada</h3>
+          <p>f(x) mide el gasto acumulado menos el limite familiar.</p>
+        </div>
+
+        <div class="context-box">
+          <h3>Derivada</h3>
+          <p>f'(x)=C(x), es decir, el costo diario en el dia x.</p>
+        </div>
+
+        <div class="context-box">
+          <h3>Raiz</h3>
+          <p>Cuando f(x)=0, el gasto acumulado llega al limite permitido.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Seleccion del escenario</p>
+      <h2>Casos de analisis</h2>
+
+      <div class="case-selector">
+        <button class="case-button active" data-case="ideal">Caso I: Estado ideal</button>
+        <button class="case-button" data-case="moderado">Caso II: Crisis moderada</button>
+        <button class="case-button" data-case="critico">Caso III: Crisis critica</button>
+      </div>
+
+      <div class="case-detail">
+        <div class="case-info">
+          <h3 id="caseTitle"></h3>
+          <p id="caseDescription"></p>
+
+          <div class="function-card">
+            <p>Funcion diaria C(x)</p>
+            <h4 id="dailyFunction"></h4>
+          </div>
+
+          <div class="function-card blue-card">
+            <p>Funcion acumulada f(x)</p>
+            <h4 id="caseFunction"></h4>
+          </div>
+
+          <div class="function-card green-card">
+            <p>Derivada f'(x)</p>
+            <h4 id="caseDerivative"></h4>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <h3>Interpretacion del escenario</h3>
+          <p id="caseInterpretation"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card input-card">
+      <p class="eyebrow dark">Datos de entrada</p>
+      <h2>Parametros del metodo de Newton-Raphson</h2>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="inputX0">Valor inicial x0</label>
+          <input type="number" id="inputX0" step="0.01" value="10">
+        </div>
+
+        <div class="form-group">
+          <label for="inputTol">Tolerancia</label>
+          <input type="number" id="inputTol" step="0.000001" value="0.000001">
+        </div>
+
+        <div class="form-group">
+          <label for="inputMax">Maximo de iteraciones</label>
+          <input type="number" id="inputMax" value="100">
+        </div>
+      </div>
+
+      <button class="calculate-btn" id="btnCalcular">Calcular por Newton-Raphson</button>
+
+      <div class="note-box">
+        <strong>Condicion importante:</strong> Newton-Raphson necesita que la
+        derivada f'(x) no sea cero y que el valor inicial x0 este cerca de la raiz.
+      </div>
+    </section>
+
+    <section class="card result-card">
+      <p class="eyebrow dark">Resultado del calculo</p>
+      <h2>Resultado aproximado</h2>
+
+      <div class="result-grid">
+        <div class="result-item">
+          <span>Raiz aproximada</span>
+          <strong id="resultadoRaiz">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>f(x)</span>
+          <strong id="resultadoFx">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Error final</span>
+          <strong id="resultadoError">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Iteraciones</span>
+          <strong id="resultadoIteraciones">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Convergencia</span>
+          <strong id="resultadoConvergencia">-</strong>
+        </div>
+      </div>
+
+      <div class="interpretation-box">
+        <h3>Analisis del resultado</h3>
+        <p id="analisisResultado">
+          Presiona calcular para obtener la interpretacion del caso.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Visualizacion</p>
+      <h2>Grafica 3D aproximada del metodo</h2>
+
+      <div class="graph-card">
+        <canvas id="newtonGraph"></canvas>
+      </div>
+
+      <p class="graph-note">
+        La curva azul representa la funcion acumulada f(x). El punto rojo marca
+        la raiz aproximada encontrada por Newton-Raphson y el punto amarillo
+        representa el valor inicial x0.
+      </p>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Tabla de iteraciones</p>
+      <h2>Proceso iterativo del metodo</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Iteracion</th>
+              <th>x_n</th>
+              <th>f(x_n)</th>
+              <th>f'(x_n)</th>
+              <th>x_nuevo</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody id="tablaIteraciones">
+            <tr>
+              <td colspan="6">Presiona calcular para ver las iteraciones.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card comparison-card">
+      <p class="eyebrow dark">Comparacion de casos</p>
+      <h2>Newton-Raphson aplicado a los tres escenarios</h2>
+
+      <button class="compare-btn" id="btnCompararCasos">Comparar los tres casos</button>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Caso</th>
+              <th>Raiz x</th>
+              <th>Iteraciones</th>
+              <th>Error</th>
+              <th>Interpretacion</th>
+            </tr>
+          </thead>
+          <tbody id="tablaComparacionCasos">
+            <tr>
+              <td colspan="5">Presiona comparar para ver los resultados.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card variables-card">
+      <p class="eyebrow dark">Interpretacion de variables</p>
+      <h2>Variables usadas en Newton-Raphson</h2>
+
+      <div class="variables-layout">
+        <div class="variables-box">
+          <h3 id="variablesCaseTitle">Caso I: Estado ideal</h3>
+          <p id="variablesCaseText">
+            En este caso se analiza una situacion controlada donde el gasto crece lentamente.
+          </p>
+
+          <div class="formula-variable">
+            <strong>Funcion del modelo:</strong>
+            <span id="variablesFormula">f(x)</span>
+          </div>
+        </div>
+
+        <div class="variables-box method-box">
+          <h3>Variables del metodo</h3>
+
+          <ul>
+            <li><strong>x:</strong> dias transcurridos desde el inicio de la crisis.</li>
+            <li><strong>C(x):</strong> costo diario aproximado en el dia x.</li>
+            <li><strong>f(x):</strong> gasto acumulado menos el limite permitido.</li>
+            <li><strong>f'(x):</strong> derivada de f(x), en este modelo equivale a C(x).</li>
+            <li><strong>x0:</strong> valor inicial elegido para empezar el metodo.</li>
+            <li><strong>x_n:</strong> aproximacion actual de la raiz.</li>
+            <li><strong>x_nuevo:</strong> nueva aproximacion calculada por Newton-Raphson.</li>
+            <li><strong>error:</strong> diferencia entre x_nuevo y x_n.</li>
+            <li><strong>tolerancia:</strong> limite minimo aceptado para detener el metodo.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="variables-interpretation">
+        <h3>Interpretacion final</h3>
+        <p id="variablesConclusion">
+          Newton-Raphson usa la pendiente de la funcion para acercarse rapidamente a la raiz.
+        </p>
+      </div>
+    </section>
+
+    <section class="card method-interpretation-card">
+      <p class="eyebrow dark">Interpretacion del metodo</p>
+      <h2>¿Que tan estable y util fue Newton-Raphson?</h2>
+
+      <p>
+        Newton-Raphson es un metodo muy util cuando se conoce la derivada de la
+        funcion y se elige un valor inicial cercano a la raiz. En este problema,
+        la derivada tiene sentido real porque representa el costo diario C(x).
+      </p>
+
+      <div class="method-interpretation-grid">
+        <div class="method-interpretation-box">
+          <h3>Rapidez</h3>
+          <p>
+            Generalmente necesita pocas iteraciones para llegar a la raiz. Por
+            eso suele ser mas rapido que Biseccion.
+          </p>
+        </div>
+
+        <div class="method-interpretation-box">
+          <h3>Utilidad</h3>
+          <p>
+            Es util para estimar rapidamente el dia critico cuando se tiene una
+            buena funcion y una derivada confiable.
+          </p>
+        </div>
+
+        <div class="method-interpretation-box">
+          <h3>Limitacion</h3>
+          <p>
+            Puede fallar si el valor inicial esta muy lejos de la raiz o si la
+            derivada se aproxima a cero.
+          </p>
+        </div>
+      </div>
+
+      <div class="final-note">
+        <h3>Conclusion</h3>
+        <p>
+          Newton-Raphson fue util porque puede llegar al punto critico en menos
+          iteraciones. Su mayor ventaja es la rapidez; su desventaja es que
+          depende mas del valor inicial que Biseccion.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Metodo de Newton-Raphson | Modulo 2 - Raices de Ecuaciones</p>
+  </footer>
+
+  <script src="Newtonapp.js"></script>
+</body>
+</html>

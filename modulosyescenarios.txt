@@ -1,0 +1,33 @@
+
+NAT
+Módulo 1: Sistemas de ecuaciones
+- Escenario   A  : Abastecimiento y transporte
+- Escenario   F  : Rumores y pánico en la distribución
+
+RONALDO
+Módulo 2: Raíces de ecuaciones
+- Escenario   E  : Umbrales críticos de abastecimiento
+
+Módulo 3: Interpolación
+- Escenario   C  : Curva continua de precios
+
+
+
+ERIKA
+Módulo 4: Integración numérica
+- Escenario   D   : Costo acumulado y pérdida del poder adquisitivo
+
+Módulo 5: Ecuaciones diferenciales
+- Escenario   B  : Vaciado crítico de reservas
+- Escenario   G  : Difusión de opinión o descontento social
+
+
+
+Escenario	Qué significa	Método principal
+A	Optimización de abastecimiento y red de transporte	        Sistemas de ecuaciones
+B	Vaciado crítico de reservas de carburantes	                Ecuaciones diferenciales
+C	Desabastecimiento de alimentos y curva de precios	        Interpolación
+D	Costo acumulado y pérdida del poder adquisitivo familiar	Integración numérica
+E	Umbrales críticos de abastecimiento	                        Raíces de ecuaciones
+F	Rumores de desabastecimiento y pánico en la distribución	Sistemas lineales mal condicionados
+G	Difusión de opinión o descontento social	                Ecuaciones diferenciales

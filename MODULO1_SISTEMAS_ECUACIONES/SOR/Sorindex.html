@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Método SOR - Crisis de Abastecimiento Bolivia 2026</title>
+
+    <link rel="stylesheet" href="SORstyle.css" />
+
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>Escenario A: Optimización del Abastecimiento de Combustible</h1>
+
+        <p class="subtitle">
+          Resolución mediante Método SOR (Successive Over Relaxation)
+        </p>
+      </header>
+
+      <section class="config-panel">
+        <h2>Configuración de la Red de Suministro</h2>
+
+        <p>
+          Simulación basada en la crisis de abastecimiento y bloqueos
+          registrados en Bolivia. El objetivo es analizar el comportamiento del
+          método SOR bajo diferentes condiciones de estabilidad.
+        </p>
+
+        <div class="preset-buttons">
+          <button id="btn-ideal" class="btn active">
+            Caso I: Estado Ideal
+          </button>
+
+          <button id="btn-moderado" class="btn btn-warning">
+            Caso II: Crisis Moderada
+          </button>
+
+          <button id="btn-critico" class="btn btn-danger">
+            Caso III: Crisis Crítica
+          </button>
+        </div>
+
+        <div class="matrix-container">
+          <div class="matrix-row">
+            <span>Planta Senkata</span>
+
+            <input type="number" id="a11" value="5" />
+
+            x₁ +
+
+            <input type="number" id="a12" value="1" />
+
+            x₂ +
+
+            <input type="number" id="a13" value="1" />
+
+            x₃ =
+
+            <input type="number" id="b1" value="23" class="b-vector" />
+          </div>
+
+          <div class="matrix-row">
+            <span>Planta Palmasola</span>
+
+            <input type="number" id="a21" value="1" />
+
+            x₁ +
+
+            <input type="number" id="a22" value="4" />
+
+            x₂ +
+
+            <input type="number" id="a23" value="1" />
+
+            x₃ =
+
+            <input type="number" id="b2" value="24" class="b-vector" />
+          </div>
+
+          <div class="matrix-row">
+            <span>Planta G. Villarroel</span>
+
+            <input type="number" id="a31" value="2" />
+
+            x₁ +
+
+            <input type="number" id="a32" value="1" />
+
+            x₂ +
+
+            <input type="number" id="a33" value="6" />
+
+            x₃ =
+
+            <input type="number" id="b3" value="31" class="b-vector" />
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Parámetro de Relajación (ω)</h3>
+
+          <p>ω = 1 equivale aproximadamente a Gauss-Seidel.</p>
+
+          <p>ω > 1 acelera la convergencia.</p>
+
+          <p>ω < 1 produce subrelajación.</p>
+
+          <input
+            type="number"
+            id="omega"
+            min="0.1"
+            max="2"
+            step="0.1"
+            value="1.03"
+          />
+        </div>
+
+        <button id="btn-calcular" class="btn btn-success">
+          Ejecutar Simulación SOR
+        </button>
+      </section>
+
+      <main class="results-layout">
+        <section class="panel-left">
+          <div class="card alpha">
+            <h2>Resultados del Abastecimiento</h2>
+
+            <div id="solucion-output"></div>
+          </div>
+
+          <div class="card">
+            <h2>Información de Convergencia</h2>
+
+            <div id="info-iteraciones"></div>
+          </div>
+
+          <div class="card">
+            <h2>Fundamento del Método SOR</h2>
+
+            <p>El método SOR es una mejora del método de Gauss-Seidel.</p>
+
+            <p>
+              Utiliza un parámetro de relajación ω que permite acelerar el
+              proceso de convergencia.
+            </p>
+
+            <p>
+              Cuando se selecciona un valor adecuado de ω, el número de
+              iteraciones puede reducirse significativamente.
+            </p>
+          </div>
+
+          <div class="card">
+            <h2>Proceso Iterativo SOR</h2>
+
+            <div class="tabla-container">
+              <table id="tabla-iteraciones">
+                <thead>
+                  <tr>
+                    <th>Iteración</th>
+
+                    <th>x₁ Gasolina</th>
+
+                    <th>x₂ Diésel</th>
+
+                    <th>x₃ GNV</th>
+
+                    <th>Error</th>
+                  </tr>
+                </thead>
+
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-right">
+          <div class="card graph-card">
+            <h2>Visualización Geométrica del Sistema</h2>
+
+            <div id="plotly-chart"></div>
+          </div>
+        </section>
+      </main>
+
+      <section class="card Respuestas-academica">
+        <h2>Respuestas al Cuestionario Académico</h2>
+
+        <div id="analisis-texto"></div>
+      </section>
+
+      <section class="card">
+        <h2>Interpretación del Modelo Matemático</h2>
+
+        <p>
+          El sistema representa la distribución de combustibles desde las
+          principales plantas de almacenamiento hacia los centros urbanos.
+        </p>
+
+        <ul>
+          <li>
+            <strong>x₁:</strong>
+            Gasolina distribuida (mil m³)
+          </li>
+
+          <li>
+            <strong>x₂:</strong>
+            Diésel distribuido (mil m³)
+          </li>
+
+          <li>
+            <strong>x₃:</strong>
+            GNV distribuido (mil m³)
+          </li>
+        </ul>
+
+        <h3>Plantas consideradas</h3>
+
+        <ul>
+          <li>Planta Senkata (El Alto)</li>
+          <li>Planta Palmasola (Santa Cruz)</li>
+          <li>Planta Gualberto Villarroel (Cochabamba)</li>
+        </ul>
+
+        <h3>Escenarios del Proyecto</h3>
+
+        <ul>
+          <li>Estado Ideal: matriz diagonal dominante.</li>
+
+          <li>Crisis Moderada: bloqueo parcial de rutas.</li>
+
+          <li>Crisis Crítica: sistema mal condicionado y alta sensibilidad.</li>
+        </ul>
+      </section>
+    </div>
+
+    <script src="SORapp.js"></script>
+  </body>
+</html>

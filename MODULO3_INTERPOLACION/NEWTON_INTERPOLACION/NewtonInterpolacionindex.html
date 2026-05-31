@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton Interpolacion - Modulo 3</title>
+  <link rel="stylesheet" href="NewtonInterpolacionstyle.css">
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Interpolacionindex.html" class="back-link">← Volver a Interpolacion</a>
+      <span class="badge">Metodo: Newton Interpolacion</span>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Modulo 3 - Interpolacion</p>
+      <h1>Metodo de Newton por Diferencias Divididas</h1>
+
+      <p class="hero-text">
+        Este metodo permite estimar precios faltantes usando una tabla de
+        diferencias divididas. Es muy util cuando se trabaja con datos dispersos.
+      </p>
+
+      <div class="formula-box">
+        P(x) = a0 + a1(x-x0) + a2(x-x0)(x-x1) + ...
+      </div>
+
+      <p class="hero-text">
+        Los coeficientes a0, a1, a2, ... se obtienen mediante diferencias
+        divididas a partir de los datos conocidos.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card context-card">
+      <p class="eyebrow dark">Contexto del ejercicio</p>
+      <h2>¿Que estamos calculando?</h2>
+
+      <p>
+        En este ejercicio se analiza el precio de productos basicos durante una
+        crisis. Como no se tienen datos para todos los dias, se usa interpolacion
+        para estimar precios faltantes.
+      </p>
+
+      <p>
+        En Newton Interpolacion, los datos conocidos se organizan en una tabla
+        de diferencias divididas. Luego se construye un polinomio que permite
+        estimar el precio en un dia especifico.
+      </p>
+
+      <div class="context-grid">
+        <div class="context-box">
+          <h3>Datos conocidos</h3>
+          <p>Son pares ordenados de la forma (dia, precio).</p>
+        </div>
+
+        <div class="context-box">
+          <h3>Diferencias divididas</h3>
+          <p>Permiten obtener los coeficientes del polinomio de Newton.</p>
+        </div>
+
+        <div class="context-box">
+          <h3>Precio estimado</h3>
+          <p>P(x) representa el precio aproximado en el dia sin dato.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Seleccion del escenario</p>
+      <h2>Casos de analisis</h2>
+
+      <div class="case-selector">
+        <button class="case-button active" data-case="ideal">Caso I: Estado ideal</button>
+        <button class="case-button" data-case="moderado">Caso II: Crisis moderada</button>
+        <button class="case-button" data-case="critico">Caso III: Crisis critica</button>
+      </div>
+
+      <div class="case-detail">
+        <div class="case-info">
+          <h3 id="caseTitle"></h3>
+          <p id="caseDescription"></p>
+
+          <div class="function-card">
+            <p>Producto analizado</p>
+            <h4 id="productName"></h4>
+          </div>
+
+          <div class="function-card blue-card">
+            <p>Funcion del caso</p>
+            <h4 id="caseFunction"></h4>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <h3>Interpretacion del escenario</h3>
+          <p id="caseInterpretation"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card input-card">
+      <p class="eyebrow dark">Datos de entrada</p>
+      <h2>Parametros para interpolar con Newton</h2>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="inputDias">Dias conocidos</label>
+          <input type="text" id="inputDias" value="1,5,10,15,20,30">
+        </div>
+
+        <div class="form-group">
+          <label for="inputPrecios">Precios conocidos</label>
+          <input type="text" id="inputPrecios" value="8,9,10,11.2,12.1,13.5">
+        </div>
+
+        <div class="form-group">
+          <label for="inputX">Dia a estimar</label>
+          <input type="number" id="inputX" step="0.01" value="12">
+        </div>
+      </div>
+
+      <button class="calculate-btn" id="btnCalcular">Calcular por Newton</button>
+
+      <div class="note-box">
+        <strong>Condicion importante:</strong> la cantidad de dias debe coincidir
+        con la cantidad de precios. Los dias no deben repetirse, porque las
+        diferencias divididas no se podrian calcular correctamente.
+      </div>
+    </section>
+
+    <section class="card result-card">
+      <p class="eyebrow dark">Resultado del calculo</p>
+      <h2>Precio estimado</h2>
+
+      <div class="result-grid">
+        <div class="result-item">
+          <span>Dia estimado</span>
+          <strong id="resultadoX">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Precio P(x)</span>
+          <strong id="resultadoPrecio">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Puntos usados</span>
+          <strong id="resultadoPuntos">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Estado</span>
+          <strong id="resultadoEstado">-</strong>
+        </div>
+      </div>
+
+      <div class="interpretation-box">
+        <h3>Analisis del resultado</h3>
+        <p id="analisisResultado">
+          Presiona calcular para obtener la interpretacion del caso.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Visualizacion</p>
+      <h2>Grafica 3D aproximada de Newton Interpolacion</h2>
+
+      <div class="graph-card">
+        <canvas id="newtonInterpolationGraph"></canvas>
+      </div>
+
+      <p class="graph-note">
+        La curva verde representa el polinomio interpolante de Newton. Los
+        puntos azules son los datos conocidos y el punto rojo es el precio
+        estimado.
+      </p>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Tabla del metodo</p>
+      <h2>Tabla de diferencias divididas</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead id="tablaHead">
+            <tr>
+              <th>i</th>
+              <th>xᵢ</th>
+              <th>yᵢ</th>
+            </tr>
+          </thead>
+          <tbody id="tablaDiferencias">
+            <tr>
+              <td colspan="3">Presiona calcular para ver la tabla.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card comparison-card">
+      <p class="eyebrow dark">Comparacion de casos</p>
+      <h2>Newton aplicado a los tres escenarios</h2>
+
+      <button class="compare-btn" id="btnCompararCasos">Comparar los tres casos</button>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Caso</th>
+              <th>Producto</th>
+              <th>Dia estimado</th>
+              <th>Precio estimado</th>
+              <th>Incremento total</th>
+              <th>Interpretacion</th>
+            </tr>
+          </thead>
+          <tbody id="tablaComparacionCasos">
+            <tr>
+              <td colspan="6">Presiona comparar para ver los resultados.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card variables-card">
+      <p class="eyebrow dark">Interpretacion de variables</p>
+      <h2>Variables usadas en Newton Interpolacion</h2>
+
+      <div class="variables-layout">
+        <div class="variables-box">
+          <h3 id="variablesCaseTitle">Caso I: Estado ideal</h3>
+          <p id="variablesCaseText">
+            En este caso se analiza un mercado estable con precios que suben lentamente.
+          </p>
+
+          <div class="formula-variable">
+            <strong>Funcion del modelo:</strong>
+            <span>P(x) = a0 + a1(x-x0) + a2(x-x0)(x-x1) + ...</span>
+          </div>
+        </div>
+
+        <div class="variables-box method-box">
+          <h3>Variables del metodo</h3>
+
+          <ul>
+            <li><strong>x:</strong> dia donde se quiere estimar el precio.</li>
+            <li><strong>xᵢ:</strong> dia conocido dentro de los datos.</li>
+            <li><strong>yᵢ:</strong> precio conocido correspondiente al dia xᵢ.</li>
+            <li><strong>a0, a1, a2:</strong> coeficientes obtenidos por diferencias divididas.</li>
+            <li><strong>f[xᵢ,xⱼ]:</strong> diferencia dividida entre dos puntos.</li>
+            <li><strong>P(x):</strong> precio interpolado en el dia x.</li>
+            <li><strong>n:</strong> cantidad de datos conocidos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="variables-interpretation">
+        <h3>Interpretacion final</h3>
+        <p id="variablesConclusion">
+          Newton usa diferencias divididas para construir el polinomio interpolante.
+        </p>
+      </div>
+    </section>
+
+    <section class="card method-interpretation-card">
+      <p class="eyebrow dark">Interpretacion del metodo</p>
+      <h2>¿Que tan estable y util fue Newton Interpolacion?</h2>
+
+      <p>
+        El metodo de Newton Interpolacion fue util porque organiza los datos
+        mediante diferencias divididas y permite construir el polinomio de forma
+        progresiva.
+      </p>
+
+      <div class="method-interpretation-grid">
+        <div class="method-interpretation-box">
+          <h3>Utilidad</h3>
+          <p>
+            Es practico cuando se desea estimar precios faltantes y tambien
+            cuando se quiere mostrar el proceso ordenado en una tabla.
+          </p>
+        </div>
+
+        <div class="method-interpretation-box">
+          <h3>Ventaja</h3>
+          <p>
+            Si se agrega un nuevo dato, no es necesario rehacer todo desde cero
+            como puede ocurrir con otros metodos.
+          </p>
+        </div>
+
+        <div class="method-interpretation-box">
+          <h3>Limitacion</h3>
+          <p>
+            Igual que Lagrange, si se usan muchos puntos puede generar
+            oscilaciones en la curva.
+          </p>
+        </div>
+      </div>
+
+      <div class="final-note">
+        <h3>Conclusion</h3>
+        <p>
+          Newton Interpolacion es util y ordenado para trabajar con datos
+          dispersos. Es muy parecido a Lagrange en resultado, pero su tabla de
+          diferencias divididas facilita el analisis del procedimiento.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Metodo de Newton Interpolacion | Modulo 3 - Interpolacion</p>
+  </footer>
+
+  <script src="NewtonInterpolacionapp.js"></script>
+</body>
+</html>

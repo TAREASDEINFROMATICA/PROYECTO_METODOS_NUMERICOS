@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biseccion - Modulo 2</title>
+  <link rel="stylesheet" href="Biseccionstyle.css">
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Raicesindex.html" class="back-link">← Volver a Raices</a>
+      <span class="badge">Metodo: Biseccion</span>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Modulo 2 - Raices de Ecuaciones</p>
+      <h1>Metodo de Biseccion</h1>
+
+      <p class="hero-text">
+        El metodo de biseccion permite encontrar el dia critico donde el gasto
+        acumulado alcanza el limite economico permitido. Trabaja con un intervalo
+        [a,b] donde la funcion cambia de signo.
+      </p>
+
+      <div class="formula-box">
+        f(x) = ∫ C(t) dt - L = 0
+      </div>
+
+      <p class="hero-text">
+        Si f(a) y f(b) tienen signos diferentes, entonces existe una raiz dentro
+        del intervalo. Esa raiz representa el dia donde inicia la zona critica.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card context-card">
+      <p class="eyebrow dark">Contexto del ejercicio</p>
+      <h2>¿Que estamos calculando?</h2>
+
+      <p>
+        En este ejercicio se analiza una crisis de precios y abastecimiento.
+        La variable x representa los dias transcurridos. La funcion f(x)
+        representa el gasto acumulado menos el limite permitido.
+      </p>
+
+      <p>
+        El metodo de biseccion busca el valor de x donde f(x)=0. Ese punto
+        indica que el gasto acumulado ya llego al limite economico.
+      </p>
+
+      <div class="context-grid">
+        <div class="context-box">
+          <h3>Antes de la raiz</h3>
+          <p>f(x) es negativa. El gasto acumulado todavia no alcanza el limite.</p>
+        </div>
+
+        <div class="context-box">
+          <h3>En la raiz</h3>
+          <p>f(x)=0. El gasto acumulado es igual al limite permitido.</p>
+        </div>
+
+        <div class="context-box">
+          <h3>Despues de la raiz</h3>
+          <p>f(x) es positiva. El sistema entra en una situacion critica.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Seleccion del escenario</p>
+      <h2>Casos de analisis</h2>
+
+      <div class="case-selector">
+        <button class="case-button active" data-case="ideal">Caso I: Estado ideal</button>
+        <button class="case-button" data-case="moderado">Caso II: Crisis moderada</button>
+        <button class="case-button" data-case="critico">Caso III: Crisis critica</button>
+      </div>
+
+      <div class="case-detail">
+        <div class="case-info">
+          <h3 id="caseTitle"></h3>
+          <p id="caseDescription"></p>
+
+          <div class="function-card">
+            <p>Funcion diaria C(x)</p>
+            <h4 id="dailyFunction"></h4>
+          </div>
+
+          <div class="function-card blue-card">
+            <p>Funcion acumulada f(x)</p>
+            <h4 id="caseFunction"></h4>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <h3>Interpretacion del escenario</h3>
+          <p id="caseInterpretation"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card input-card">
+      <p class="eyebrow dark">Datos de entrada</p>
+      <h2>Parametros del metodo de biseccion</h2>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="inputA">Valor inicial a</label>
+          <input type="number" id="inputA" step="0.01" value="0">
+        </div>
+
+        <div class="form-group">
+          <label for="inputB">Valor inicial b</label>
+          <input type="number" id="inputB" step="0.01" value="30">
+        </div>
+
+        <div class="form-group">
+          <label for="inputTol">Tolerancia</label>
+          <input type="number" id="inputTol" step="0.000001" value="0.000001">
+        </div>
+
+        <div class="form-group">
+          <label for="inputMax">Maximo de iteraciones</label>
+          <input type="number" id="inputMax" value="100">
+        </div>
+      </div>
+
+      <button class="calculate-btn" id="btnCalcular">Calcular por Biseccion</button>
+
+      <div class="note-box">
+        <strong>Condicion necesaria:</strong> para aplicar biseccion debe cumplirse
+        que f(a) y f(b) tengan signos diferentes.
+      </div>
+    </section>
+
+    <section class="card result-card">
+      <p class="eyebrow dark">Resultado del calculo</p>
+      <h2>Resultado aproximado</h2>
+
+      <div class="result-grid">
+        <div class="result-item">
+          <span>Raiz aproximada</span>
+          <strong id="resultadoRaiz">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>f(x)</span>
+          <strong id="resultadoFx">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Error final</span>
+          <strong id="resultadoError">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Iteraciones</span>
+          <strong id="resultadoIteraciones">-</strong>
+        </div>
+
+        <div class="result-item">
+          <span>Convergencia</span>
+          <strong id="resultadoConvergencia">-</strong>
+        </div>
+      </div>
+
+      <div class="interpretation-box">
+        <h3>Analisis del resultado</h3>
+        <p id="analisisResultado">
+          Presiona calcular para obtener la interpretacion del caso.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Visualizacion</p>
+      <h2>Grafica 3D aproximada del metodo</h2>
+
+      <div class="graph-card">
+        <canvas id="bisectionGraph"></canvas>
+      </div>
+
+      <p class="graph-note">
+        La curva azul representa la funcion acumulada f(x). El punto rojo marca
+        la raiz aproximada encontrada por biseccion. Las lineas punteadas muestran
+        el intervalo usado.
+      </p>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Tabla de iteraciones</p>
+      <h2>Proceso iterativo del metodo</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Iteracion</th>
+              <th>a</th>
+              <th>b</th>
+              <th>m = (a+b)/2</th>
+              <th>f(a)</th>
+              <th>f(m)</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody id="tablaIteraciones">
+            <tr>
+              <td colspan="7">Presiona calcular para ver las iteraciones.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card comparison-card">
+      <p class="eyebrow dark">Comparacion de casos</p>
+      <h2>Biseccion aplicada a los tres escenarios</h2>
+
+      <button class="compare-btn" id="btnCompararCasos">Comparar los tres casos</button>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Caso</th>
+              <th>Raiz x</th>
+              <th>Iteraciones</th>
+              <th>Error</th>
+              <th>Interpretacion</th>
+            </tr>
+          </thead>
+          <tbody id="tablaComparacionCasos">
+            <tr>
+              <td colspan="5">Presiona comparar para ver los resultados.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="card variables-card">
+  <p class="eyebrow dark">Interpretacion de variables</p>
+  <h2>Variables usadas en el metodo de Biseccion</h2>
+
+  <div class="variables-layout">
+    <div class="variables-box">
+      <h3 id="variablesCaseTitle">Caso I: Estado ideal</h3>
+      <p id="variablesCaseText">
+        En este caso se analiza una situacion controlada donde el gasto crece lentamente.
+      </p>
+
+      <div class="formula-variable">
+        <strong>Funcion del modelo:</strong>
+        <span id="variablesFormula">f(x)</span>
+      </div>
+    </div>
+
+    <div class="variables-box method-box">
+      <h3>Variables del metodo</h3>
+
+      <ul>
+        <li><strong>x:</strong> dias transcurridos desde el inicio de la crisis.</li>
+        <li><strong>C(x):</strong> costo diario aproximado en el dia x.</li>
+        <li><strong>f(x):</strong> gasto acumulado menos el limite permitido.</li>
+        <li><strong>L:</strong> limite economico maximo que puede soportar la familia.</li>
+        <li><strong>a:</strong> extremo inferior del intervalo inicial.</li>
+        <li><strong>b:</strong> extremo superior del intervalo inicial.</li>
+        <li><strong>m:</strong> punto medio calculado con m = (a + b) / 2.</li>
+        <li><strong>f(a):</strong> valor de la funcion en el extremo inferior.</li>
+        <li><strong>f(m):</strong> valor de la funcion en el punto medio.</li>
+        <li><strong>error:</strong> aproximacion del margen de diferencia entre iteraciones.</li>
+        <li><strong>tolerancia:</strong> limite minimo aceptado para detener el metodo.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="variables-interpretation">
+    <h3>Interpretacion final</h3>
+    <p id="variablesConclusion">
+      En Biseccion, el intervalo se va reduciendo hasta encontrar el valor de x donde f(x)=0.
+    </p>
+  </div>
+</section>
+<section class="card method-interpretation-card">
+  <p class="eyebrow dark">Interpretacion del metodo</p>
+  <h2>¿Que tan estable y util fue Biseccion?</h2>
+
+  <p>
+    El metodo de Biseccion fue estable porque siempre reduce el intervalo
+    donde se encuentra la raiz. Mientras exista cambio de signo entre
+    f(a) y f(b), el metodo puede aproximarse al punto critico sin depender
+    demasiado de un valor inicial exacto.
+  </p>
+
+  <div class="method-interpretation-grid">
+    <div class="method-interpretation-box">
+      <h3>Estabilidad</h3>
+      <p>
+        Es uno de los metodos mas estables, porque no salta fuera del intervalo.
+        En cada iteracion divide el intervalo y conserva la zona donde existe
+        cambio de signo.
+      </p>
+    </div>
+
+    <div class="method-interpretation-box">
+      <h3>Utilidad</h3>
+      <p>
+        Es util para verificar el dia critico de forma segura. Aunque puede ser
+        mas lento que Newton-Raphson o Secante, es confiable para comprobar que
+        la raiz existe.
+      </p>
+    </div>
+
+    <div class="method-interpretation-box">
+      <h3>Limitacion</h3>
+      <p>
+        Necesita que f(a) y f(b) tengan signos diferentes. Si no hay cambio de
+        signo, el metodo no puede aplicarse directamente.
+      </p>
+    </div>
+  </div>
+
+  <div class="final-note">
+    <h3>Conclusion</h3>
+    <p>
+      Biseccion es el metodo mas seguro para iniciar el analisis. Su mayor
+      ventaja es la estabilidad; su desventaja es que puede requerir mas
+      iteraciones. Por eso sera comparado despues con Newton-Raphson y Secante
+      para determinar cual metodo fue mas rapido y cual fue mas conveniente.
+    </p>
+  </div>
+</section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Metodo de Biseccion | Modulo 2 - Raices de Ecuaciones</p>
+  </footer>
+
+  <script src="Biseccionapp.js"></script>
+</body>
+</html>

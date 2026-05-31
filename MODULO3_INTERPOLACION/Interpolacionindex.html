@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 3 - Interpolacion</title>
+  <link rel="stylesheet" href="Interpolacionstyle.css">
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../index.html" class="back-link">← Volver al inicio</a>
+      <span class="badge">Persona 2</span>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Desafio Final de Metodos Numericos</p>
+      <h1>Modulo 3: Interpolacion</h1>
+
+      <p class="hero-text">
+        Este modulo analiza la variacion de precios de productos basicos cuando
+        solo existen datos dispersos durante el mes.
+      </p>
+
+      <div class="formula-box">
+        P(x) ≈ precio estimado en el dia x
+      </div>
+
+      <p class="hero-text">
+        La interpolacion permite reconstruir una curva aproximada de precios
+        para estimar valores faltantes entre datos conocidos.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="card context-card">
+      <p class="eyebrow dark">Contexto del ejercicio</p>
+      <h2>¿De que estamos hablando?</h2>
+
+      <p>
+        En una situacion de crisis, los precios de alimentos basicos no siempre
+        se registran todos los dias. A veces solo existen datos de algunos dias
+        o semanas. Por eso se necesita interpolar para estimar precios faltantes.
+      </p>
+
+      <p>
+        En este modulo se trabaja con datos dispersos de precios durante un mes.
+        El objetivo es reconstruir una curva continua que permita analizar como
+        suben los precios en distintos escenarios.
+      </p>
+
+      <div class="context-grid">
+        <div class="context-box">
+          <h3>Datos conocidos</h3>
+          <p>
+            Son pares ordenados de la forma (dia, precio), por ejemplo
+            dia 10 y precio 13 Bs.
+          </p>
+        </div>
+
+        <div class="context-box">
+          <h3>Dato faltante</h3>
+          <p>
+            Es el precio que se desea estimar en un dia donde no existe registro.
+          </p>
+        </div>
+
+        <div class="context-box">
+          <h3>Curva interpolada</h3>
+          <p>
+            Es la curva que aproxima el comportamiento de los precios durante
+            el mes.
+          </p>
+        </div>
+      </div>
+
+      <div class="model-box">
+        <h3>Modelo general</h3>
+
+        <p class="model-formula">
+          Datos: (x₀,y₀), (x₁,y₁), ..., (xₙ,yₙ)
+        </p>
+
+        <p class="model-formula green">
+          P(x) = precio interpolado
+        </p>
+
+        <ul>
+          <li><strong>x:</strong> dia del mes que se desea analizar.</li>
+          <li><strong>y:</strong> precio del producto en Bs.</li>
+          <li><strong>P(x):</strong> precio estimado por interpolacion.</li>
+          <li><strong>n:</strong> cantidad de datos conocidos.</li>
+          <li><strong>Curva:</strong> comportamiento aproximado del precio.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card intro-card">
+      <div>
+        <p class="eyebrow dark">Presentacion del modulo</p>
+        <h2>¿Que se realizara?</h2>
+
+        <p>
+          Se analizaran tres escenarios de precios: estado ideal, crisis
+          moderada y crisis critica. Cada escenario usara datos dispersos de
+          precios durante el mes y se resolvera con los metodos de Lagrange,
+          Newton y Splines cubicos.
+        </p>
+      </div>
+
+      <div class="summary-grid">
+        <div class="mini-card">
+          <span>3</span>
+          <p>Casos de precios</p>
+        </div>
+
+        <div class="mini-card">
+          <span>3</span>
+          <p>Metodos de interpolacion</p>
+        </div>
+
+        <div class="mini-card">
+          <span>P(x)</span>
+          <p>Precio estimado</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Casos del modulo</p>
+      <h2>Escenarios que se analizaran</h2>
+
+      <div class="case-selector">
+        <button class="case-button active" data-case="ideal">Caso I: Estado ideal</button>
+        <button class="case-button" data-case="moderado">Caso II: Crisis moderada</button>
+        <button class="case-button" data-case="critico">Caso III: Crisis critica</button>
+      </div>
+
+      <div class="case-detail">
+        <div class="case-info">
+          <h3 id="caseTitle"></h3>
+          <p id="caseDescription"></p>
+
+          <div class="function-card">
+            <p>Producto analizado</p>
+            <h4 id="productName"></h4>
+          </div>
+
+          <div class="function-card blue-card">
+            <p>Funcion del caso</p>
+            <h4 id="caseFunction"></h4>
+          </div>
+
+          <div class="function-card green-card">
+            <p>Dato a estimar</p>
+            <h4 id="estimateDay"></h4>
+          </div>
+
+          <div class="variables-box">
+            <h4>Interpretacion de variables</h4>
+            <ul>
+              <li><strong>x:</strong> dia del mes.</li>
+              <li><strong>y:</strong> precio del producto en bolivianos.</li>
+              <li><strong>P(x):</strong> precio estimado en un dia sin dato.</li>
+              <li><strong>Datos dispersos:</strong> registros conocidos de precio.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="result-panel">
+          <h3>Resultado aproximado del caso</h3>
+          <p class="big-number" id="estimatedPrice">-</p>
+          <p id="caseInterpretation"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card formulas-card">
+      <p class="eyebrow dark">Funciones usadas</p>
+      <h2>Formulas de interpolacion aplicadas</h2>
+
+      <div class="formulas-grid">
+        <div class="formula-item">
+          <h3>Lagrange</h3>
+          <p>
+            P(x) = Σ yᵢ Lᵢ(x)
+          </p>
+          <small>
+            Usa todos los puntos conocidos para construir directamente el polinomio.
+          </small>
+        </div>
+
+        <div class="formula-item">
+          <h3>Newton Interpolacion</h3>
+          <p>
+            P(x) = a₀ + a₁(x-x₀) + a₂(x-x₀)(x-x₁) + ...
+          </p>
+          <small>
+            Usa diferencias divididas para calcular los coeficientes del polinomio.
+          </small>
+        </div>
+
+        <div class="formula-item">
+          <h3>Splines Cubicos</h3>
+          <p>
+            Sᵢ(x) = aᵢ + bᵢ(x-xᵢ) + cᵢ(x-xᵢ)² + dᵢ(x-xᵢ)³
+          </p>
+          <small>
+            Divide la curva en tramos para obtener una interpolacion mas suave.
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Datos dispersos</p>
+      <h2>Tabla de precios del caso seleccionado</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Dia</th>
+              <th>Precio Bs</th>
+              <th>Interpretacion</th>
+            </tr>
+          </thead>
+          <tbody id="dataTable">
+            <!-- Se llena con JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card justification-card">
+      <p class="eyebrow dark">Justificacion de datos</p>
+      <h2>¿Por que se eligieron estos precios?</h2>
+
+      <p id="justificationText"></p>
+
+      <div class="numbers-grid">
+        <div class="number-card">
+          <span id="firstPrice"></span>
+          <p>Precio inicial del producto al comenzar el mes.</p>
+        </div>
+
+        <div class="number-card">
+          <span id="lastPrice"></span>
+          <p>Precio final aproximado al terminar el mes.</p>
+        </div>
+
+        <div class="number-card">
+          <span id="increaseValue"></span>
+          <p>Incremento total durante el periodo analizado.</p>
+        </div>
+
+        <div class="number-card limit-card">
+          <span id="estimateValue"></span>
+          <p>Dia elegido para estimar un precio faltante mediante interpolacion.</p>
+        </div>
+      </div>
+
+      <div class="conclusion-box">
+        <h3>Conclusion del caso</h3>
+        <p id="caseConclusion"></p>
+      </div>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow dark">Visualizacion</p>
+      <h2>Grafica 3D aproximada de la curva de precios</h2>
+
+      <div class="graph-card">
+        <canvas id="interpolationGraph"></canvas>
+      </div>
+
+      <p class="graph-note">
+        La grafica 3D aproximada muestra los datos conocidos y la curva estimada
+        de precios. El punto rojo representa el precio interpolado en el dia
+        seleccionado.
+      </p>
+    </section>
+
+    <section class="card comparison-card">
+      <p class="eyebrow dark">Comparativa de Metodos Numericos</p>
+      <h2>Comparacion de resultados por escenario</h2>
+
+      <p>
+        En esta seccion se comparan los tres metodos de interpolacion aplicados
+        al mismo escenario. El resultado representa el precio aproximado en un
+        dia donde no se tiene dato registrado.
+      </p>
+
+      <div class="compare-toolbar">
+        <label for="comparisonCase">Escenario:</label>
+
+        <select id="comparisonCase">
+          <option value="ideal">Caso I: Estado ideal</option>
+          <option value="moderado">Caso II: Crisis moderada</option>
+          <option value="critico" selected>Caso III: Crisis critica</option>
+        </select>
+
+        <button id="btnCompararMetodos" class="compare-btn">
+          Comparar todos los metodos
+        </button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Metodo</th>
+              <th>Datos usados</th>
+              <th>Convergio</th>
+              <th>Dia x</th>
+              <th>Precio estimado</th>
+              <th>Diferencia</th>
+            </tr>
+          </thead>
+
+          <tbody id="tablaComparacionMetodos">
+            <tr>
+              <td colspan="6">Selecciona un escenario y presiona comparar.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="comparison-summary" id="comparisonSummary">
+        Selecciona un escenario y presiona comparar.
+      </div>
+    </section>
+
+    <section class="card methods-card">
+      <p class="eyebrow dark">Metodos obligatorios</p>
+      <h2>Selecciona el metodo de interpolacion</h2>
+
+      <div class="methods-grid">
+        <article class="method-card">
+          <div class="method-icon">1</div>
+          <h3>Lagrange</h3>
+          <p>
+            Construye un polinomio usando todos los puntos conocidos. Es directo
+            y facil de aplicar cuando hay pocos datos.
+          </p>
+          <ul>
+            <li>Usa todos los puntos.</li>
+            <li>No necesita tabla de diferencias.</li>
+            <li>Bueno para estimaciones puntuales.</li>
+          </ul>
+          <a href="LAGRANGE/Lagrangeindex.html" class="btn">Abrir Lagrange</a>
+        </article>
+
+        <article class="method-card">
+          <div class="method-icon">2</div>
+          <h3>Newton Interpolacion</h3>
+          <p>
+            Usa diferencias divididas para construir el polinomio interpolante.
+            Es util cuando se agregan nuevos datos.
+          </p>
+          <ul>
+            <li>Usa diferencias divididas.</li>
+            <li>Permite organizar mejor los calculos.</li>
+            <li>Da el mismo polinomio que Lagrange.</li>
+          </ul>
+          <a href="NEWTON_INTERPOLACION/NewtonInterpolacionindex.html" class="btn">Abrir Newton</a>
+        </article>
+
+        <article class="method-card">
+          <div class="method-icon">3</div>
+          <h3>Splines Cubicos</h3>
+          <p>
+            Une los puntos mediante polinomios cubicos por tramos. Produce una
+            curva mas suave y estable visualmente.
+          </p>
+          <ul>
+            <li>Trabaja por intervalos.</li>
+            <li>Genera curvas suaves.</li>
+            <li>Reduce oscilaciones grandes.</li>
+          </ul>
+          <a href="SPLINES/Splinesindex.html" class="btn">Abrir Splines</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="card comparison-card">
+      <p class="eyebrow dark">Comparativa general</p>
+      <h2>Comparacion de escenarios</h2>
+
+      <button class="compare-btn" id="btnCompararCasos">Comparar los tres casos</button>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Caso</th>
+              <th>Producto</th>
+              <th>Dia estimado</th>
+              <th>Precio estimado</th>
+              <th>Incremento total</th>
+              <th>Interpretacion</th>
+            </tr>
+          </thead>
+          <tbody id="comparisonTable">
+            <tr>
+              <td colspan="6">Presiona comparar para ver los resultados.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card method-interpretation-card">
+      <p class="eyebrow dark">Interpretacion de metodos</p>
+      <h2>¿Que metodo puede ser mas estable o util?</h2>
+
+      <div class="method-interpretation-grid">
+        <div class="method-interpretation-box">
+          <h3>Lagrange</h3>
+          <p>
+            Es util cuando se desea calcular directamente un precio faltante.
+            Sin embargo, con muchos puntos puede presentar oscilaciones.
+          </p>
+        </div>
+
+        <div class="method-interpretation-box">
+          <h3>Newton</h3>
+          <p>
+            Es util para organizar mejor los datos mediante diferencias
+            divididas. Es practico si se agregan nuevos registros.
+          </p>
+        </div>
+
+        <div class="method-interpretation-box">
+          <h3>Splines</h3>
+          <p>
+            Suele ser el mas estable visualmente, porque trabaja por tramos y
+            genera una curva suave entre los puntos.
+          </p>
+        </div>
+      </div>
+
+      <div class="final-note">
+        <h3>Conclusion</h3>
+        <p>
+          Para estimar un solo valor, Lagrange y Newton son utiles. Para mostrar
+          una curva de precios mas suave y realista, Splines cubicos suele ser
+          el metodo mas estable.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Modulo 3 - Interpolacion | Lagrange, Newton y Splines Cubicos</p>
+  </footer>
+
+  <script src="Interpolacionapp.js"></script>
+</body>
+</html>
