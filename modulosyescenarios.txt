@@ -35,3 +35,4 @@ G	Difusión de opinión o descontento social	                Ecuaciones diferenc
 
 DIRECION PARA USAR GIT 
 https://github.com/TAREASDEINFROMATICA/PROYECTO_METODOS_NUMERICOS.git
+

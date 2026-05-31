@@ -1,0 +1,41 @@
+TENER INTALADO GIT 
+configuar git 
+git config --global user.name "Su Nombre"
+git config --global user.email "su_correo@gmail.com"
+ ver version
+git --version
+git version 2.51.2.windows.1
+
+
+
+PRIMERO ENTRAR A CMD Y ESTAR EN ESCRITORIO PARA QUE SE DESCARGE AI.
+
+git clone https://github.com/TAREASDEINFROMATICA/PROYECTO_METODOS_NUMERICOS.git
+
+
+LUEGO INGRESA AL PROYECTO
+
+
+ANTES OJO ANTES DE TRABAJAR 
+ESTE COMANDO SIRVE PATA TENER LOS ULTIMOS CMABIOS DE 
+LOS COMPAÑEROS
+
+git pull origin main
+
+LUEGO DESPUES DE HACER UN CAMBIO GUARDARLO CON 
+
+git add .
+git commit -m "Descriccion"
+git push origin main
+
+
+ojo si uno subio antes algo no te dejara subirlo
+por eso  primerjo actualza  
+
+git pull origin main
+
+luego puedes guardar con 
+
+git add .
+git commit -m "Descriccion"
+git push origin main
