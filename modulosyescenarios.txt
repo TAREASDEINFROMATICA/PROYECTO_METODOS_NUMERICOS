@@ -31,3 +31,7 @@ D	Costo acumulado y pérdida del poder adquisitivo familiar	Integración numéri
 E	Umbrales críticos de abastecimiento	                        Raíces de ecuaciones
 F	Rumores de desabastecimiento y pánico en la distribución	Sistemas lineales mal condicionados
 G	Difusión de opinión o descontento social	                Ecuaciones diferenciales
+
+
+DIRECION PARA USAR GIT 
+https://github.com/TAREASDEINFROMATICA/PROYECTO_METODOS_NUMERICOS.git
