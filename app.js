@@ -7,7 +7,7 @@ const modulos = [
     descripcion:
       "Analiza abastecimiento, transporte, distribucion de recursos y rumores mediante Jacobi, Gauss-Seidel, SOR, Gradiente Conjugado y LU.",
     responsable: "Casilla Rengel Paola Nathaly",
-    ruta: "MODULO1_SISTEMAS_ECUACIONES/index.html",
+    ruta: "MODULO1_SISTEMAS_ECUACIONES/Sistemaindex.html",
     color: "#2563eb",
     colorSuave: "rgba(37, 99, 235, 0.12)"
   },
