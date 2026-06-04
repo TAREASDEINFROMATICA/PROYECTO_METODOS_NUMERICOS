@@ -58,6 +58,18 @@ const modulos = [
     ruta: "MODULO5_EDO/EDOindex.html",
     color: "#ef4444",
     colorSuave: "rgba(239, 68, 68, 0.12)"
+  },
+  {
+    numero: 6,
+    titulo: "Sistemas de ecuaciones lineales mal condicionados",
+    etiqueta: "MODULO6_SISTEMAS_MAL_CONDICIONADOS",
+    escenarios: ["F"],
+    descripcion:
+      "Modela sistemas sensibles o mal condicionados donde pequenos cambios producen resultados muy diferentes.",
+    responsable: "Persona 1 - Casilla Rengel Paola Nathaly",
+    ruta: "MODULO6_SEE/index.html",
+    color: "#3f0606",
+    colorSuave: "rgba(108, 5, 5, 0.12)"
   }
 ];
 
