@@ -82,26 +82,35 @@
       </div>
 
       <div class="case-detail">
-        <div class="case-info">
-          <h3 id="caseTitle"></h3>
-          <p id="caseDescription"></p>
+  <div class="case-info">
+    <h3 id="caseTitle"></h3>
+    <p id="caseDescription"></p>
 
-          <div class="function-card">
-            <p>Producto analizado</p>
-            <h4 id="productName"></h4>
-          </div>
+    <div class="function-card">
+      <p>Producto analizado</p>
+      <small class="function-context">
+        Alimento cuyo precio se esta estudiando durante la situacion de crisis
+      </small>
+      <h4 id="productName"></h4>
+    </div>
 
-          <div class="function-card blue-card">
-            <p>Funcion del caso</p>
-            <h4 id="caseFunction"></h4>
-          </div>
-        </div>
+    <div class="function-card blue-card">
+      <p>Funcion del caso</p>
+      <small class="function-context">
+        Modelo usado para representar el comportamiento aproximado del precio
+      </small>
+      <h4 id="caseFunction"></h4>
+    </div>
+  </div>
 
-        <div class="result-panel">
-          <h3>Interpretacion del escenario</h3>
-          <p id="caseInterpretation"></p>
-        </div>
-      </div>
+  <div class="result-panel">
+    <h3>Interpretacion del escenario</h3>
+    <small class="panel-context">
+      Explica como se comporta el precio del producto en este caso
+    </small>
+    <p id="caseInterpretation"></p>
+  </div>
+</div>
     </section>
 
     <section class="card input-card">
@@ -109,21 +118,30 @@
       <h2>Parametros para interpolar con Lagrange</h2>
 
       <div class="form-grid">
-        <div class="form-group">
-          <label for="inputDias">Dias conocidos</label>
-          <input type="text" id="inputDias" value="1,5,10,15,20,30">
-        </div>
+  <div class="form-group">
+    <label for="inputDias">Dias conocidos</label>
+    <span class="field-context">
+      Dias donde ya se tiene registrado el precio real
+    </span>
+    <input type="text" id="inputDias" value="1,5,10,15,20,30">
+  </div>
 
-        <div class="form-group">
-          <label for="inputPrecios">Precios conocidos</label>
-          <input type="text" id="inputPrecios" value="8,9,10,11.2,12.1,13.5">
-        </div>
+  <div class="form-group">
+    <label for="inputPrecios">Precios conocidos</label>
+    <span class="field-context">
+      Precios del producto en los dias registrados
+    </span>
+    <input type="text" id="inputPrecios" value="8,9,10,11.2,12.1,13.5">
+  </div>
 
-        <div class="form-group">
-          <label for="inputX">Dia a estimar</label>
-          <input type="number" id="inputX" step="0.01" value="12">
-        </div>
-      </div>
+  <div class="form-group">
+    <label for="inputX">Dia a estimar</label>
+    <span class="field-context">
+      Dia sin dato donde se quiere aproximar el precio
+    </span>
+    <input type="number" id="inputX" step="0.01" value="12">
+  </div>
+</div>
 
       <button class="calculate-btn" id="btnCalcular">Calcular por Lagrange</button>
 
@@ -139,26 +157,38 @@
       <h2>Precio estimado</h2>
 
       <div class="result-grid">
-        <div class="result-item">
-          <span>Dia estimado</span>
-          <strong id="resultadoX">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Dia estimado</span>
+    <small class="result-context">
+      Dia del mes donde no se tenia precio registrado
+    </small>
+    <strong id="resultadoX">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Precio P(x)</span>
-          <strong id="resultadoPrecio">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Precio P(x)</span>
+    <small class="result-context">
+      Precio aproximado calculado con Lagrange
+    </small>
+    <strong id="resultadoPrecio">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Puntos usados</span>
-          <strong id="resultadoPuntos">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Puntos usados</span>
+    <small class="result-context">
+      Cantidad de pares dia-precio usados en el calculo
+    </small>
+    <strong id="resultadoPuntos">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Estado</span>
-          <strong id="resultadoEstado">-</strong>
-        </div>
-      </div>
+  <div class="result-item">
+    <span>Estado</span>
+    <small class="result-context">
+      Indica si el calculo se realizo correctamente
+    </small>
+    <strong id="resultadoEstado">-</strong>
+  </div>
+</div>
 
       <div class="interpretation-box">
         <h3>Analisis del resultado</h3>
@@ -189,15 +219,34 @@
 
       <div class="table-wrapper">
         <table>
-          <thead>
-            <tr>
-              <th>i</th>
-              <th>xᵢ</th>
-              <th>yᵢ</th>
-              <th>Lᵢ(x)</th>
-              <th>yᵢ · Lᵢ(x)</th>
-            </tr>
-          </thead>
+         <thead>
+  <tr>
+    <th>
+      i
+      <small class="th-context">Numero del dato</small>
+    </th>
+
+    <th>
+      xᵢ
+      <small class="th-context">Dia conocido</small>
+    </th>
+
+    <th>
+      yᵢ
+      <small class="th-context">Precio registrado</small>
+    </th>
+
+    <th>
+      Lᵢ(x)
+      <small class="th-context">Peso del dato en la estimacion</small>
+    </th>
+
+    <th>
+      yᵢ · Lᵢ(x)
+      <small class="th-context">Aporte al precio final</small>
+    </th>
+  </tr>
+</thead>
           <tbody id="tablaLagrange">
             <tr>
               <td colspan="5">Presiona calcular para ver el proceso.</td>
@@ -216,15 +265,38 @@
       <div class="table-wrapper">
         <table>
           <thead>
-            <tr>
-              <th>Caso</th>
-              <th>Producto</th>
-              <th>Dia estimado</th>
-              <th>Precio estimado</th>
-              <th>Incremento total</th>
-              <th>Interpretacion</th>
-            </tr>
-          </thead>
+  <tr>
+    <th>
+      Caso
+      <small class="th-context">Escenario analizado</small>
+    </th>
+
+    <th>
+      Producto
+      <small class="th-context">Alimento evaluado</small>
+    </th>
+
+    <th>
+      Dia estimado
+      <small class="th-context">Dia sin precio real</small>
+    </th>
+
+    <th>
+      Precio estimado
+      <small class="th-context">Resultado P(x)</small>
+    </th>
+
+    <th>
+      Incremento total
+      <small class="th-context">Subida del precio en el periodo</small>
+    </th>
+
+    <th>
+      Interpretacion
+      <small class="th-context">Lectura del resultado en la crisis</small>
+    </th>
+  </tr>
+</thead>
           <tbody id="tablaComparacionCasos">
             <tr>
               <td colspan="6">Presiona comparar para ver los resultados.</td>

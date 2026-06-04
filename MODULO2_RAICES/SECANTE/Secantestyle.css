@@ -498,3 +498,33 @@ tr:hover {
     font-size: 15px;
   }
 }
+.field-context {
+  display: block;
+  font-size: 13px;
+  color: #2563eb;
+  font-weight: 700;
+  margin-top: -3px;
+  margin-bottom: 3px;
+}
+
+.result-context {
+  display: block;
+  font-size: 13px;
+  color: #2563eb;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+
+.th-context {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.form-group label {
+  margin-bottom: 0;
+}

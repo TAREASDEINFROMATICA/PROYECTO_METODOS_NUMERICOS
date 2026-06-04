@@ -490,3 +490,63 @@ tr:hover {
     font-size: 15px;
   }
 }
+.field-context {
+  display: block;
+  font-size: 13px;
+  color: #2563eb;
+  font-weight: 700;
+  margin-top: -3px;
+  margin-bottom: 3px;
+}
+
+.result-context {
+  display: block;
+  font-size: 13px;
+  color: #2563eb;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+
+.th-context {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.variables-table {
+  margin-top: 24px;
+  min-width: 950px;
+}
+
+.variables-table th {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.variables-table td:first-child {
+  font-weight: 900;
+  color: #0f766e;
+}
+
+.variables-table td:nth-child(2) {
+  font-weight: 800;
+  color: #111827;
+}
+
+.variables-table td:nth-child(3) {
+  color: #1d4ed8;
+  font-weight: 800;
+}
+
+#resumenSituacionActual {
+  color: #374151;
+  font-size: 16px;
+}
+
+.form-group label {
+  margin-bottom: 0;
+}

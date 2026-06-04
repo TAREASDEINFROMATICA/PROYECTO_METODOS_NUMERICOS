@@ -108,21 +108,30 @@
       <h2>Parametros para interpolar con Splines Cubicos</h2>
 
       <div class="form-grid">
-        <div class="form-group">
-          <label for="inputDias">Dias conocidos</label>
-          <input type="text" id="inputDias" value="1,5,10,15,20,30">
-        </div>
+  <div class="form-group">
+    <label for="inputDias">Dias conocidos</label>
+    <span class="field-context">
+      Dias donde ya se tiene registrado el precio real
+    </span>
+    <input type="text" id="inputDias" value="1,5,10,15,20,30">
+  </div>
 
-        <div class="form-group">
-          <label for="inputPrecios">Precios conocidos</label>
-          <input type="text" id="inputPrecios" value="8,9,10,11.2,12.1,13.5">
-        </div>
+  <div class="form-group">
+    <label for="inputPrecios">Precios conocidos</label>
+    <span class="field-context">
+      Precios reales del producto en esos dias
+    </span>
+    <input type="text" id="inputPrecios" value="8,9,10,11.2,12.1,13.5">
+  </div>
 
-        <div class="form-group">
-          <label for="inputX">Dia a estimar</label>
-          <input type="number" id="inputX" step="0.01" value="12">
-        </div>
-      </div>
+  <div class="form-group">
+    <label for="inputX">Dia a estimar</label>
+    <span class="field-context">
+      Dia sin registro donde se quiere calcular el precio
+    </span>
+    <input type="number" id="inputX" step="0.01" value="12">
+  </div>
+</div>
 
       <button class="calculate-btn" id="btnCalcular">Calcular por Splines</button>
 
@@ -138,26 +147,38 @@
       <h2>Precio estimado</h2>
 
       <div class="result-grid">
-        <div class="result-item">
-          <span>Dia estimado</span>
-          <strong id="resultadoX">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Dia estimado</span>
+    <small class="result-context">
+      Dia del mes donde no se tenia precio registrado
+    </small>
+    <strong id="resultadoX">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Precio S(x)</span>
-          <strong id="resultadoPrecio">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Precio S(x)</span>
+    <small class="result-context">
+      Precio aproximado calculado con Splines Cubicos
+    </small>
+    <strong id="resultadoPrecio">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Tramos usados</span>
-          <strong id="resultadoTramos">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Tramos usados</span>
+    <small class="result-context">
+      Cantidad de intervalos creados entre los dias conocidos
+    </small>
+    <strong id="resultadoTramos">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Estado</span>
-          <strong id="resultadoEstado">-</strong>
-        </div>
-      </div>
+  <div class="result-item">
+    <span>Estado</span>
+    <small class="result-context">
+      Indica si el calculo se realizo correctamente
+    </small>
+    <strong id="resultadoEstado">-</strong>
+  </div>
+</div>
 
       <div class="interpretation-box">
         <h3>Analisis del resultado</h3>
@@ -189,16 +210,43 @@
       <div class="table-wrapper">
         <table>
           <thead>
-            <tr>
-              <th>Tramo</th>
-              <th>Intervalo</th>
-              <th>aᵢ</th>
-              <th>bᵢ</th>
-              <th>cᵢ</th>
-              <th>dᵢ</th>
-              <th>Usado</th>
-            </tr>
-          </thead>
+  <tr>
+    <th>
+      Tramo
+      <small class="th-context">Numero del intervalo</small>
+    </th>
+
+    <th>
+      Intervalo
+      <small class="th-context">Rango de dias conocidos</small>
+    </th>
+
+    <th>
+      a
+      <small class="th-context">Precio inicial del tramo</small>
+    </th>
+
+    <th>
+      b
+      <small class="th-context">Tendencia de subida del precio</small>
+    </th>
+
+    <th>
+      c
+      <small class="th-context">Curvatura suave del precio</small>
+    </th>
+
+    <th>
+      d
+      <small class="th-context">Cambio cubico del tramo</small>
+    </th>
+
+    <th>
+      Usado
+      <small class="th-context">Tramo donde cae el dia estimado</small>
+    </th>
+  </tr>
+</thead>
           <tbody id="tablaSplines">
             <tr>
               <td colspan="7">Presiona calcular para ver los coeficientes.</td>

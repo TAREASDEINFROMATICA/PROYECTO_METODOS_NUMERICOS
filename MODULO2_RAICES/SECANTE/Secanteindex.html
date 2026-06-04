@@ -144,32 +144,37 @@
       <p class="eyebrow dark">Resultado del calculo</p>
       <h2>Resultado aproximado</h2>
 
-      <div class="result-grid">
-        <div class="result-item">
-          <span>Raiz aproximada</span>
-          <strong id="resultadoRaiz">-</strong>
-        </div>
+     <div class="result-grid">
+  <div class="result-item">
+    <span>Raiz aproximada</span>
+    <small class="result-context">Dia critico donde el gasto alcanza el limite</small>
+    <strong id="resultadoRaiz">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>f(x)</span>
-          <strong id="resultadoFx">-</strong>
-        </div>
+  <div class="result-item">
+    <span>f(x)</span>
+    <small class="result-context">Diferencia entre gasto acumulado y limite permitido</small>
+    <strong id="resultadoFx">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Error final</span>
-          <strong id="resultadoError">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Error final</span>
+    <small class="result-context">Diferencia final entre dos aproximaciones</small>
+    <strong id="resultadoError">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Iteraciones</span>
-          <strong id="resultadoIteraciones">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Iteraciones</span>
+    <small class="result-context">Cantidad de repeticiones realizadas</small>
+    <strong id="resultadoIteraciones">-</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Convergencia</span>
-          <strong id="resultadoConvergencia">-</strong>
-        </div>
-      </div>
+  <div class="result-item">
+    <span>Convergencia</span>
+    <small class="result-context">Indica si el metodo encontro una solucion valida</small>
+    <strong id="resultadoConvergencia">-</strong>
+  </div>
+</div>
 
       <div class="interpretation-box">
         <h3>Analisis del resultado</h3>
@@ -201,16 +206,33 @@
       <div class="table-wrapper">
         <table>
           <thead>
-            <tr>
-              <th>Iteracion</th>
-              <th>x0</th>
-              <th>x1</th>
-              <th>f(x0)</th>
-              <th>f(x1)</th>
-              <th>x nuevo</th>
-              <th>Error</th>
-            </tr>
-          </thead>
+  <tr>
+    <th>
+      Caso
+      <small class="th-context">Escenario analizado</small>
+    </th>
+
+    <th>
+      Raiz x
+      <small class="th-context">Dia critico encontrado</small>
+    </th>
+
+    <th>
+      Iteraciones
+      <small class="th-context">Repeticiones usadas</small>
+    </th>
+
+    <th>
+      Error
+      <small class="th-context">Margen final del calculo</small>
+    </th>
+
+    <th>
+      Interpretacion
+      <small class="th-context">Lectura del resultado en la situacion real</small>
+    </th>
+  </tr>
+</thead>
           <tbody id="tablaIteraciones">
             <tr>
               <td colspan="7">Presiona calcular para ver las iteraciones.</td>

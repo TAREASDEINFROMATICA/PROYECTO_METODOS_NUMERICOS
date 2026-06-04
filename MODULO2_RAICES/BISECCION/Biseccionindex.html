@@ -108,26 +108,30 @@
       <h2>Parametros del metodo de biseccion</h2>
 
       <div class="form-grid">
-        <div class="form-group">
-          <label for="inputA">Valor inicial a</label>
-          <input type="number" id="inputA" step="0.01" value="0">
-        </div>
+  <div class="form-group">
+    <label for="inputA">Valor inicial a</label>
+    <span class="field-context">Dia inicial del analisis</span>
+    <input type="number" id="inputA" step="0.01" value="0">
+  </div>
 
-        <div class="form-group">
-          <label for="inputB">Valor inicial b</label>
-          <input type="number" id="inputB" step="0.01" value="30">
-        </div>
+  <div class="form-group">
+    <label for="inputB">Valor inicial b</label>
+    <span class="field-context">Dia final donde se busca la raiz</span>
+    <input type="number" id="inputB" step="0.01" value="30">
+  </div>
 
-        <div class="form-group">
-          <label for="inputTol">Tolerancia</label>
-          <input type="number" id="inputTol" step="0.000001" value="0.000001">
-        </div>
+  <div class="form-group">
+    <label for="inputTol">Tolerancia</label>
+    <span class="field-context">Precision aceptada del resultado</span>
+    <input type="number" id="inputTol" step="0.000001" value="0.000001">
+  </div>
 
-        <div class="form-group">
-          <label for="inputMax">Maximo de iteraciones</label>
-          <input type="number" id="inputMax" value="100">
-        </div>
-      </div>
+  <div class="form-group">
+    <label for="inputMax">Maximo de iteraciones</label>
+    <span class="field-context">Limite de intentos del metodo</span>
+    <input type="number" id="inputMax" value="100">
+  </div>
+</div>
 
       <button class="calculate-btn" id="btnCalcular">Calcular por Biseccion</button>
 
@@ -142,31 +146,36 @@
       <h2>Resultado aproximado</h2>
 
       <div class="result-grid">
-        <div class="result-item">
-          <span>Raiz aproximada</span>
-          <strong id="resultadoRaiz">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Raiz aproximada</span>
+    <small class="result-context">Dia critico donde el gasto alcanza el limite</small>
+    <strong id="resultadoRaiz">0.000000</strong>
+  </div>
 
-        <div class="result-item">
-          <span>f(x)</span>
-          <strong id="resultadoFx">-</strong>
-        </div>
+  <div class="result-item">
+    <span>f(x)</span>
+    <small class="result-context">Diferencia entre gasto acumulado y limite</small>
+    <strong id="resultadoFx">0.000000</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Error final</span>
-          <strong id="resultadoError">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Error final</span>
+    <small class="result-context">Margen final de aproximacion del calculo</small>
+    <strong id="resultadoError">0.000000</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Iteraciones</span>
-          <strong id="resultadoIteraciones">-</strong>
-        </div>
+  <div class="result-item">
+    <span>Iteraciones</span>
+    <small class="result-context">Cantidad de veces que se dividio el intervalo</small>
+    <strong id="resultadoIteraciones">0</strong>
+  </div>
 
-        <div class="result-item">
-          <span>Convergencia</span>
-          <strong id="resultadoConvergencia">-</strong>
-        </div>
-      </div>
+  <div class="result-item">
+    <span>Convergencia</span>
+    <small class="result-context">Indica si el metodo encontro una solucion valida</small>
+    <strong id="resultadoConvergencia">No</strong>
+  </div>
+</div>
 
       <div class="interpretation-box">
         <h3>Analisis del resultado</h3>
@@ -198,16 +207,43 @@
       <div class="table-wrapper">
         <table>
           <thead>
-            <tr>
-              <th>Iteracion</th>
-              <th>a</th>
-              <th>b</th>
-              <th>m = (a+b)/2</th>
-              <th>f(a)</th>
-              <th>f(m)</th>
-              <th>Error</th>
-            </tr>
-          </thead>
+  <tr>
+    <th>
+      Iteracion
+      <small class="th-context">Repeticion del calculo</small>
+    </th>
+
+    <th>
+      a
+      <small class="th-context">Dia inicial del intervalo</small>
+    </th>
+
+    <th>
+      b
+      <small class="th-context">Dia final del intervalo</small>
+    </th>
+
+    <th>
+      m = (a + b) / 2
+      <small class="th-context">Dia medio evaluado</small>
+    </th>
+
+    <th>
+      f(a)
+      <small class="th-context">Diferencia gasto-limite en a</small>
+    </th>
+
+    <th>
+      f(m)
+      <small class="th-context">Diferencia gasto-limite en m</small>
+    </th>
+
+    <th>
+      Error
+      <small class="th-context">Margen de aproximacion</small>
+    </th>
+  </tr>
+</thead>
           <tbody id="tablaIteraciones">
             <tr>
               <td colspan="7">Presiona calcular para ver las iteraciones.</td>
