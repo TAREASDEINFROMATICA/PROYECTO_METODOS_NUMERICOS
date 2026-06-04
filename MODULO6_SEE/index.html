@@ -3,1099 +3,293 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rumores y Desabastecimiento en Bolivia</title>
+    <title>Simulador de Redes Logísticas - Escenario F</title>
     <link rel="stylesheet" href="styles.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="main.js" defer></script>
   </head>
   <body>
-    <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
-    <header class="hero">
-      <div class="hero-bg"></div>
-      <div class="hero-content">
-        <div class="badge">📊 Métodos Numéricos · Bolivia 2024–2025</div>
-        <h1 class="hero-title">
-          <br />
-          <span class="accent">Rumores y Pánico</span><br />
-          en la Distribución
-        </h1>
-        <p class="hero-sub">
-          Simulación matemática de cómo un rumor de desabastecimiento puede
-          desestabilizar toda la cadena de suministro boliviana — desde mercados
-          locales hasta rutas interdepartamentales.
+    <header>
+      <div class="container">
+        <h1>Simulador Logístico: El Efecto Mariposa de los Rumores</h1>
+        <p class="subtitle">
+          Análisis del Escenario F: Sistemas Mal Condicionados en Mercados
+          Populares
         </p>
-        <div class="hero-chips">
-          <span class="chip">🔢 Sistemas Lineales</span>
-          <span class="chip">📐 Raíces de Ecuaciones</span>
-          <span class="chip">📈 Interpolación</span>
-          <span class="chip">∫ Integración Numérica</span>
-          <span class="chip">📉 Ecuaciones Diferenciales</span>
-        </div>
-        <a href="#contexto" class="btn-hero">Explorar la simulación ↓</a>
       </div>
     </header>
 
-    <!-- ═══════════════════════════ CONTEXTO ═══════════════════════════ -->
-    <section id="contexto" class="section section-dark">
-      <div class="container">
-        <div class="section-label">El problema real</div>
-        <h2 class="section-title">¿Qué está pasando en Bolivia?</h2>
-        <div class="context-grid">
-          <div class="context-card">
-            <div class="context-icon">⛽</div>
-            <h3>Carburantes</h3>
-            <p>
-              Las colas en surtidores pueden durar horas. El acceso irregular al
-              diésel afecta el transporte de alimentos y mercancías entre
-              departamentos.
-            </p>
-          </div>
-          <div class="context-card">
-            <div class="context-icon">📱</div>
-            <h3>Rumores y redes sociales</h3>
-            <p>
-              Un mensaje de WhatsApp que dice "no habrá azúcar mañana" puede
-              vaciar estantes en pocas horas, aunque el rumor sea falso.
-            </p>
-          </div>
-          <div class="context-card">
-            <div class="context-icon">🛒</div>
-            <h3>Compras de pánico</h3>
-            <p>
-              Cuando la gente compra más de lo que necesita por miedo, crea una
-              escasez artificial que hace que el rumor se vuelva realidad.
-            </p>
-          </div>
-          <div class="context-card">
-            <div class="context-icon">🚛</div>
-            <h3>Distribución irregular</h3>
-            <p>
-              Bloqueos de carreteras y conflictos sociales interrumpen las rutas
-              normales. Los mercados más alejados sufren primero.
-            </p>
-          </div>
-        </div>
-        <div class="context-quote">
-          <blockquote>
-            "Un pequeño cambio en la <strong>percepción social</strong> puede
-            generar un <strong>gran cambio en la demanda</strong> — y este
-            cambio puede modelarse matemáticamente."
-          </blockquote>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════ NAVEGACIÓN MÉTODOS ═══════════════════════════ -->
-    <nav class="methods-nav">
-      <div class="container">
-        <div class="nav-label">Módulos de simulación</div>
-        <div class="nav-tabs">
-          <button class="nav-tab active" onclick="showModule('sistemas')">
-            <span class="tab-num">01</span>
-            <span class="tab-name">Sistemas<br />Lineales</span>
-          </button>
-          <button class="nav-tab" onclick="showModule('raices')">
-            <span class="tab-num">02</span>
-            <span class="tab-name">Raíces de<br />Ecuaciones</span>
-          </button>
-          <button class="nav-tab" onclick="showModule('interpolacion')">
-            <span class="tab-num">03</span>
-            <span class="tab-name">Inter-<br />polación</span>
-          </button>
-          <button class="nav-tab" onclick="showModule('integracion')">
-            <span class="tab-num">04</span>
-            <span class="tab-name">Integración<br />Numérica</span>
-          </button>
-          <button class="nav-tab" onclick="showModule('diferencial')">
-            <span class="tab-num">05</span>
-            <span class="tab-name">Ecuaciones<br />Diferenciales</span>
-          </button>
-        </div>
-      </div>
-    </nav>
-
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <!--                    MÓDULO 1: SISTEMAS LINEALES                  -->
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <section id="module-sistemas" class="module active">
-      <div class="container">
-        <div class="module-header">
-          <div class="module-num">01</div>
-          <div>
-            <div class="section-label">Método numérico aplicado</div>
-            <h2 class="section-title">
-              Sistemas de Ecuaciones Lineales<br /><span class="accent-warm"
-                >y Número de Condición</span
-              >
-            </h2>
-          </div>
-        </div>
-
-        <!-- Explicación conceptual -->
-        <div class="explain-box">
-          <h3>🧠 ¿Qué estamos modelando y por qué?</h3>
-          <p>
-            Imagina que tienes <strong>4 mercados en Bolivia</strong>: La Paz,
-            El Alto, Santa Cruz y Cochabamba. Cada mercado tiene una
-            <strong>demanda de alimentos</strong> (cuánto necesita) y recibe
-            <strong>suministros desde distintas fuentes</strong> (campo,
-            importaciones, otras ciudades).
-          </p>
-          <p>
-            Normalmente podemos calcular exactamente cuánto debe enviar cada
-            fuente a cada mercado resolviendo un sistema de ecuaciones. Pero
-            cuando hay un <strong>rumor de escasez</strong>, la demanda se
-            dispara de forma desproporcionada — y el sistema matemático se
-            vuelve <strong>"mal condicionado"</strong>: un pequeño error de
-            información produce errores gigantescos en la distribución.
-          </p>
-          <div class="explain-highlight">
-            💡 El <strong>número de condición</strong> nos dice qué tan sensible
-            es el sistema. Si es mayor a 1,000 — ¡el sistema es peligrosamente
-            inestable! Un rumor del 5% puede causar una desviación del 500% en
-            la distribución.
-          </div>
-        </div>
-
-        <!-- Variables explicadas -->
-        <div class="variables-box">
-          <h3>📋 ¿Qué significa cada variable?</h3>
-          <div class="var-grid">
-            <div class="var-card">
-              <span class="var-name">x₁ = La Paz</span>
-              <span class="var-desc"
-                >Cantidad de alimentos (toneladas/día) que debe recibir el
-                mercado de La Paz para satisfacer su demanda real.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">x₂ = El Alto</span>
-              <span class="var-desc"
-                >Cantidad que necesita El Alto. Al ser zona densamente poblada y
-                de bajos ingresos, es la más vulnerable al pánico.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">x₃ = Santa Cruz</span>
-              <span class="var-desc"
-                >Eje productivo del país. Normalmente exporta a otras regiones,
-                pero bajo pánico también retiene stock.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">x₄ = Cochabamba</span>
-              <span class="var-desc"
-                >Zona de paso e intermediación. Su desestabilización afecta las
-                rutas hacia los Yungas y el sur.</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">κ (kappa)</span>
-              <span class="var-desc"
-                >Número de condición: mide qué tan "frágil" es el sistema. κ
-                &lt; 100 = estable. κ &gt; 1,000 = peligroso.</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">% Rumor</span>
-              <span class="var-desc"
-                >Qué porcentaje de aumento en la demanda genera el rumor. Un 5%
-                de rumor puede verse amplificado mucho más.</span
-              >
-            </div>
-          </div>
-        </div>
-
-        <!-- Inputs -->
-        <div class="sim-card">
-          <h3>⚙️ Configura el escenario</h3>
-          <p class="sim-intro">
-            Ajusta el nivel de rumor y observa cómo el sistema de distribución
-            reacciona:
-          </p>
-
-          <div class="input-grid">
-            <div class="input-group">
-              <label>🔊 Nivel de Rumor</label>
-              <select id="sl-rumor-level" onchange="actualizarEtiquetaRumor()">
-                <option value="0">🟢 Sin rumor (0%)</option>
-                <option value="5">🟡 Rumor bajo (5%)</option>
-                <option value="15" selected>🟠 Rumor medio (15%)</option>
-                <option value="30">🔴 Rumor alto (30%)</option>
-                <option value="50">🆘 Pánico total (50%)</option>
-              </select>
-              <small id="sl-rumor-label" class="input-note"
-                >Los mercados aumentan su demanda un 15% por el rumor</small
-              >
-            </div>
-
-            <div class="input-group">
-              <label>📦 Demanda base La Paz (ton/día)</label>
-              <input type="number" id="sl-d1" value="120" min="50" max="500" />
-              <small class="input-note"
-                >Consumo diario normal de alimentos en La Paz</small
-              >
-            </div>
-            <div class="input-group">
-              <label>📦 Demanda base El Alto (ton/día)</label>
-              <input type="number" id="sl-d2" value="95" min="50" max="500" />
-              <small class="input-note">Consumo diario normal en El Alto</small>
-            </div>
-            <div class="input-group">
-              <label>📦 Demanda base Santa Cruz (ton/día)</label>
-              <input type="number" id="sl-d3" value="200" min="50" max="800" />
-              <small class="input-note"
-                >Santa Cruz tiene mayor capacidad pero también mayor
-                demanda</small
-              >
-            </div>
-            <div class="input-group">
-              <label>📦 Demanda base Cochabamba (ton/día)</label>
-              <input type="number" id="sl-d4" value="110" min="50" max="400" />
-              <small class="input-note"
-                >Cochabamba como zona de distribución intermedia</small
-              >
-            </div>
-          </div>
-
-          <button class="btn-simulate" onclick="resolverSistemasLineales()">
-            🔢 Resolver sistema y analizar estabilidad
-          </button>
-        </div>
-
-        <!-- Resultados -->
-        <div id="sl-resultados" class="results-section hidden">
-          <h3>📊 Resultados del análisis</h3>
-
-          <div class="result-narrative" id="sl-narrative"></div>
-
-          <div class="results-grid">
-            <div class="result-panel">
-              <h4>Sistema de ecuaciones resuelto</h4>
-              <div id="sl-matrix-display" class="matrix-display"></div>
-            </div>
-            <div class="result-panel">
-              <h4>Suministro calculado por mercado</h4>
-              <table class="result-table" id="sl-table"></table>
-            </div>
-          </div>
-
-          <div class="condition-display" id="sl-condition"></div>
-
-          <div class="chart-container">
-            <canvas id="sl-chart"></canvas>
-          </div>
-
-          <div class="interpretation-box" id="sl-interpretation"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <!--                  MÓDULO 2: RAÍCES DE ECUACIONES                 -->
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <section id="module-raices" class="module">
-      <div class="container">
-        <div class="module-header">
-          <div class="module-num">02</div>
-          <div>
-            <div class="section-label">Método numérico aplicado</div>
-            <h2 class="section-title">
-              Raíces de Ecuaciones<br /><span class="accent-warm"
-                >Punto de Quiebre del Stock</span
-              >
-            </h2>
-          </div>
-        </div>
-
-        <div class="explain-box">
-          <h3>🧠 ¿Qué estamos buscando?</h3>
-          <p>
-            Existe un <strong>punto crítico de rumor</strong> a partir del cual
-            el stock disponible ya no puede satisfacer la demanda. Es como
-            buscar la temperatura exacta a la que el agua hierve — en nuestro
-            caso, buscamos el <strong>porcentaje de pánico</strong> que hace que
-            el sistema colapse.
-          </p>
-          <p>
-            Usamos el método de <strong>bisección</strong> (dividir el problema
-            a la mitad repetidamente) para encontrar ese punto exacto. El método
-            nos dice: "entre el 0% y el 50% de pánico, el colapso ocurre
-            exactamente en X%".
-          </p>
-          <div class="explain-highlight">
-            💡 La ecuación que resolvemos es:
-            <strong>Demanda(rumor) − Stock(rumor) = 0</strong>. Cuando demanda
-            supera al stock, el resultado es negativo → el sistema colapsó.
-            Buscamos el cero exacto de esa diferencia.
-          </div>
-        </div>
-
-        <div class="variables-box">
-          <h3>📋 ¿Qué significa cada valor?</h3>
-          <div class="var-grid">
-            <div class="var-card">
-              <span class="var-name">Stock inicial</span>
-              <span class="var-desc"
-                >Toneladas de alimento disponibles en los almacenes antes de que
-                el rumor se extienda.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">Demanda normal</span>
-              <span class="var-desc"
-                >Lo que los mercados consumen en condiciones de tranquilidad
-                social.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">α (alpha)</span>
-              <span class="var-desc"
-                >Factor de amplificación del pánico. Indica cuánto aumenta la
-                demanda por cada 1% de rumor.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">β (beta)</span>
-              <span class="var-desc"
-                >Factor de reducción del stock. Cuando hay pánico,
-                distribuidores también retienen mercancía.</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">p* (raíz)</span>
-              <span class="var-desc"
-                >El porcentaje exacto de pánico donde la demanda iguala al
-                stock. Más allá de este punto: desabastecimiento.</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">Iteraciones</span>
-              <span class="var-desc"
-                >Cuántos pasos necesitó el método de bisección para encontrar la
-                respuesta con precisión.</span
-              >
-            </div>
-          </div>
-        </div>
-
-        <div class="sim-card">
-          <h3>⚙️ Configura los parámetros del mercado</h3>
-
-          <div class="input-grid">
-            <div class="input-group">
-              <label>📦 Stock inicial (toneladas)</label>
-              <input
-                type="number"
-                id="r-stock"
-                value="1500"
-                min="500"
-                max="10000"
-              />
-              <small class="input-note"
-                >Total de alimentos disponibles en la red de distribución
-                regional</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🛒 Demanda diaria normal (toneladas)</label>
-              <input
-                type="number"
-                id="r-demanda"
-                value="800"
-                min="100"
-                max="5000"
-              />
-              <small class="input-note"
-                >Consumo total sin pánico ni rumores</small
-              >
-            </div>
-            <div class="input-group">
-              <label>📈 Factor de amplificación del pánico (α)</label>
-              <input
-                type="number"
-                id="r-alpha"
-                value="2.5"
-                min="0.5"
-                max="10"
-                step="0.1"
-              />
-              <small class="input-note"
-                >Por ejemplo, α=2.5 significa que un 10% de rumor genera un 25%
-                más de demanda</small
-              >
-            </div>
-            <div class="input-group">
-              <label>📉 Factor de retención de stock (β)</label>
-              <input
-                type="number"
-                id="r-beta"
-                value="0.8"
-                min="0.1"
-                max="1"
-                step="0.05"
-              />
-              <small class="input-note"
-                >β=0.8 significa que distribuidores retienen el 20% del stock
-                cuando hay rumores</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🎯 Tolerancia del método (precisión)</label>
-              <input
-                type="number"
-                id="r-tol"
-                value="0.001"
-                min="0.0001"
-                max="0.1"
-                step="0.0001"
-              />
-              <small class="input-note"
-                >Qué tan precisa debe ser la respuesta. Menor número = más
-                preciso</small
-              >
-            </div>
-          </div>
-
-          <button class="btn-simulate" onclick="resolverRaices()">
-            🔍 Encontrar punto de quiebre
-          </button>
-        </div>
-
-        <div id="r-resultados" class="results-section hidden">
-          <h3>📊 Resultado de la bisección</h3>
-
-          <div class="result-narrative" id="r-narrative"></div>
-
-          <div class="results-grid">
-            <div class="result-panel">
-              <h4>Historial de iteraciones</h4>
-              <div class="table-scroll">
-                <table class="result-table" id="r-table"></table>
-              </div>
-            </div>
-            <div class="result-panel">
-              <h4>Escenarios de colapso</h4>
-              <table class="result-table" id="r-scenarios"></table>
-            </div>
-          </div>
-
-          <div class="chart-container">
-            <canvas id="r-chart"></canvas>
-          </div>
-
-          <div class="interpretation-box" id="r-interpretation"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <!--                     MÓDULO 3: INTERPOLACIÓN                     -->
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <section id="module-interpolacion" class="module">
-      <div class="container">
-        <div class="module-header">
-          <div class="module-num">03</div>
-          <div>
-            <div class="section-label">Método numérico aplicado</div>
-            <h2 class="section-title">
-              Interpolación<br /><span class="accent-warm"
-                >Curva de Pánico en el Tiempo</span
-              >
-            </h2>
-          </div>
-        </div>
-
-        <div class="explain-box">
-          <h3>🧠 ¿Qué estamos haciendo?</h3>
-          <p>
-            Solo tenemos datos de la demanda en ciertos momentos del día (cuando
-            se realizaron encuestas o se registraron ventas). Pero necesitamos
-            saber qué pasó <strong>entre esos momentos</strong>.
-          </p>
-          <p>
-            La interpolación <strong>construye una curva suave</strong> que pasa
-            por todos los puntos que sí conocemos, y nos permite estimar la
-            demanda en cualquier hora del día. Es como unir puntos con una línea
-            inteligente.
-          </p>
-          <div class="explain-highlight">
-            💡 En este contexto boliviano, un rumor puede aparecer a las 7am y
-            para el mediodía haber causado compras masivas. La interpolación nos
-            ayuda a reconstruir esa curva de pánico hora a hora para entender
-            cómo se propagó.
-          </div>
-        </div>
-
-        <div class="variables-box">
-          <h3>📋 ¿Qué representa cada elemento?</h3>
-          <div class="var-grid">
-            <div class="var-card">
-              <span class="var-name">Hora del día (t)</span>
-              <span class="var-desc"
-                >Los momentos específicos en que se registraron datos de demanda
-                (6am, 10am, 2pm, 6pm, etc.)</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">Demanda observada</span>
-              <span class="var-desc"
-                >Cuántas toneladas se demandaron en ese momento exacto. Son los
-                "puntos conocidos".</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">Curva interpolada</span>
-              <span class="var-desc"
-                >La curva que construye el método para estimar la demanda en
-                horas que no se midieron.</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">Pico de demanda</span>
-              <span class="var-desc"
-                >La hora y cantidad máxima que predice la curva. Ese es el
-                momento de mayor presión sobre el sistema.</span
-              >
-            </div>
-          </div>
-        </div>
-
-        <div class="sim-card">
-          <h3>⚙️ Define los datos de demanda observados</h3>
-          <p class="sim-intro">
-            Ingresa la demanda registrada a distintas horas del día (simula un
-            día de crisis con rumor):
-          </p>
-
-          <div class="input-grid">
-            <div class="input-group">
-              <label>🕕 Demanda a las 6:00 AM (ton)</label>
-              <input type="number" id="ip-h0" value="80" min="0" max="2000" />
-              <small class="input-note"
-                >Antes del rumor: demanda normal de madrugada</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🕙 Demanda a las 10:00 AM (ton)</label>
-              <input type="number" id="ip-h4" value="220" min="0" max="2000" />
-              <small class="input-note"
-                >El rumor comenzó a circular en redes sociales</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🕛 Demanda a las 12:00 PM (ton)</label>
-              <input type="number" id="ip-h6" value="480" min="0" max="2000" />
-              <small class="input-note"
-                >Pánico en su punto más alto: todos van al mercado</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🕓 Demanda a las 15:00 PM (ton)</label>
-              <input type="number" id="ip-h9" value="310" min="0" max="2000" />
-              <small class="input-note"
-                >Comienza a calmarse porque los estantes ya están vacíos</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🕕 Demanda a las 18:00 PM (ton)</label>
-              <input type="number" id="ip-h12" value="150" min="0" max="2000" />
-              <small class="input-note"
-                >Tarde: muchos ya compraron, la demanda baja</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🕘 Demanda a las 21:00 PM (ton)</label>
-              <input type="number" id="ip-h15" value="60" min="0" max="2000" />
-              <small class="input-note"
-                >Noche: mercados cerrados, calma post-pánico</small
-              >
-            </div>
-          </div>
-
-          <button class="btn-simulate" onclick="resolverInterpolacion()">
-            📈 Construir curva de pánico
-          </button>
-        </div>
-
-        <div id="ip-resultados" class="results-section hidden">
-          <h3>📊 Curva de demanda interpolada</h3>
-
-          <div class="result-narrative" id="ip-narrative"></div>
-
-          <div class="chart-container big">
-            <canvas id="ip-chart"></canvas>
-          </div>
-
-          <div class="results-grid">
-            <div class="result-panel">
-              <h4>Estimaciones por hora</h4>
-              <div class="table-scroll">
-                <table class="result-table" id="ip-table"></table>
-              </div>
-            </div>
-            <div class="result-panel">
-              <h4>Análisis del pico de demanda</h4>
-              <div id="ip-peak-analysis" class="peak-analysis"></div>
-            </div>
-          </div>
-
-          <div class="interpretation-box" id="ip-interpretation"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <!--                   MÓDULO 4: INTEGRACIÓN NUMÉRICA               -->
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <section id="module-integracion" class="module">
-      <div class="container">
-        <div class="module-header">
-          <div class="module-num">04</div>
-          <div>
-            <div class="section-label">Método numérico aplicado</div>
-            <h2 class="section-title">
-              Integración Numérica<br /><span class="accent-warm"
-                >Total de Alimentos Demandados</span
-              >
-            </h2>
-          </div>
-        </div>
-
-        <div class="explain-box">
-          <h3>🧠 ¿Qué calculamos con integración?</h3>
-          <p>
-            Si tenemos la
-            <strong>curva de demanda a lo largo del tiempo</strong>, la
-            integración numérica nos dice el <strong>total acumulado</strong>:
-            cuántas toneladas se demandaron en todo el día.
-          </p>
-          <p>
-            Es como calcular el <strong>área bajo la curva</strong>. Si la curva
-            está muy alta (mucha demanda) durante muchas horas, el área total es
-            enorme. Eso representa la cantidad total de alimentos que la red de
-            distribución tuvo que manejar durante la crisis.
-          </p>
-          <div class="explain-highlight">
-            💡 Usamos la <strong>Regla de Simpson</strong>: divide el tiempo en
-            pequeños intervalos y aproxima el área de cada uno. Entre más
-            intervalos, más preciso. Es como calcular el área de un campo
-            irregular dividiéndolo en muchos rectángulos pequeños.
-          </div>
-        </div>
-
-        <div class="variables-box">
-          <h3>📋 ¿Qué significa cada resultado?</h3>
-          <div class="var-grid">
-            <div class="var-card">
-              <span class="var-name">Demanda base diaria</span>
-              <span class="var-desc"
-                >El total normal sin crisis. Es la referencia para comparar
-                cuánto exceso generó el pánico.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">Demanda total con pánico</span>
-              <span class="var-desc"
-                >El área bajo la curva durante el día de crisis. Es lo que la
-                red realmente tuvo que entregar (o no pudo).</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">Exceso de demanda</span>
-              <span class="var-desc"
-                >La diferencia entre lo que se pidió y lo normal. Este exceso es
-                el costo del rumor.</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">n (intervalos)</span>
-              <span class="var-desc"
-                >Cuántos trozos en que se divide el tiempo para el cálculo. Más
-                intervalos = más exacto.</span
-              >
-            </div>
-          </div>
-        </div>
-
-        <div class="sim-card">
-          <h3>⚙️ Define el perfil de demanda durante la crisis</h3>
-
-          <div class="input-grid">
-            <div class="input-group">
-              <label>🕕 Hora de inicio del análisis</label>
-              <input type="number" id="in-t0" value="6" min="0" max="23" />
-              <small class="input-note"
-                >A qué hora se empezó a registrar la demanda (ej: 6 = 6:00
-                AM)</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🕙 Hora de fin del análisis</label>
-              <input type="number" id="in-tf" value="22" min="1" max="24" />
-              <small class="input-note"
-                >A qué hora termina el registro (ej: 22 = 10:00 PM)</small
-              >
-            </div>
-            <div class="input-group">
-              <label>📦 Demanda normal por hora (ton/hr)</label>
-              <input
-                type="number"
-                id="in-normal"
-                value="40"
-                min="5"
-                max="500"
-              />
-              <small class="input-note"
-                >Cuánto se consume normalmente cada hora (sin crisis)</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🔴 Pico de demanda durante el pánico (ton/hr)</label>
-              <input
-                type="number"
-                id="in-pico"
-                value="180"
-                min="10"
-                max="2000"
-              />
-              <small class="input-note"
-                >Máxima demanda horaria alcanzada en el peor momento</small
-              >
-            </div>
-            <div class="input-group">
-              <label>⏰ Hora del pico de pánico</label>
-              <input
-                type="number"
-                id="in-hora-pico"
-                value="12"
-                min="0"
-                max="23"
-              />
-              <small class="input-note"
-                >A qué hora ocurrió el máximo pánico (ej: 12 = mediodía)</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🔢 Número de intervalos para Simpson</label>
-              <input
-                type="number"
-                id="in-n"
-                value="100"
-                min="4"
-                max="1000"
-                step="2"
-              />
-              <small class="input-note"
-                >Debe ser número par. Más intervalos = más preciso</small
-              >
-            </div>
-          </div>
-
-          <button class="btn-simulate" onclick="resolverIntegracion()">
-            ∫ Calcular demanda acumulada
-          </button>
-        </div>
-
-        <div id="in-resultados" class="results-section hidden">
-          <h3>📊 Análisis de la demanda acumulada</h3>
-
-          <div class="result-narrative" id="in-narrative"></div>
-
-          <div class="chart-container big">
-            <canvas id="in-chart"></canvas>
-          </div>
-
-          <div class="results-grid">
-            <div class="result-panel">
-              <h4>Tabla de valores clave</h4>
-              <table class="result-table" id="in-table"></table>
-            </div>
-            <div class="result-panel">
-              <h4>Comparación: Normal vs Crisis</h4>
-              <div class="chart-container">
-                <canvas id="in-chart2"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="interpretation-box" id="in-interpretation"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <!--                MÓDULO 5: ECUACIONES DIFERENCIALES               -->
-    <!-- ═══════════════════════════════════════════════════════════════ -->
-    <section id="module-diferencial" class="module">
-      <div class="container">
-        <div class="module-header">
-          <div class="module-num">05</div>
-          <div>
-            <div class="section-label">Método numérico aplicado</div>
-            <h2 class="section-title">
-              Ecuaciones Diferenciales<br /><span class="accent-warm"
-                >Propagación del Rumor en el Tiempo</span
-              >
-            </h2>
-          </div>
-        </div>
-
-        <div class="explain-box">
-          <h3>🧠 ¿Cómo crece un rumor matemáticamente?</h3>
-          <p>
-            Un rumor no se propaga de golpe — se extiende
-            <strong>gradualmente</strong>, primero lento, luego muy rápido
-            (cuando "explota" en WhatsApp), y eventualmente se frena cuando ya
-            todos lo escucharon o cuando se desmiente.
-          </p>
-          <p>
-            Las ecuaciones diferenciales modelan
-            <strong>cómo cambia el pánico en cada momento</strong>. El método de
-            <strong>Runge-Kutta</strong> calcula paso a paso cómo evoluciona el
-            sistema, como una película cuadro a cuadro. Nos dice: "si ahora hay
-            20% de pánico, en una hora habrá 35%, y en dos horas, 65%..."
-          </p>
-          <div class="explain-highlight">
-            💡 El modelo sigue la lógica: el pánico crece cuando hay mucha gente
-            "susceptible" de creerlo y mucho "pánico activo" propagándolo. Se
-            frena cuando la gente empieza a descreer o cuando el sistema se
-            satura.
-          </div>
-        </div>
-
-        <div class="variables-box">
-          <h3>📋 ¿Qué significa cada variable del modelo?</h3>
-          <div class="var-grid">
-            <div class="var-card">
-              <span class="var-name">S(t) = Susceptibles</span>
-              <span class="var-desc"
-                >Personas que aún no han escuchado el rumor pero pueden creerlo.
-                Al inicio son la mayoría.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">P(t) = En pánico</span>
-              <span class="var-desc"
-                >Personas que creen el rumor activamente y están comprando o
-                difundiendo el pánico.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">R(t) = Recuperados</span>
-              <span class="var-desc"
-                >Personas que ya compraron lo que necesitaban o que dejaron de
-                creer el rumor.</span
-              >
-            </div>
-            <div class="var-card">
-              <span class="var-name">β (tasa de contagio)</span>
-              <span class="var-desc"
-                >Qué tan rápido el rumor "infecta" a nuevas personas. Alta en
-                redes sociales, baja en zonas rurales.</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">γ (tasa de recuperación)</span>
-              <span class="var-desc"
-                >Qué tan rápido la gente se calma o deja de comprar en
-                pánico.</span
-              >
-            </div>
-            <div class="var-card accent">
-              <span class="var-name">Pico de pánico</span>
-              <span class="var-desc"
-                >El momento en que el mayor número de personas está comprando en
-                pánico simultáneamente.</span
-              >
-            </div>
-          </div>
-        </div>
-
-        <div class="sim-card">
-          <h3>⚙️ Configura la dinámica del rumor</h3>
-
-          <div class="input-grid">
-            <div class="input-group">
-              <label>👥 Población total del mercado</label>
-              <input
-                type="number"
-                id="ed-N"
-                value="100000"
-                min="1000"
-                max="1000000"
-                step="1000"
-              />
-              <small class="input-note"
-                >Número de personas en la zona de influencia del rumor</small
-              >
-            </div>
-            <div class="input-group">
-              <label>😰 Personas en pánico al inicio</label>
-              <input type="number" id="ed-P0" value="500" min="1" max="10000" />
-              <small class="input-note"
-                >Las primeras personas que escucharon y creyeron el rumor</small
-              >
-            </div>
-            <div class="input-group">
-              <label>📡 Velocidad de contagio del rumor (β)</label>
-              <input
-                type="number"
-                id="ed-beta"
-                value="0.00003"
-                min="0.000001"
-                max="0.001"
-                step="0.000001"
-              />
-              <small class="input-note"
-                >Con WhatsApp y redes sociales, β puede ser muy alto. Prueba
-                valores entre 0.00001 y 0.0001</small
-              >
-            </div>
-            <div class="input-group">
-              <label>😌 Velocidad de calma (γ)</label>
-              <input
-                type="number"
-                id="ed-gamma"
-                value="0.15"
-                min="0.01"
-                max="1"
-                step="0.01"
-              />
-              <small class="input-note"
-                >Qué tan rápido la gente se calma. Valores altos = pánico
-                breve</small
-              >
-            </div>
-            <div class="input-group">
-              <label>⏱️ Duración de la simulación (horas)</label>
-              <input type="number" id="ed-T" value="72" min="12" max="240" />
-              <small class="input-note"
-                >Cuántas horas simular el comportamiento del rumor</small
-              >
-            </div>
-            <div class="input-group">
-              <label>🔢 Pasos de tiempo para Runge-Kutta</label>
-              <input type="number" id="ed-n" value="200" min="50" max="2000" />
-              <small class="input-note"
-                >Más pasos = más preciso. 200 es un buen balance</small
-              >
-            </div>
-          </div>
-
-          <button class="btn-simulate" onclick="resolverDiferencial()">
-            📉 Simular propagación del rumor
-          </button>
-        </div>
-
-        <div id="ed-resultados" class="results-section hidden">
-          <h3>📊 Evolución temporal del pánico</h3>
-
-          <div class="result-narrative" id="ed-narrative"></div>
-
-          <div class="chart-container big">
-            <canvas id="ed-chart"></canvas>
-          </div>
-
-          <div class="results-grid">
-            <div class="result-panel">
-              <h4>Estadísticas clave de la crisis</h4>
-              <table class="result-table" id="ed-table"></table>
-            </div>
-            <div class="result-panel">
-              <h4>Impacto sobre el stock</h4>
-              <div class="chart-container">
-                <canvas id="ed-chart2"></canvas>
-              </div>
-            </div>
-          </div>
-
-          <div class="interpretation-box" id="ed-interpretation"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════ CONCLUSIONES ═══════════════════════════ -->
-    <section class="section section-dark">
-      <div class="container">
-        <div class="section-label">Reflexión final</div>
-        <h2 class="section-title">Conclusiones del Modelo</h2>
-
-        <div class="conclusions-grid">
-          <div class="conclusion-card">
-            <div class="conc-num">01</div>
-            <h3>Los sistemas mal condicionados son reales</h3>
-            <p>
-              La red de distribución boliviana opera con márgenes muy estrechos.
-              Un rumor del 5% puede desequilibrar por completo la distribución
-              en zonas como El Alto o los Yungas, donde el número de condición
-              del sistema es alto.
-            </p>
-          </div>
-          <div class="conclusion-card">
-            <div class="conc-num">02</div>
-            <h3>Existe un umbral crítico</h3>
-            <p>
-              El método de bisección revela que hay un porcentaje de pánico a
-              partir del cual el desabastecimiento es inevitable. Conocer ese
-              umbral permite actuar antes de cruzarlo.
-            </p>
-          </div>
-          <div class="conclusion-card">
-            <div class="conc-num">03</div>
-            <h3>El tiempo importa</h3>
-            <p>
-              La interpolación muestra que el pico de compras ocurre pocas horas
-              después del rumor. Si la respuesta institucional tarda más que
-              eso, el daño ya está hecho.
-            </p>
-          </div>
-          <div class="conclusion-card">
-            <div class="conc-num">04</div>
-            <h3>El costo del pánico es mensurable</h3>
-            <p>
-              La integración numérica nos da el costo real en toneladas: cuántos
-              alimentos extra se demandaron innecesariamente, y por tanto cuánto
-              se desperdicia o falta en la semana siguiente.
-            </p>
-          </div>
-          <div class="conclusion-card">
-            <div class="conc-num">05</div>
-            <h3>Los rumores siguen leyes matemáticas</h3>
-            <p>
-              El modelo diferencial muestra que los rumores se propagan como
-              epidemias: rápido al inicio, luego se frenan. Aumentar γ
-              (desmentir rápido y creíblemente) es la mejor vacuna.
-            </p>
-          </div>
-          <div class="conclusion-card">
-            <div class="conc-num">06</div>
-            <h3>Limitaciones del modelo</h3>
-            <p>
-              Este modelo simplifica la realidad: no incluye diferencias entre
-              ciudades, el efecto de los bloqueos de carreteras, la corrupción
-              en la distribución, ni las diferencias culturales en la percepción
-              del riesgo. Es una aproximación, no una predicción exacta.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
-    <footer class="footer">
-      <div class="container">
-        <p>📐 Escenario F — Métodos Numéricos | UMSA · 2026</p>
+    <main class="container">
+      <section class="card">
+        <h2>
+          1. El Impacto de los Bloqueos de Carreteras en el Suministro de
+          Alimentos
+        </h2>
         <p>
-          Modelado matemático sin posicionamiento político · Solo análisis
-          académico
+          Este simulador analiza un problema crítico y real de nuestra región:
+          cómo la red de distribución de alimentos que abastece a las familias
+          colapsa debido al cierre de rutas troncales y los conflictos viales
+          que interrumpen el libre tránsito.
         </p>
-      </div>
-    </footer>
+        <p>
+          Cuando se confirman
+          <strong
+            >bloqueos prolongados en las carreteras principales (reportados por
+            la ABC)</strong
+          >, se genera una ola de incertidumbre en la población. El temor a
+          quedarse sin productos básicos provoca que los consumidores sufran una
+          psicosis colectiva, disparando las compras nerviosas un 50% de golpe
+          en el
+          <strong
+            >Mercado Rodríguez, Mercado Villa Fátima y Mercado El Alto</strong
+          >. Al estar las rutas reales bajo una
+          <strong>fricción extrema</strong> (camiones varados, desvíos
+          improvisados por la ceja o choques de tráfico), el sistema matemático
+          se vuelve hipersensible. Al presionar el botón de simulación, verás
+          cómo este pánico y el estrangulamiento de las vías engañan al software
+          de despacho, provocando un quiebre total de stock (números negativos)
+          y dejando los anaqueles completamente vacíos.
+        </p>
+      </section>
 
-    <script src="main.js"></script>
+      <section class="grid-2">
+        <div class="card">
+          <h2>2. Estado de las Carreteras y Modificación de la Demanda (b)</h2>
+          <p class="instruction">
+            Haz clic en las pestañas para ver cómo el cierre de vías y los
+            rumores de desabastecimiento alteran el comportamiento en los
+            mercados:
+          </p>
+          <div class="tabs">
+            <button
+              class="tab-btn active"
+              data-b1="3000"
+              data-b2="3002"
+              data-b3="2998"
+              data-desc="<strong>Situación Base (Rutas Transitables):</strong> Las carreteras de la red fundamental están expeditas. Las familias compran sus 3000 kg habituales de forma tranquila. El suministro en el Mercado Rodríguez, Villa Fátima y El Alto fluye en perfecto equilibrio."
+            >
+              Rutas Libres (Día Normal)
+            </button>
+            <button
+              class="tab-btn"
+              data-b1="3150"
+              data-b2="3152"
+              data-b3="3148"
+              data-desc="<strong>Alerta de Trancas (+5% de Demanda):</strong> Comienzan a reportarse puntos de tensión menores o amagos de bloqueo en las salidas principales. Provoca un ligero incremento preventivo en las compras de la canasta familiar por precaución."
+            >
+              Rumor de Bloqueo (+5%)
+            </button>
+            <button
+              class="tab-btn"
+              data-b1="4500"
+              data-b2="4650"
+              data-b3="4320"
+              data-desc="<strong>Bloqueo Total e Incertidumbre (+50%):</strong> ¡Cierre total de las rutas troncales! Decenas de camiones con verduras y productos lácteos quedan varados sin poder llegar a los centros de abasto. El pánico se apodera de los compradores que abarrotan los mercados en pocas horas, disparando la demanda un 50% y provocando el colapso logístico reflejado en los saldos negativos."
+            >
+              Bloqueo Total Confirmado (+50%)
+            </button>
+          </div>
+
+          <div id="scenario-text" class="explanation-box">
+            Selecciona un escenario arriba para inicializar la simulación.
+          </div>
+
+          <div class="form-row" style="margin-top: 15px">
+            <div>
+              <label>Demanda Rodríguez (b1):</label>
+              <input type="number" id="b1" value="3000" />
+            </div>
+            <div>
+              <label>Demanda Villa Fátima (b2):</label>
+              <input type="number" id="b2" value="3002" />
+            </div>
+            <div>
+              <label>Demanda El Alto (b3):</label>
+              <input type="number" id="b3" value="2998" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>3. Matriz de Esfuerzo Logístico Calibrada (A)</h2>
+          <p class="instruction">
+            Estos coeficientes representan el costo de transporte en las calles.
+            Un determinante cercano a cero genera inestabilidad:
+          </p>
+          <div class="matrix-grid">
+            <input type="number" id="a00" value="1000.00" />
+            <input type="number" id="a01" value="992.00" />
+            <input type="number" id="a02" value="996.00" />
+
+            <input type="number" id="a10" value="1004.00" />
+            <input type="number" id="a11" value="1000.00" />
+            <input type="number" id="a12" value="994.00" />
+
+            <input type="number" id="a20" value="998.00" />
+            <input type="number" id="a21" value="1002.00" />
+            <input type="number" id="a22" value="1000.00" />
+          </div>
+          <div class="metric">
+            <span>Número de Condición Real:</span>
+            <span id="lbl-condicion" class="status-error">Calculando...</span>
+          </div>
+          <button type="button" id="btn-calcular" class="btn">
+            Simular Despacho y Actualizar Datos
+          </button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>4. Resultados del Despacho de Suministros</h2>
+        <div class="grid-2">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mercado (Variable)</th>
+                  <th>Asignación Logística</th>
+                  <th>Diagnóstico en Terreno</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Mercado Rodríguez (x1)</strong></td>
+                  <td id="val-x1" class="value-cell">-</td>
+                  <td id="diag-x1">-</td>
+                </tr>
+                <tr>
+                  <td><strong>Mercado Villa Fátima (x2)</strong></td>
+                  <td id="val-x2" class="value-cell">-</td>
+                  <td id="diag-x2">-</td>
+                </tr>
+                <tr>
+                  <td><strong>Mercado El Alto (x3)</strong></td>
+                  <td id="val-x3" class="value-cell">-</td>
+                  <td id="diag-x3">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="chart-container">
+            <canvas id="graficoResultados"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>5. Demostración Matemática Activa por Método Numérico</h2>
+        <p class="instruction">
+          Haz clic en cada pestaña metodológica para inspeccionar cómo opera
+          internamente cada algoritmo con la matriz editable:
+        </p>
+
+        <div class="method-tabs">
+          <button class="method-btn active" data-method="lu">
+            Factorización LU
+          </button>
+          <button class="method-btn" data-method="jacobi">
+            Método de Jacobi
+          </button>
+          <button class="method-btn" data-method="seidel-sor">
+            Gauss-Seidel y SOR
+          </button>
+          <button class="method-btn" data-method="gcp">GCP (Suñagua)</button>
+        </div>
+
+        <div
+          id="box-explicacion-metodo"
+          class="explanation-box"
+          style="
+            background: #f8fafc;
+            border-left-color: #2563eb;
+            margin-bottom: 15px;
+          "
+        ></div>
+
+        <div id="panel-lu" class="metodo-panel">
+          <h3>Matrices de Descomposición Directa (A = L * U)</h3>
+          <div class="grid-2" style="margin-top: 10px">
+            <div>
+              <h4>Matriz L (Triangular Inferior):</h4>
+              <div
+                id="matriz-L"
+                class="explanation-box"
+                style="
+                  font-family: monospace;
+                  background: #0f172a;
+                  color: #10b981;
+                "
+              ></div>
+            </div>
+            <div>
+              <h4>Matriz U (Triangular Superior):</h4>
+              <div
+                id="matriz-U"
+                class="explanation-box"
+                style="
+                  font-family: monospace;
+                  background: #0f172a;
+                  color: #10b981;
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="panel-jacobi" class="metodo-panel" style="display: none">
+          <h3>Tabla de Iteraciones Simultáneas (Jacobi)</h3>
+          <table id="tabla-jacobi" style="margin-top: 10px"></table>
+        </div>
+
+        <div id="panel-seidel-sor" class="metodo-panel" style="display: none">
+          <div class="grid-2">
+            <div>
+              <h3>Iteraciones de Gauss-Seidel</h3>
+              <table id="tabla-seidel" style="margin-top: 10px"></table>
+            </div>
+            <div>
+              <h3>Iteraciones con SOR (Amortiguado w = 0.35)</h3>
+              <table id="tabla-sor" style="margin-top: 10px"></table>
+            </div>
+          </div>
+        </div>
+
+        <div id="panel-gcp" class="metodo-panel" style="display: none">
+          <h3>
+            Algoritmo de Gradiente Conjugado Precondicionado (Filtro Suñagua)
+          </h3>
+          <table id="tabla-gcp" style="margin-top: 10px"></table>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>6. Cuestionario Evaluativo Oficial del Escenario F</h2>
+        <div style="display: grid; gap: 12px">
+          <p>
+            <strong>¿Qué pasa si la demanda aumenta solo un 5%?</strong> La
+            asignación da un salto desorbitado (pasa de valores normales a
+            fluctuaciones caóticas de más del 200%), dejando ver la
+            inestabilidad crítica de la red urbana.
+          </p>
+          <p>
+            <strong>¿La solución cambia poco o demasiado?</strong> Cambia
+            <strong>demasiado</strong>. Es un sistema altamente inestable e
+            hipersensible al más mínimo error de redondeo físico o matemático.
+          </p>
+          <p>
+            <strong>¿El sistema es estable o mal condicionado?</strong> Es
+            marcadamente <strong>mal condicionado</strong>, debido a que las
+            calles congestionadas y bloqueadas hacen que cualquier variación de
+            datos rompa los cálculos operativos.
+          </p>
+          <p>
+            <strong>¿Qué mercado se vuelve más vulnerable?</strong> El
+            <strong>Mercado Rodríguez</strong> cae de inmediato en números
+            negativos, indicando un desabastecimiento crítico instantáneo en la
+            zona central producto del pánico generalizado.
+          </p>
+        </div>
+      </section>
+    </main>
   </body>
 </html>
