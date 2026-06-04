@@ -237,3 +237,77 @@ ul {
 li {
   margin-bottom: 6px;
 }
+/* ─── BARRA DE NAVEGACIÓN MÉTODOS (CELESTE) ─── */
+.method-navbar {
+  background: linear-gradient(135deg, #00b4d8, #0096c7); /* celeste intenso */
+  border-bottom: 2px solid #0077b6;
+  padding: 8px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 150, 199, 0.25);
+  backdrop-filter: blur(8px);
+}
+
+.method-navbar .nav-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 20px;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-link.active {
+  background: #ffffff;
+  color: #0077b6;
+  border-color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+}
+
+.nav-link.active:hover {
+  background: #f0f9ff;
+  color: #005f8a;
+}
+
+.nav-home {
+  font-weight: 700;
+}
+
+/* ─── RESPONSIVO ─── */
+@media (max-width: 600px) {
+  .method-navbar .nav-container {
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  .nav-link {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+  }
+}
