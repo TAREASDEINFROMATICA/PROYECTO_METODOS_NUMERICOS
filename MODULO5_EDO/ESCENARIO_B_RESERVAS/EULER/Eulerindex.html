@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método de Euler - Explicación SÚPER DETALLADA</title>
+  <link rel="stylesheet" href="../../EDOstyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .explicacion-paso {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-left: 5px solid;
+    }
+    .paso-1 { border-left-color: #3498db; }
+    .paso-2 { border-left-color: #e67e22; }
+    .paso-3 { border-left-color: #27ae60; }
+    .paso-4 { border-left-color: #e74c3c; }
+    
+    .formula-resaltada {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .numero-grande {
+      font-size: 2rem;
+      font-weight: 800;
+      font-family: monospace;
+    }
+    .caja-ejemplo {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .comparacion-casos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .caso-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    .caso-card:hover { transform: translateY(-5px); }
+    .caso-ideal { border-top: 4px solid #27ae60; }
+    .caso-moderado { border-top: 4px solid #e67e22; }
+    .caso-critico { border-top: 4px solid #e74c3c; }
+    .caso-seleccionado { box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+    
+    .tabla-euler {
+      font-size: 0.8rem;
+      max-height: 450px;
+      overflow-y: auto;
+    }
+    .tabla-euler th {
+      background: #4a3b7c;
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+    .resumen-final {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    .badge-info {
+      display: inline-block;
+      background: #3498db20;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Reservasindex.html" class="back-link">← Volver al escenario</a>
+      <span class="badge">Método de Euler | Explicación paso a paso</span>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">Método Numérico - Euler</p>
+      <h1>📐 Método de Euler</h1>
+      <p class="hero-subtitle">Aprendamos a calcular el vaciado de reservas día por día</p>
+      <div class="formula-box">
+        <strong>🎯 Objetivo:</strong> Calcular cuánto combustible queda cada día
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== PARTE 1: EL PROBLEMA ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-question-circle"></i> PARTE 1: ¿Qué problema estamos resolviendo?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-1">
+          <h3 style="color: #3498db;"><i class="fas fa-gas-pump"></i> El problema real</h3>
+          <p>Imagina que tienes una <strong>planta de almacenamiento de combustible</strong> en Bolivia. Cada día:</p>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>📥 <strong>Entra</strong> una cantidad de combustible (camiones que llegan)</li>
+            <li>📤 <strong>Sale</strong> una cantidad de combustible (la gente compra)</li>
+          </ul>
+          <p>La pregunta es: <strong>¿Cuánto combustible quedará después de varios días?</strong></p>
+          <div class="formula-resaltada">
+            Reserva del día siguiente = Reserva de hoy + (Lo que entra - Lo que se consume)
+          </div>
+          <p class="badge-info"><i class="fas fa-lightbulb"></i> Esto es una ECUACIÓN DIFERENCIAL: dR/dt = entrada - consumo</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 2: EL MÉTODO DE EULER ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-calculator"></i> PARTE 2: ¿Cómo funciona el método de Euler?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-2">
+          <h3 style="color: #e67e22;"><i class="fas fa-chalkboard-teacher"></i> Explicación con una analogía</h3>
+          <p>Imagina que estás manejando un auto y quieres saber dónde estarás dentro de 1 hora:</p>
+          <div class="caja-ejemplo">
+            <p><strong>Si vas a 100 km/h, en 1 hora recorrerás 100 km</strong></p>
+            <p>Posición nueva = Posición actual + Velocidad × Tiempo</p>
+          </div>
+          <p>¡El método de Euler hace exactamente lo mismo! Pero en lugar de posición, calculamos <strong>combustible</strong>, y en lugar de velocidad, usamos la <strong>tasa de cambio (entrada - consumo)</strong>.</p>
+        </div>
+
+        <div class="explicacion-paso paso-3">
+          <h3 style="color: #27ae60;"><i class="fas fa-chart-line"></i> La fórmula aplicada a nuestro problema</h3>
+          <div class="formula-resaltada" style="font-size: 1.3rem;">
+            R<sub>nuevo</sub> = R<sub>actual</sub> + (entrada - consumo) × Δt
+          </div>
+          <p>Donde:</p>
+          <ul style="margin-left: 1.5rem;">
+            <li><strong>R<sub>nuevo</sub></strong> = Combustible que quedará mañana (litros)</li>
+            <li><strong>R<sub>actual</sub></strong> = Combustible que tenemos hoy (litros)</li>
+            <li><strong>entrada</strong> = Combustible que llega por día (litros/día)</li>
+            <li><strong>consumo</strong> = Combustible que se consume por día (litros/día)</li>
+            <li><strong>Δt</strong> = Paso de tiempo (normalmente 1 día)</li>
+          </ul>
+        </div>
+
+        <div class="explicacion-paso paso-4">
+          <h3 style="color: #e74c3c;"><i class="fas fa-play-circle"></i> Ejemplo con números reales</h3>
+          <p>Supongamos que hoy tenemos <strong class="numero-grande" style="color:#e74c3c; font-size:1.5rem;">10,000 litros</strong></p>
+          <p>Hoy entraron <strong>500 litros</strong> y se consumieron <strong>600 litros</strong></p>
+          <div class="caja-ejemplo">
+            <p style="font-size: 1.2rem;">📌 Cambio neto = 500 - 600 = <strong style="color:#e74c3c;">-100 litros</strong> (perdemos 100 litros)</p>
+            <p style="font-size: 1.2rem;">📌 Reserva mañana = 10,000 + (-100) = <strong style="color:#27ae60;">9,900 litros</strong></p>
+          </div>
+          <p><strong>¡Y así día tras día!</strong> El método de Euler repite este cálculo simple muchas veces.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 3: LOS 3 ESCENARIOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> PARTE 3: Los 3 escenarios de crisis que simularemos</h2>
+      </div>
+      <div class="card-body">
+        <p>Dependiendo de la gravedad de la crisis, el consumo y la entrada cambian:</p>
+        
+        <div class="comparacion-casos">
+          <div id="cardIdeal" class="caso-card caso-ideal" onclick="seleccionarCaso('ideal')">
+            <h4 style="color: #27ae60;">📈 Caso Ideal</h4>
+            <p><strong>Consumo:</strong> 600 L/día</p>
+            <p><strong>Entrada:</strong> 500 L/día</p>
+            <p><strong>Pérdida diaria:</strong> 100 L/día</p>
+            <p style="font-size:0.8rem; margin-top:0.5rem;">Situación normal</p>
+          </div>
+          <div id="cardModerado" class="caso-card caso-moderado" onclick="seleccionarCaso('moderado')">
+            <h4 style="color: #e67e22;">⚠️ Caso Moderado</h4>
+            <p><strong>Consumo:</strong> 900 L/día <span style="font-size:0.7rem;">(+50%)</span></p>
+            <p><strong>Entrada:</strong> 350 L/día <span style="font-size:0.7rem;">(-30%)</span></p>
+            <p><strong>Pérdida diaria:</strong> 550 L/día</p>
+            <p style="font-size:0.8rem; margin-top:0.5rem;">Crisis parcial</p>
+          </div>
+          <div id="cardCritico" class="caso-card caso-critico" onclick="seleccionarCaso('critico')">
+            <h4 style="color: #e74c3c;">🔥 Caso Crítico</h4>
+            <p><strong>Consumo:</strong> 1200 L/día <span style="font-size:0.7rem;">(+100%)</span></p>
+            <p><strong>Entrada:</strong> 250 L/día <span style="font-size:0.7rem;">(-50%)</span></p>
+            <p><strong>Pérdida diaria:</strong> 950 L/día</p>
+            <p style="font-size:0.8rem; margin-top:0.5rem;">Crisis severa + pánico</p>
+          </div>
+        </div>
+        
+        <div class="badge-info" style="display: block; text-align: center; margin-top: 1rem;">
+          <i class="fas fa-hand-pointer"></i> Haz clic en cualquier caso para simularlo
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 4: PARÁMETROS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-sliders-h"></i> PARTE 4: Ajusta los parámetros de la simulación</h2>
+      </div>
+      <div class="card-body">
+        <div class="parametros-grid">
+          <div class="parametro-card">
+            <label><i class="fas fa-database"></i> Reserva inicial (litros)</label>
+            <input type="number" id="reservaInicial" value="10000" step="500">
+            <small>¿Cuánto combustible hay al inicio?</small>
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-gas-pump"></i> Consumo (L/día)</label>
+            <input type="number" id="consumo" value="600" step="50" readonly style="background:#f0eef7;">
+            <small>Depende del caso seleccionado</small>
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-truck"></i> Entrada (L/día)</label>
+            <input type="number" id="entrada" value="500" step="50" readonly style="background:#f0eef7;">
+            <small>Depende del caso seleccionado</small>
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-brain"></i> Factor pánico (solo crítico)</label>
+            <input type="number" id="factorPanico" value="0.5" step="0.1" min="0" max="2">
+            <small>Cuando hay pánico, el consumo aumenta</small>
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-calendar-day"></i> Días a simular</label>
+            <input type="number" id="dias" value="15">
+            <small>¿Cuántos días queremos predecir?</small>
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-ruler"></i> Paso de tiempo (días)</label>
+            <input type="number" id="dt" value="1" step="0.5">
+            <small>Normalmente 1 día. Menor = más preciso</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 5: CÁLCULO DÍA POR DÍA ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-table"></i> PARTE 5: Cálculo día por día (como en Excel)</h2>
+      </div>
+      <div class="card-body">
+        <p>El método de Euler calcula la reserva día tras día usando la fórmula que aprendimos:</p>
+        <div class="formula-resaltada" style="font-size: 0.9rem;">
+          R<sub>mañana</sub> = R<sub>hoy</sub> + (Entrada - Consumo) × 1 día
+        </div>
+        
+        <div class="table-wrapper tabla-euler">
+          <table id="tablaEuler">
+            <thead>
+              <tr>
+                <th>Día</th>
+                <th>Reserva (litros)</th>
+                <th>Cambio del día</th>
+                <th>Explicación del cálculo</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoTablaEuler"></tbody>
+          </table>
+        </div>
+        <p class="graph-note" style="margin-top: 0.5rem;">📌 Cada fila muestra cómo se calcula el día siguiente usando el método de Euler</p>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 6: RESULTADOS E INTERPRETACIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-line"></i> PARTE 6: Resultados y su significado</h2>
+      </div>
+      <div class="card-body">
+        <div id="resultadosSimulacion" class="resumen-final">
+          <p style="text-align: center;">Selecciona un caso para ver los resultados detallados</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 7: GRÁFICA ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-area"></i> PARTE 7: Visualización de la evolución</h2>
+      </div>
+      <div class="card-body">
+        <div class="graph-container">
+          <canvas id="graficoEuler" style="max-height: 350px;"></canvas>
+        </div>
+        <p class="graph-note">📈 La línea muestra cómo disminuye la reserva. Si la línea es muy inclinada = crisis grave.</p>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 8: COMPARACIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-balance-scale"></i> PARTE 8: Comparación de los 3 casos</h2>
+      </div>
+      <div class="card-body">
+        <div id="comparacionCasos" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;"></div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 9: CONCLUSIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-lightbulb"></i> PARTE 9: ¿Qué aprendimos?</h2>
+      </div>
+      <div class="card-body">
+        <div class="comparison-summary">
+          <h3><i class="fas fa-graduation-cap"></i> Resumen del método de Euler</h3>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>✅ Es un método <strong>simple y fácil de entender</strong></li>
+            <li>✅ Nos permite <strong>estimar rápidamente</strong> cuándo se agotará el combustible</li>
+            <li>✅ Es útil para <strong>tomar decisiones iniciales</strong> (¿hay riesgo o no?)</li>
+            <li>❌ No es el más preciso (el error se acumula día a día)</li>
+            <li>❌ Para decisiones críticas, se recomienda usar <strong>RK4</strong> (más preciso)</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>📌 En la vida real:</strong> El método de Euler es suficiente para saber si HAY RIESGO. Pero si necesitas saber EXACTAMENTE cuándo se agotará, usa RK4.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Método de Euler</strong> | Rₙ₊₁ = Rₙ + h × (entrada - consumo)</p>
+    <p>📌 Este método nos permite simular el vaciado de reservas paso a paso</p>
+  </footer>
+
+  <script>
+    let chart = null;
+    let casoActual = "ideal";
+    
+    const valoresCasos = {
+      ideal: { consumo: 600, entrada: 500, color: "#27ae60", nombre: "Ideal", perdidaDiaria: 100,
+               descripcion: "En situación normal, la reserva disminuye lentamente. Hay tiempo para reaccionar." },
+      moderado: { consumo: 900, entrada: 350, color: "#e67e22", nombre: "Moderado", perdidaDiaria: 550,
+                  descripcion: "En crisis moderada, la reserva se agota rápidamente. ¡Se necesitan medidas urgentes!" },
+      critico: { consumo: 1200, entrada: 250, color: "#e74c3c", nombre: "Crítico", perdidaDiaria: 950,
+                 descripcion: "¡EMERGENCIA! El combustible se agotará en días. Acción inmediata requerida." }
+    };
+    
+    function seleccionarCaso(caso) {
+      casoActual = caso;
+      
+      // Actualizar estilos de las tarjetas
+      document.getElementById("cardIdeal").style.border = "2px solid transparent";
+      document.getElementById("cardModerado").style.border = "2px solid transparent";
+      document.getElementById("cardCritico").style.border = "2px solid transparent";
+      document.getElementById(`card${caso.charAt(0).toUpperCase() + caso.slice(1)}`).style.border = `2px solid ${valoresCasos[caso].color}`;
+      
+      document.getElementById("consumo").value = valoresCasos[caso].consumo;
+      document.getElementById("entrada").value = valoresCasos[caso].entrada;
+      
+      const color = valoresCasos[caso].color;
+      document.getElementById("consumo").style.color = color;
+      document.getElementById("entrada").style.color = color;
+      
+      calcularEuler();
+      actualizarComparacion();
+    }
+    
+    function calcularEuler() {
+      const R0 = parseFloat(document.getElementById("reservaInicial").value);
+      let consumo = parseFloat(document.getElementById("consumo").value);
+      let entrada = parseFloat(document.getElementById("entrada").value);
+      const factorPanico = parseFloat(document.getElementById("factorPanico").value);
+      const dias = parseFloat(document.getElementById("dias").value);
+      const h = parseFloat(document.getElementById("dt").value);
+      const n = Math.ceil(dias / h);
+      
+      const color = valoresCasos[casoActual].color;
+      const nombreCaso = valoresCasos[casoActual].nombre;
+      
+      let t = Array(n + 1).fill(0);
+      let R = Array(n + 1).fill(0);
+      R[0] = R0;
+      
+      function dRdt(reserva) {
+        let cons = consumo;
+        if (casoActual === "critico" && reserva < R0 * 0.5) {
+          cons = consumo * (1 + factorPanico);
+        }
+        return entrada - cons;
+      }
+      
+      for (let i = 0; i < n; i++) {
+        t[i + 1] = t[i] + h;
+        let derivada = dRdt(R[i]);
+        R[i + 1] = R[i] + h * derivada;
+        if (R[i + 1] < 0) R[i + 1] = 0;
+      }
+      
+      let diaCritico = null;
+      for (let i = 0; i <= n; i++) {
+        if (R[i] <= 0) {
+          diaCritico = t[i];
+          break;
+        }
+      }
+      
+      // Generar tabla
+      const tbody = document.getElementById("cuerpoTablaEuler");
+      tbody.innerHTML = "";
+      
+      for (let i = 0; i <= n; i++) {
+        let cambio = entrada - consumo;
+        let explicacion = "";
+        let calculo = "";
+        
+        if (i === 0) {
+          explicacion = `🏁 Comenzamos con ${R0.toFixed(0)} litros en el tanque.`;
+          calculo = `Valor inicial`;
+        } else {
+          let cambioReal = R[i] - R[i-1];
+          if (cambioReal < 0) {
+            explicacion = `📉 Perdimos ${Math.abs(cambioReal).toFixed(0)} litros hoy. La reserva bajó de ${R[i-1].toFixed(0)} a ${R[i].toFixed(0)} litros.`;
+          } else if (cambioReal > 0) {
+            explicacion = `📈 Ganamos ${cambioReal.toFixed(0)} litros hoy. La reserva subió de ${R[i-1].toFixed(0)} a ${R[i].toFixed(0)} litros.`;
+          } else {
+            explicacion = `⚖️ La reserva se mantuvo en ${R[i].toFixed(0)} litros.`;
+          }
+          calculo = `${R[i-1].toFixed(0)} + (${entrada} - ${consumo}) × ${h} = ${R[i].toFixed(0)}`;
+          
+          if (casoActual === "critico" && R[i-1] < R0 * 0.5 && R[i-1] > 0) {
+            explicacion += ` ⚠️ ¡ALERTA DE PÁNICO! El consumo aumentó a ${(consumo * (1 + factorPanico)).toFixed(0)} L/día por la escasez.`;
+          }
+        }
+        
+        tbody.innerHTML += `<tr>
+          <td style="text-align:center; font-weight:bold;">${t[i].toFixed(1)}</td>
+          <td style="text-align:center; font-weight:bold; color:${color};">${R[i].toFixed(0)}</td>
+          <td style="text-align:center;">${cambio.toFixed(0)} L/día</td>
+          <td style="text-align:left; font-size:0.75rem;">${explicacion}<br><span style="color:#666;">Fórmula: ${calculo}</span></td>
+        </tr>`;
+      }
+      
+      // Resultados
+      const perdidaDiaria = consumo - entrada;
+      const diasRestantes = diaCritico ? diaCritico.toFixed(1) : "más de " + dias;
+      
+      let resultadosHtml = `
+        <div style="border-left: 4px solid ${color}; padding-left: 1rem;">
+          <h3 style="color: ${color};">📊 Resultados de la simulación - Caso ${nombreCaso}</h3>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+            <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+              <div style="font-size:0.7rem;">Reserva inicial</div>
+              <div class="numero-grande" style="font-size:1.5rem;">${R0.toFixed(0)}</div>
+              <div>litros</div>
+            </div>
+            <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+              <div style="font-size:0.7rem;">Reserva final</div>
+              <div class="numero-grande" style="font-size:1.5rem; color:${color};">${R[n].toFixed(0)}</div>
+              <div>litros</div>
+            </div>
+            <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+              <div style="font-size:0.7rem;">Pérdida por día</div>
+              <div class="numero-grande" style="font-size:1.5rem;">${perdidaDiaria}</div>
+              <div>litros/día</div>
+            </div>
+          </div>
+          <p><strong>📌 ¿Qué significa esto?</strong></p>
+          <p>${valoresCasos[casoActual].descripcion}</p>
+          ${diaCritico ? `<p><strong style="color:#e74c3c;">⚠️ DÍA CRÍTICO:</strong> La reserva se agotaría completamente en <strong>${diaCritico.toFixed(1)} días</strong>.</p>` : '<p>✅ La reserva no llegó a cero en el período simulado.</p>'}
+          <p><strong>💡 Interpretación para Bolivia:</strong> ${casoActual === "ideal" ? "La situación es manejable, pero hay que monitorear." : (casoActual === "moderado" ? "¡ALERTA! Se necesitan medidas urgentes para evitar el desabastecimiento." : "¡EMERGENCIA NACIONAL! Se requiere racionamiento inmediato y control de precios.")}</p>
+        </div>
+      `;
+      
+      document.getElementById("resultadosSimulacion").innerHTML = resultadosHtml;
+      
+      // Gráfica
+      if (chart) chart.destroy();
+      const ctx = document.getElementById("graficoEuler").getContext("2d");
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: t.map(v => v.toFixed(1)),
+          datasets: [{
+            label: `Reserva de combustible - Caso ${nombreCaso}`,
+            data: R,
+            borderColor: color,
+            backgroundColor: `${color}20`,
+            borderWidth: 3,
+            fill: true,
+            tension: 0.1,
+            pointRadius: 3,
+            pointBackgroundColor: color
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { labels: { color: '#4a3b7c' } },
+            tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(0)} litros` } }
+          },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: 'Litros de combustible', color: '#7a7596' } },
+            x: { title: { display: true, text: 'Días', color: '#7a7596' } }
+          }
+        }
+      });
+    }
+    
+    function actualizarComparacion() {
+      const R0 = parseFloat(document.getElementById("reservaInicial").value);
+      const factorPanico = parseFloat(document.getElementById("factorPanico").value);
+      const dias = parseFloat(document.getElementById("dias").value);
+      const h = parseFloat(document.getElementById("dt").value);
+      const n = Math.ceil(dias / h);
+      
+      const casos = ["ideal", "moderado", "critico"];
+      const nombres = ["📈 Ideal", "⚠️ Moderado", "🔥 Crítico"];
+      const colores = ["#27ae60", "#e67e22", "#e74c3c"];
+      const consumos = [600, 900, 1200];
+      const entradas = [500, 350, 250];
+      
+      let html = "";
+      
+      for (let idx = 0; idx < casos.length; idx++) {
+        let consumo = consumos[idx];
+        let entrada = entradas[idx];
+        
+        function dRdtComparar(reserva, casoType) {
+          let cons = consumo;
+          if (casoType === "critico" && reserva < R0 * 0.5) {
+            cons = consumo * (1 + factorPanico);
+          }
+          return entrada - cons;
+        }
+        
+        let R_arr = Array(n + 1).fill(0);
+        R_arr[0] = R0;
+        
+        for (let i = 0; i < n; i++) {
+          let derivada = dRdtComparar(R_arr[i], casos[idx]);
+          R_arr[i + 1] = R_arr[i] + h * derivada;
+          if (R_arr[i + 1] < 0) R_arr[i + 1] = 0;
+        }
+        
+        let diaCritico = null;
+        for (let i = 0; i <= n; i++) {
+          if (R_arr[i] <= 0) { diaCritico = i * h; break; }
+        }
+        
+        html += `
+          <div style="background: white; border-radius: 16px; padding: 1rem; text-align: center; border-top: 4px solid ${colores[idx]};">
+            <h4 style="color: ${colores[idx]};">${nombres[idx]}</h4>
+            <p><strong>Consumo:</strong> ${consumo} L/día</p>
+            <p><strong>Entrada:</strong> ${entrada} L/día</p>
+            <p><strong>Reserva final:</strong> <span style="color: ${colores[idx]}; font-weight:700;">${R_arr[n].toFixed(0)} L</span></p>
+            ${diaCritico ? `<p style="color:#e74c3c;"><strong>⚠️ Día crítico:</strong> ${diaCritico.toFixed(1)}</p>` : '<p style="color:#27ae60;">✅ Sin crisis</p>'}
+          </div>
+        `;
+      }
+      
+      document.getElementById("comparacionCasos").innerHTML = html;
+    }
+    
+    document.getElementById("reservaInicial").addEventListener("change", () => { calcularEuler(); actualizarComparacion(); });
+    document.getElementById("factorPanico").addEventListener("change", () => { calcularEuler(); actualizarComparacion(); });
+    document.getElementById("dias").addEventListener("change", () => { calcularEuler(); actualizarComparacion(); });
+    document.getElementById("dt").addEventListener("change", () => { calcularEuler(); actualizarComparacion(); });
+    
+    calcularEuler();
+    actualizarComparacion();
+  </script>
+</body>
+</html>

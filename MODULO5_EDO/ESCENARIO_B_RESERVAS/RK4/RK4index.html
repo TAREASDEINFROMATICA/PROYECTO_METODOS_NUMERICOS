@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método de Runge-Kutta 4 (RK4) - Explicación SÚPER DETALLADA</title>
+  <link rel="stylesheet" href="../../EDOstyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .explicacion-paso {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-left: 5px solid;
+    }
+    .paso-1 { border-left-color: #3498db; }
+    .paso-2 { border-left-color: #e67e22; }
+    .paso-3 { border-left-color: #27ae60; }
+    .paso-4 { border-left-color: #e74c3c; }
+    .paso-5 { border-left-color: #8b6cc9; }
+    
+    .formula-resaltada {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 1rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .k-card {
+      background: #f0eef7;
+      border-radius: 12px;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      display: inline-block;
+      width: 100%;
+    }
+    .k1 { border-left: 4px solid #3498db; }
+    .k2 { border-left: 4px solid #e67e22; }
+    .k3 { border-left: 4px solid #27ae60; }
+    .k4 { border-left: 4px solid #e74c3c; }
+    
+    .comparacion-metodos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .metodo-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .caso-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    .caso-card:hover { transform: translateY(-5px); }
+    .caso-ideal { border-top: 4px solid #27ae60; }
+    .caso-moderado { border-top: 4px solid #e67e22; }
+    .caso-critico { border-top: 4px solid #e74c3c; }
+    
+    .tabla-rk4 {
+      font-size: 0.7rem;
+      max-height: 450px;
+      overflow-y: auto;
+    }
+    .tabla-rk4 th {
+      background: #4a3b7c;
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+    .resumen-final {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    .badge-excelente {
+      background: #27ae6020;
+      color: #27ae60;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Reservasindex.html" class="back-link">← Volver al escenario</a>
+      <span class="badge">Método de Runge-Kutta 4 (RK4) | Error O(h⁴) ⭐ EL MÁS PRECISO</span>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">Método Numérico - Runge-Kutta 4</p>
+      <h1>⭐ Método de Runge-Kutta 4 (RK4)</h1>
+      <p class="hero-subtitle">El método más preciso para simular el vaciado de reservas</p>
+      <div class="formula-box">
+        <strong>🎯 Objetivo:</strong> Calcular la reserva de combustible con MÁXIMA PRECISIÓN
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== PARTE 1: ¿POR QUÉ RK4? ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-question-circle"></i> PARTE 1: ¿Por qué necesitamos un método aún más preciso?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-1">
+          <h3 style="color: #3498db;"><i class="fas fa-chart-line"></i> La evolución de los métodos</h3>
+          <div class="comparacion-metodos">
+            <div class="metodo-card">
+              <h4 style="color: #3498db;">📐 Euler</h4>
+              <p>1 pendiente</p>
+              <p><strong>Error:</strong> O(h)</p>
+              <p>Precisión: ⭐</p>
+            </div>
+            <div class="metodo-card">
+              <h4 style="color: #e67e22;">📈 Heun</h4>
+              <p>2 pendientes</p>
+              <p><strong>Error:</strong> O(h²)</p>
+              <p>Precisión: ⭐⭐</p>
+            </div>
+            <div class="metodo-card" style="background: #8b6cc910;">
+              <h4 style="color: #8b6cc9;">⭐ RK4</h4>
+              <p>4 pendientes</p>
+              <p><strong>Error:</strong> O(h⁴)</p>
+              <p>Precisión: ⭐⭐⭐⭐⭐</p>
+            </div>
+          </div>
+          <p><strong class="badge-excelente">RK4 es 10,000 VECES más preciso que Euler</strong> (para h=0.1, error de Euler ~0.1, error de RK4 ~0.0001)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 2: ¿CÓMO FUNCIONA RK4? ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-calculator"></i> PARTE 2: ¿Cómo funciona el método RK4?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-2">
+          <h3 style="color: #e67e22;"><i class="fas fa-chalkboard-teacher"></i> La idea: Calcular 4 pendientes diferentes</h3>
+          <p>RK4 calcula <strong>CUATRO pendientes</strong> en diferentes puntos y las promedia con pesos específicos:</p>
+          
+          <div class="k-card k1">
+            <strong>📌 k₁</strong> = f(tₙ, Rₙ) → Pendiente al <strong>INICIO</strong> del intervalo
+          </div>
+          <div class="k-card k2">
+            <strong>📌 k₂</strong> = f(tₙ + h/2, Rₙ + (h/2)·k₁) → Pendiente en el <strong>PUNTO MEDIO</strong> (usando k₁)
+          </div>
+          <div class="k-card k3">
+            <strong>📌 k₃</strong> = f(tₙ + h/2, Rₙ + (h/2)·k₂) → Pendiente en el <strong>PUNTO MEDIO</strong> (usando k₂)
+          </div>
+          <div class="k-card k4">
+            <strong>📌 k₄</strong> = f(tₙ + h, Rₙ + h·k₃) → Pendiente al <strong>FINAL</strong> del intervalo
+          </div>
+        </div>
+
+        <div class="explicacion-paso paso-3">
+          <h3 style="color: #27ae60;"><i class="fas fa-chart-line"></i> La fórmula completa de RK4</h3>
+          <div class="formula-resaltada" style="font-size: 1rem;">
+            Rₙ₊₁ = Rₙ + (h/6) × (k₁ + 2k₂ + 2k₃ + k₄)
+          </div>
+          <p>Los pesos son: <strong>1, 2, 2, 1</strong> - ¡da más peso a las pendientes del punto medio!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 3: EJEMPLO PRÁCTICO ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-play-circle"></i> PARTE 3: Ejemplo práctico paso a paso</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-4">
+          <h3 style="color: #e74c3c;"><i class="fas fa-calculator"></i> Aprendamos con números reales</h3>
+          <p><strong>Datos:</strong> Reserva inicial = 10,000 litros | Consumo = 600 L/día | Entrada = 500 L/día | h = 1 día</p>
+          
+          <div style="background: #f0eef7; border-radius: 16px; padding: 1rem; margin: 1rem 0;">
+            <h4>📌 Calculando las 4 pendientes:</h4>
+            
+            <div class="k-card k1" style="margin: 0.5rem 0;">
+              <strong>k₁ =</strong> entrada - consumo = 500 - 600 = <strong>-100</strong>
+            </div>
+            <div class="k-card k2">
+              <strong>k₂ =</strong> entrada - consumo = 500 - 600 = <strong>-100</strong> (igual porque es constante)
+            </div>
+            <div class="k-card k3">
+              <strong>k₃ =</strong> entrada - consumo = 500 - 600 = <strong>-100</strong>
+            </div>
+            <div class="k-card k4">
+              <strong>k₄ =</strong> entrada - consumo = 500 - 600 = <strong>-100</strong>
+            </div>
+            
+            <h4 style="margin-top: 1rem;">📌 Aplicando la fórmula:</h4>
+            <div class="formula-resaltada" style="font-size: 1rem;">
+              R₁ = 10,000 + (1/6) × (-100 + 2×(-100) + 2×(-100) + (-100))<br>
+              R₁ = 10,000 + (1/6) × (-600) = 10,000 - 100 = <strong>9,900 litros</strong>
+            </div>
+            <p>⚠️ <strong>Importante:</strong> Cuando la derivada es constante, RK4 coincide con Euler y Heun. ¡La magia ocurre cuando la derivada VARÍA!</p>
+          </div>
+          
+          <div style="background: #f0eef7; border-radius: 16px; padding: 1rem; margin: 1rem 0;">
+            <h4>📌 ¿Cuándo RK4 es SUPERIOR?</h4>
+            <p>Cuando la derivada cambia (como en el caso CRÍTICO con pánico), RK4 es mucho más preciso porque:</p>
+            <ul style="margin-left: 1.5rem;">
+              <li>✅ Evalúa la pendiente en 4 puntos diferentes</li>
+              <li>✅ Captura mejor los cambios bruscos</li>
+              <li>✅ El error es O(h⁴) vs O(h) de Euler</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 4: COMPARACIÓN DE MÉTODOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-balance-scale"></i> PARTE 4: Comparación: Euler vs Heun vs RK4</h2>
+      </div>
+      <div class="card-body">
+        <div class="table-wrapper">
+          <table style="width: 100%;">
+            <thead>
+              <tr><th>Método</th><th>Pendientes</th><th>Fórmula</th><th>Error</th><th>Precisión</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Euler</strong></td><td>1</td><td>yₙ₊₁ = yₙ + h·f(tₙ,yₙ)</td><td>O(h)</td><td style="color:#e74c3c;">Baja</td></tr>
+              <tr><td><strong>Heun</strong></td><td>2</td><td>yₙ₊₁ = yₙ + (h/2)[f(tₙ,yₙ) + f(tₙ₊₁, yₙ + h·f(tₙ,yₙ))]</td><td>O(h²)</td><td style="color:#e67e22;">Media</td></tr>
+              <tr style="background:#8b6cc910;"><td><strong>RK4 ⭐</strong></td><td>4</td><td>yₙ₊₁ = yₙ + (h/6)[k₁ + 2k₂ + 2k₃ + k₄]</td><td>O(h⁴)</td><td style="color:#27ae60;">Excelente</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="graph-note" style="margin-top: 1rem;">📌 <strong>RK4 es el estándar en ingeniería</strong> para simulaciones que requieren alta precisión.</p>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 5: LOS 3 ESCENARIOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> PARTE 5: Los 3 escenarios de crisis que simularemos</h2>
+      </div>
+      <div class="card-body">
+        <div class="comparacion-casos" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+          <div id="cardIdeal" class="caso-card caso-ideal" onclick="seleccionarCaso('ideal')">
+            <h4 style="color: #27ae60;">📈 Caso Ideal</h4>
+            <p><strong>Consumo:</strong> 600 L/día</p>
+            <p><strong>Entrada:</strong> 500 L/día</p>
+            <p><strong>Pérdida:</strong> 100 L/día</p>
+          </div>
+          <div id="cardModerado" class="caso-card caso-moderado" onclick="seleccionarCaso('moderado')">
+            <h4 style="color: #e67e22;">⚠️ Caso Moderado</h4>
+            <p><strong>Consumo:</strong> 900 L/día (+50%)</p>
+            <p><strong>Entrada:</strong> 350 L/día (-30%)</p>
+            <p><strong>Pérdida:</strong> 550 L/día</p>
+          </div>
+          <div id="cardCritico" class="caso-card caso-critico" onclick="seleccionarCaso('critico')">
+            <h4 style="color: #e74c3c;">🔥 Caso Crítico</h4>
+            <p><strong>Consumo:</strong> 1200 L/día (+100%)</p>
+            <p><strong>Entrada:</strong> 250 L/día (-50%)</p>
+            <p><strong>Pérdida:</strong> 950 L/día + pánico</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 6: PARÁMETROS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-sliders-h"></i> PARTE 6: Parámetros de la simulación</h2>
+      </div>
+      <div class="card-body">
+        <div class="parametros-grid">
+          <div class="parametro-card"><label><i class="fas fa-database"></i> Reserva inicial (litros)</label><input type="number" id="reservaInicial" value="10000" step="500"></div>
+          <div class="parametro-card"><label><i class="fas fa-gas-pump"></i> Consumo (L/día)</label><input type="number" id="consumo" value="600" step="50" readonly style="background:#f0eef7;"></div>
+          <div class="parametro-card"><label><i class="fas fa-truck"></i> Entrada (L/día)</label><input type="number" id="entrada" value="500" step="50" readonly style="background:#f0eef7;"></div>
+          <div class="parametro-card"><label><i class="fas fa-brain"></i> Factor pánico (crítico)</label><input type="number" id="factorPanico" value="0.5" step="0.1" min="0" max="2"></div>
+          <div class="parametro-card"><label><i class="fas fa-calendar-day"></i> Días a simular</label><input type="number" id="dias" value="15"></div>
+          <div class="parametro-card"><label><i class="fas fa-ruler"></i> Paso de tiempo (días)</label><input type="number" id="dt" value="1" step="0.5"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 7: CÁLCULO DÍA POR DÍA CON RK4 ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-table"></i> PARTE 7: Cálculo día por día con RK4</h2>
+      </div>
+      <div class="card-body">
+        <p>RK4 calcula <strong>4 pendientes por cada día</strong> para lograr máxima precisión:</p>
+        
+        <div class="table-wrapper tabla-rk4">
+          <table id="tablaRK4">
+            <thead>
+              <tr>
+                <th>Día</th>
+                <th>Reserva (L)</th>
+                <th>k₁</th>
+                <th>k₂</th>
+                <th>k₃</th>
+                <th>k₄</th>
+                <th>Promedio ponderado</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoTablaRK4"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 8: RESULTADOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-line"></i> PARTE 8: Resultados de la simulación</h2>
+      </div>
+      <div class="card-body">
+        <div id="resultadosSimulacion" class="resumen-final">
+          <p style="text-align: center;">Selecciona un caso para ver los resultados detallados</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 9: GRÁFICA ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-area"></i> PARTE 9: Visualización de la evolución</h2>
+      </div>
+      <div class="card-body">
+        <div class="graph-container">
+          <canvas id="graficoRK4" style="max-height: 350px;"></canvas>
+        </div>
+        <p class="graph-note">📈 La línea muestra la evolución de la reserva usando RK4 (el método más preciso)</p>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 10: COMPARACIÓN DE CASOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> PARTE 10: Comparación entre los 3 casos</h2>
+      </div>
+      <div class="card-body">
+        <div id="comparacionCasos" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;"></div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 11: CONCLUSIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-lightbulb"></i> PARTE 11: ¿Por qué RK4 es el MEJOR método?</h2>
+      </div>
+      <div class="card-body">
+        <div class="comparison-summary">
+          <h3><i class="fas fa-graduation-cap"></i> Resumen del método RK4</h3>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>✅ Es el método <strong>MÁS PRECISO</strong> de los tres (error O(h⁴))</li>
+            <li>✅ Calcula <strong>4 pendientes</strong> en diferentes puntos del intervalo</li>
+            <li>✅ Usa pesos <strong>1, 2, 2, 1</strong> para dar más importancia al punto medio</li>
+            <li>✅ Es el <strong>estándar en ingeniería</strong> para simulaciones críticas</li>
+            <li>✅ Captura <strong>cambios bruscos</strong> (como el pánico en caso crítico) mucho mejor</li>
+            <li>❌ Requiere 4 evaluaciones por paso (más costoso computacionalmente)</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>📌 RECOMENDACIÓN FINAL:</strong> Para simulaciones de vaciado de reservas, <strong>USA RK4</strong> - la precisión extra vale la pena, especialmente en escenarios de crisis donde cada litro cuenta.</p>
+          <div class="badge-excelente" style="display: block; text-align: center; margin-top: 1rem;">
+            ⭐ RK4 es el método RECOMENDADO para este proyecto ⭐
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Método de Runge-Kutta 4 (RK4)</strong> | Rₙ₊₁ = Rₙ + (h/6)(k₁ + 2k₂ + 2k₃ + k₄)</p>
+    <p>⭐ El método más preciso para simular el vaciado de reservas | Error O(h⁴)</p>
+  </footer>
+
+  <script>
+    let chart = null;
+    let casoActual = "ideal";
+    
+    const valoresCasos = {
+      ideal: { consumo: 600, entrada: 500, color: "#27ae60", nombre: "Ideal" },
+      moderado: { consumo: 900, entrada: 350, color: "#e67e22", nombre: "Moderado" },
+      critico: { consumo: 1200, entrada: 250, color: "#e74c3c", nombre: "Crítico" }
+    };
+    
+    function seleccionarCaso(caso) {
+      casoActual = caso;
+      
+      document.getElementById("cardIdeal").style.border = "2px solid transparent";
+      document.getElementById("cardModerado").style.border = "2px solid transparent";
+      document.getElementById("cardCritico").style.border = "2px solid transparent";
+      document.getElementById(`card${caso.charAt(0).toUpperCase() + caso.slice(1)}`).style.border = `2px solid ${valoresCasos[caso].color}`;
+      
+      document.getElementById("consumo").value = valoresCasos[caso].consumo;
+      document.getElementById("entrada").value = valoresCasos[caso].entrada;
+      
+      const color = valoresCasos[caso].color;
+      document.getElementById("consumo").style.color = color;
+      document.getElementById("entrada").style.color = color;
+      
+      calcularRK4();
+      actualizarComparacion();
+    }
+    
+    function calcularRK4() {
+      const R0 = parseFloat(document.getElementById("reservaInicial").value);
+      let consumo = parseFloat(document.getElementById("consumo").value);
+      let entrada = parseFloat(document.getElementById("entrada").value);
+      const factorPanico = parseFloat(document.getElementById("factorPanico").value);
+      const dias = parseFloat(document.getElementById("dias").value);
+      const h = parseFloat(document.getElementById("dt").value);
+      const n = Math.ceil(dias / h);
+      
+      const color = valoresCasos[casoActual].color;
+      const nombreCaso = valoresCasos[casoActual].nombre;
+      
+      let t = Array(n + 1).fill(0);
+      let R = Array(n + 1).fill(0);
+      R[0] = R0;
+      
+      // Almacenar los k para la tabla
+      let k1_vals = Array(n + 1).fill(null);
+      let k2_vals = Array(n + 1).fill(null);
+      let k3_vals = Array(n + 1).fill(null);
+      let k4_vals = Array(n + 1).fill(null);
+      
+      function dRdt(reserva, tiempo) {
+        let cons = consumo;
+        if (casoActual === "critico" && reserva < R0 * 0.5) {
+          cons = consumo * (1 + factorPanico);
+        }
+        return entrada - cons;
+      }
+      
+      for (let i = 0; i < n; i++) {
+        t[i + 1] = t[i] + h;
+        
+        let k1 = dRdt(R[i], t[i]);
+        let k2 = dRdt(R[i] + (h/2) * k1, t[i] + h/2);
+        let k3 = dRdt(R[i] + (h/2) * k2, t[i] + h/2);
+        let k4 = dRdt(R[i] + h * k3, t[i] + h);
+        
+        k1_vals[i] = k1;
+        k2_vals[i] = k2;
+        k3_vals[i] = k3;
+        k4_vals[i] = k4;
+        
+        R[i + 1] = R[i] + (h/6) * (k1 + 2*k2 + 2*k3 + k4);
+        if (R[i + 1] < 0) R[i + 1] = 0;
+      }
+      
+      let diaCritico = null;
+      for (let i = 0; i <= n; i++) {
+        if (R[i] <= 0) {
+          diaCritico = t[i];
+          break;
+        }
+      }
+      
+      // Generar tabla
+      const tbody = document.getElementById("cuerpoTablaRK4");
+      tbody.innerHTML = "";
+      
+      for (let i = 0; i <= n; i++) {
+        if (i === 0) {
+          tbody.innerHTML += `<tr>
+            <td style="text-align:center; font-weight:bold;">${t[i].toFixed(1)}</td>
+            <td style="text-align:center; font-weight:bold; color:${color};">${R[i].toFixed(0)}</td>
+            <td colspan="5" style="text-align:center;">Valor inicial</td>
+          </tr>`;
+        } else {
+          let promedio = (k1_vals[i-1] + 2*k2_vals[i-1] + 2*k3_vals[i-1] + k4_vals[i-1]) / 6;
+          tbody.innerHTML += `<tr>
+            <td style="text-align:center; font-weight:bold;">${t[i].toFixed(1)}</td>
+            <td style="text-align:center; font-weight:bold; color:${color};">${R[i].toFixed(0)}</td>
+            <td style="text-align:center;">${k1_vals[i-1].toFixed(0)}</td>
+            <td style="text-align:center;">${k2_vals[i-1].toFixed(0)}</td>
+            <td style="text-align:center;">${k3_vals[i-1].toFixed(0)}</td>
+            <td style="text-align:center;">${k4_vals[i-1].toFixed(0)}</td>
+            <td style="text-align:center;">${promedio.toFixed(2)}</td>
+          </tr>`;
+        }
+      }
+      
+      // Resultados
+      const perdidaDiaria = consumo - entrada;
+      
+      let resultadosHtml = `
+        <div style="border-left: 4px solid ${color}; padding-left: 1rem;">
+          <h3 style="color: ${color};">📊 Resultados de la simulación con RK4 - Caso ${nombreCaso}</h3>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+            <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+              <div style="font-size:0.7rem;">Reserva inicial</div>
+              <div style="font-size:1.5rem; font-weight:800;">${R0.toFixed(0)}</div>
+              <div>litros</div>
+            </div>
+            <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+              <div style="font-size:0.7rem;">Reserva final</div>
+              <div style="font-size:1.5rem; font-weight:800; color:${color};">${R[n].toFixed(0)}</div>
+              <div>litros</div>
+            </div>
+            <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+              <div style="font-size:0.7rem;">Pérdida por día</div>
+              <div style="font-size:1.5rem; font-weight:800;">${perdidaDiaria}</div>
+              <div>litros/día</div>
+            </div>
+          </div>
+          <p><strong>📌 ¿Qué significa esto?</strong></p>
+          <p>${casoActual === "ideal" ? "En situación normal, la reserva disminuye lentamente. Hay tiempo para reaccionar." : (casoActual === "moderado" ? "En crisis moderada, la reserva se agota rápidamente. ¡Se necesitan medidas urgentes!" : "¡EMERGENCIA NACIONAL! El combustible se agotará en días. Acción inmediata requerida.")}</p>
+          ${diaCritico ? `<p><strong style="color:#e74c3c;">⚠️ DÍA CRÍTICO:</strong> La reserva se agotaría completamente en <strong>${diaCritico.toFixed(1)} días</strong> según RK4.</p>` : '<p>✅ La reserva no llegó a cero en el período simulado.</p>'}
+          <p><strong>⭐ Por qué RK4 es el mejor:</strong> Su error es O(h⁴), lo que significa que es <strong>10,000 veces más preciso</strong> que Euler (para h=0.1). Ideal para decisiones críticas.</p>
+        </div>
+      `;
+      
+      document.getElementById("resultadosSimulacion").innerHTML = resultadosHtml;
+      
+      // Gráfica
+      if (chart) chart.destroy();
+      const ctx = document.getElementById("graficoRK4").getContext("2d");
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: t.map(v => v.toFixed(1)),
+          datasets: [{
+            label: `Reserva - RK4 (Caso ${nombreCaso})`,
+            data: R,
+            borderColor: color,
+            backgroundColor: `${color}20`,
+            borderWidth: 3,
+            fill: true,
+            tension: 0.1,
+            pointRadius: 3,
+            pointBackgroundColor: color
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { labels: { color: '#4a3b7c' } },
+            tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(0)} litros` } }
+          },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: 'Litros de combustible', color: '#7a7596' } },
+            x: { title: { display: true, text: 'Días', color: '#7a7596' } }
+          }
+        }
+      });
+    }
+    
+    function actualizarComparacion() {
+      const R0 = parseFloat(document.getElementById("reservaInicial").value);
+      const factorPanico = parseFloat(document.getElementById("factorPanico").value);
+      const dias = parseFloat(document.getElementById("dias").value);
+      const h = parseFloat(document.getElementById("dt").value);
+      const n = Math.ceil(dias / h);
+      
+      const casos = ["ideal", "moderado", "critico"];
+      const nombres = ["📈 Ideal", "⚠️ Moderado", "🔥 Crítico"];
+      const colores = ["#27ae60", "#e67e22", "#e74c3c"];
+      const consumos = [600, 900, 1200];
+      const entradas = [500, 350, 250];
+      
+      let html = "";
+      
+      for (let idx = 0; idx < casos.length; idx++) {
+        let consumo = consumos[idx];
+        let entrada = entradas[idx];
+        
+        function dRdtComparar(reserva, casoType) {
+          let cons = consumo;
+          if (casoType === "critico" && reserva < R0 * 0.5) {
+            cons = consumo * (1 + factorPanico);
+          }
+          return entrada - cons;
+        }
+        
+        let R_arr = Array(n + 1).fill(0);
+        R_arr[0] = R0;
+        
+        for (let i = 0; i < n; i++) {
+          let k1 = dRdtComparar(R_arr[i], casos[idx]);
+          let k2 = dRdtComparar(R_arr[i] + (h/2) * k1, casos[idx]);
+          let k3 = dRdtComparar(R_arr[i] + (h/2) * k2, casos[idx]);
+          let k4 = dRdtComparar(R_arr[i] + h * k3, casos[idx]);
+          R_arr[i + 1] = R_arr[i] + (h/6) * (k1 + 2*k2 + 2*k3 + k4);
+          if (R_arr[i + 1] < 0) R_arr[i + 1] = 0;
+        }
+        
+        let diaCritico = null;
+        for (let i = 0; i <= n; i++) {
+          if (R_arr[i] <= 0) { diaCritico = i * h; break; }
+        }
+        
+        html += `
+          <div style="background: white; border-radius: 16px; padding: 1rem; text-align: center; border-top: 4px solid ${colores[idx]};">
+            <h4 style="color: ${colores[idx]};">${nombres[idx]}</h4>
+            <p><strong>Consumo:</strong> ${consumo} L/día</p>
+            <p><strong>Entrada:</strong> ${entrada} L/día</p>
+            <p><strong>Reserva final:</strong> <span style="color: ${colores[idx]}; font-weight:700;">${R_arr[n].toFixed(0)} L</span></p>
+            ${diaCritico ? `<p style="color:#e74c3c;"><strong>⚠️ Día crítico:</strong> ${diaCritico.toFixed(1)}</p>` : '<p style="color:#27ae60;">✅ Sin crisis</p>'}
+          </div>
+        `;
+      }
+      
+      document.getElementById("comparacionCasos").innerHTML = html;
+    }
+    
+    document.getElementById("reservaInicial").addEventListener("change", () => { calcularRK4(); actualizarComparacion(); });
+    document.getElementById("factorPanico").addEventListener("change", () => { calcularRK4(); actualizarComparacion(); });
+    document.getElementById("dias").addEventListener("change", () => { calcularRK4(); actualizarComparacion(); });
+    document.getElementById("dt").addEventListener("change", () => { calcularRK4(); actualizarComparacion(); });
+    
+    calcularRK4();
+    actualizarComparacion();
+  </script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escenario B - Vaciado de Reservas de Carburantes</title>
+  <link rel="stylesheet" href="../EDOstyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .parametro-actual {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      border-radius: 16px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      border-left: 4px solid #8b6cc9;
+    }
+    .valor-destacado {
+      font-size: 1.3rem;
+      font-weight: 800;
+      font-family: monospace;
+    }
+    .valor-ideal { color: #27ae60; }
+    .valor-moderado { color: #e67e22; }
+    .valor-critico { color: #e74c3c; }
+    
+    .metodo-btn-ejecutar {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 40px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1rem;
+    }
+    .btn-euler { background: #3498db20; color: #3498db; border: 1px solid #3498db30; }
+    .btn-euler:hover { background: #3498db; color: white; transform: translateY(-2px); }
+    .btn-heun { background: #e67e2220; color: #e67e22; border: 1px solid #e67e2230; }
+    .btn-heun:hover { background: #e67e22; color: white; transform: translateY(-2px); }
+    .btn-rk4 { background: #6b4e9e20; color: #6b4e9e; border: 1px solid #6b4e9e30; }
+    .btn-rk4:hover { background: #6b4e9e; color: white; transform: translateY(-2px); }
+    
+    .resultado-metodo {
+      background: white;
+      border-radius: 16px;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border: 1px solid rgba(107, 78, 158, 0.1);
+      transition: all 0.3s;
+    }
+    .resultado-valor {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0.5rem 0;
+    }
+    .comparacion-casos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .caso-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid rgba(107,78,158,0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .caso-card:hover { transform: translateY(-3px); }
+    .caso-ideal-border { border-top: 4px solid #27ae60; }
+    .caso-moderado-border { border-top: 4px solid #e67e22; }
+    .caso-critico-border { border-top: 4px solid #e74c3c; }
+    .caso-seleccionado { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    
+    .explicacion-metodo {
+      background: rgba(107,78,158,0.05);
+      border-radius: 12px;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+    }
+    
+    /* Estilos para los valores que cambian */
+    .valor-consumo, .valor-entrada {
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 20px;
+      display: inline-block;
+    }
+    .consumo-ideal, .entrada-ideal { background: #27ae6020; color: #27ae60; }
+    .consumo-moderado, .entrada-moderado { background: #e67e2220; color: #e67e22; }
+    .consumo-critico, .entrada-critico { background: #e74c3c20; color: #e74c3c; }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../EDOindex.html" class="back-link">← Volver al módulo</a>
+      <span class="badge">Escenario B - Vaciado de reservas de carburantes</span>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">Ecuaciones Diferenciales</p>
+      <h1>⛽ Vaciado crítico de reservas</h1>
+      <p class="hero-subtitle">Simulación de reservas de carburante con 3 niveles de crisis</p>
+      <div class="formula-box">
+        <strong>📐 Modelo matemático:</strong> dR/dt = entrada - consumo | R(t): reserva en litros
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== EXPLICACIÓN DEL ESCENARIO ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-gas-pump"></i> ¿Qué estamos simulando?</h2>
+      </div>
+      <div class="card-body">
+        <p>
+          En Bolivia, las plantas de almacenamiento de carburantes enfrentan desafíos constantes de abastecimiento. 
+          Durante situaciones de crisis (bloqueos, escasez, aumento de demanda), las reservas pueden disminuir rápidamente.
+        </p>
+        <p style="margin-top: 0.8rem;">
+          <strong>El problema:</strong> Una planta de carburantes tiene una <strong>reserva inicial R₀</strong>. 
+          Cada día, llega una cantidad fija de combustible (<strong>entrada</strong>) y la población consume otra cantidad (<strong>consumo</strong>).
+          Queremos saber: <strong>¿En cuántos días se agotará la reserva?</strong>
+        </p>
+        
+        <div class="variables-explicacion" style="margin-top: 1.5rem;">
+          <h4><i class="fas fa-chart-line"></i> Variables del modelo:</h4>
+          <div class="variable-grid">
+            <div class="variable-item"><span class="var-simbolo">R(t)</span><div class="var-info"><strong>Reserva</strong><p>Combustible disponible en el día t (litros).</p></div></div>
+            <div class="variable-item"><span class="var-simbolo">entrada</span><div class="var-info"><strong>Reabastecimiento</strong><p>Cantidad de combustible que llega por día (L/día).</p></div></div>
+            <div class="variable-item"><span class="var-simbolo">consumo</span><div class="var-info"><strong>Demanda</strong><p>Cantidad que consume la población por día (L/día).</p></div></div>
+            <div class="variable-item"><span class="var-simbolo">t</span><div class="var-info"><strong>Tiempo</strong><p>Días transcurridos desde el inicio.</p></div></div>
+          </div>
+        </div>
+
+        <div class="model-box" style="margin-top: 1rem;">
+          <h3>📐 Ecuación diferencial del modelo</h3>
+          <p class="model-formula">dR/dt = entrada - consumo</p>
+          <p class="model-explicacion">
+            La tasa de cambio de la reserva es igual a lo que entra menos lo que sale.
+            Si <strong>entrada > consumo</strong>, la reserva aumenta. Si <strong>entrada < consumo</strong>, la reserva disminuye.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SELECTOR DE CASOS (TARJETAS CLICKEABLES) ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> Seleccione el nivel de crisis</h2>
+      </div>
+      <div class="card-body">
+        
+        <!-- Tarjetas de casos clicleables -->
+        <div class="comparacion-casos">
+          <div id="casoIdealCard" class="caso-card caso-ideal-border caso-seleccionado" onclick="seleccionarCaso('ideal')">
+            <h4 style="color: #27ae60;">📈 Caso Ideal</h4>
+            <p style="font-size: 0.8rem;">Situación normal, sin crisis</p>
+            <hr>
+            <p><strong>Consumo:</strong> <span style="color:#27ae60; font-weight:700;">600 L/día</span></p>
+            <p><strong>Entrada:</strong> <span style="color:#27ae60; font-weight:700;">500 L/día</span></p>
+            <p><strong>Balance:</strong> <span style="color:#e74c3c;">-100 L/día</span></p>
+            <p style="font-size:0.7rem; margin-top:0.5rem;">La reserva disminuye lentamente</p>
+          </div>
+          <div id="casoModeradoCard" class="caso-card caso-moderado-border" onclick="seleccionarCaso('moderado')">
+            <h4 style="color: #e67e22;">⚠️ Caso Moderado</h4>
+            <p style="font-size: 0.8rem;">Crisis parcial, desabastecimiento</p>
+            <hr>
+            <p><strong>Consumo:</strong> <span style="color:#e67e22; font-weight:700;">900 L/día</span> <span style="font-size:0.7rem;">(+50%)</span></p>
+            <p><strong>Entrada:</strong> <span style="color:#e67e22; font-weight:700;">350 L/día</span> <span style="font-size:0.7rem;">(-30%)</span></p>
+            <p><strong>Balance:</strong> <span style="color:#e74c3c;">-550 L/día</span></p>
+            <p style="font-size:0.7rem; margin-top:0.5rem;">La reserva disminuye rápido</p>
+          </div>
+          <div id="casoCriticoCard" class="caso-card caso-critico-border" onclick="seleccionarCaso('critico')">
+            <h4 style="color: #e74c3c;">🔥 Caso Crítico</h4>
+            <p style="font-size: 0.8rem;">Crisis severa, especulación, pánico</p>
+            <hr>
+            <p><strong>Consumo:</strong> <span style="color:#e74c3c; font-weight:700;">1200 L/día</span> <span style="font-size:0.7rem;">(+100%)</span></p>
+            <p><strong>Entrada:</strong> <span style="color:#e74c3c; font-weight:700;">250 L/día</span> <span style="font-size:0.7rem;">(-50%)</span></p>
+            <p><strong>Balance:</strong> <span style="color:#e74c3c;">-950 L/día</span></p>
+            <p style="font-size:0.7rem; margin-top:0.5rem;">La reserva se agota en días</p>
+          </div>
+        </div>
+
+        <!-- Panel que muestra LOS VALORES ACTUALES (CAMBIAN DINÁMICAMENTE) -->
+        <div class="parametro-actual" id="panelValoresActuales">
+          <i class="fas fa-chart-line"></i> <strong>📊 Valores actuales del caso seleccionado:</strong><br>
+          <span style="font-size: 1rem;">📉 <strong>Consumo:</strong> <span id="consumoActual" class="valor-destacado valor-ideal">600</span> L/día</span><br>
+          <span style="font-size: 1rem;">📈 <strong>Entrada:</strong> <span id="entradaActual" class="valor-destacado valor-ideal">500</span> L/día</span><br>
+          <span style="font-size: 1rem;">⚖️ <strong>Balance diario:</strong> <span id="balanceActual" class="valor-destacado">-100</span> L/día</span><br>
+          <span style="font-size: 1rem;">😨 <strong>Factor pánico:</strong> <span id="panicoActual">0</span>% (se activa si reserva < 50%)</span>
+        </div>
+
+        <!-- Parámetros que el usuario PUEDE MODIFICAR (ahora sí se ven los valores reales) -->
+        <div class="parametros-grid">
+          <div class="parametro-card">
+            <label>📊 Reserva inicial (litros)</label>
+            <input type="number" id="reservaInicial" value="10000" step="500">
+          </div>
+          <div class="parametro-card">
+            <label>⛽ Consumo actual (L/día) - <span id="consumoLabel" style="color:#27ae60;">Ideal</span></label>
+            <input type="number" id="consumoActualInput" value="600" step="50" style="font-weight:700;">
+          </div>
+          <div class="parametro-card">
+            <label>🚚 Entrada actual (L/día) - <span id="entradaLabel" style="color:#27ae60;">Ideal</span></label>
+            <input type="number" id="entradaActualInput" value="500" step="50" style="font-weight:700;">
+          </div>
+          <div class="parametro-card">
+            <label>😨 Factor pánico (solo crítico)</label>
+            <input type="number" id="factorPanico" value="0.5" step="0.1" min="0" max="2">
+          </div>
+          <div class="parametro-card">
+            <label>📅 Días a simular</label>
+            <input type="number" id="dias" value="30">
+          </div>
+          <div class="parametro-card">
+            <label>📏 Paso de tiempo (dt)</label>
+            <input type="number" id="dt" value="0.5" step="0.1">
+          </div>
+        </div>
+        
+        <div class="comparison-summary" style="margin-top: 1rem;">
+          <strong><i class="fas fa-chart-line"></i> 💡 ¿Qué significa cada caso?</strong><br>
+          • <strong style="color:#27ae60;">Ideal:</strong> Consumo normal (600 L/día), entrada normal (500 L/día). La reserva disminuye lentamente.<br>
+          • <strong style="color:#e67e22;">Moderado:</strong> Consumo +50% (900 L/día), entrada -30% (350 L/día). Crisis parcial, se acelera el vaciado.<br>
+          • <strong style="color:#e74c3c;">Crítico:</strong> Consumo +100% (1200 L/día), entrada -50% (250 L/día). ¡Emergencia! Además, hay pánico cuando baja la reserva.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== BOTONES PARA VER MÉTODOS EXPLICADOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-code-branch"></i> Explore cada método en detalle</h2>
+      </div>
+      <div class="card-body">
+        <p style="margin-bottom: 1rem;">Haga clic en cualquier tarjeta para ver la <strong>explicación paso a paso</strong> de cómo funciona ese método aplicado al vaciado de reservas:</p>
+        
+        <div class="methods-grid" style="margin-bottom: 2rem;">
+          <a href="EULER/Eulerindex.html" class="method-link" target="_blank">
+            <div class="method-card">
+              <div class="method-icon">1</div>
+              <h3><i class="fas fa-calculator"></i> Método de Euler</h3>
+              <p>Error O(h) - El más simple</p>
+              <div class="explicacion-metodo">
+                <strong>📌 ¿Qué verás?</strong> Explicación paso a paso, fórmula, ejemplo numérico y ventajas/desventajas.
+              </div>
+              <span class="btn-method">Ver explicación completa →</span>
+            </div>
+          </a>
+          <a href="HEUN/Heunindex.html" class="method-link" target="_blank">
+            <div class="method-card">
+              <div class="method-icon">2</div>
+              <h3><i class="fas fa-chart-line"></i> Método de Heun</h3>
+              <p>Error O(h²) - Predictor-Corrector</p>
+              <div class="explicacion-metodo">
+                <strong>📌 ¿Qué verás?</strong> Explicación del método predictor-corrector, fórmula y comparación con Euler.
+              </div>
+              <span class="btn-method">Ver explicación completa →</span>
+            </div>
+          </a>
+          <a href="RK4/RK4index.html" class="method-link" target="_blank">
+            <div class="method-card">
+              <div class="method-icon">3</div>
+              <h3><i class="fas fa-star"></i> Método de Runge-Kutta 4 (RK4)</h3>
+              <p>Error O(h⁴) - ⭐ El más preciso</p>
+              <div class="explicacion-metodo">
+                <strong>📌 ¿Qué verás?</strong> Explicación de los 4 coeficientes k₁, k₂, k₃, k₄ y por qué es el más preciso.
+              </div>
+              <span class="btn-method">Ver explicación completa →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== EJECUTAR SIMULACIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-line"></i> Simulación interactiva</h2>
+      </div>
+      <div class="card-body">
+        <p>Seleccione un método y ejecute la simulación para ver los resultados en tiempo real:</p>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
+          <button id="btnEuler" class="metodo-btn-ejecutar btn-euler"><i class="fas fa-calculator"></i> Ejecutar Euler</button>
+          <button id="btnHeun" class="metodo-btn-ejecutar btn-heun"><i class="fas fa-chart-line"></i> Ejecutar Heun</button>
+          <button id="btnRK4" class="metodo-btn-ejecutar btn-rk4"><i class="fas fa-star"></i> Ejecutar RK4 (Recomendado)</button>
+        </div>
+
+        <div id="resultadosContainer">
+          <div id="resultadoEuler" class="resultado-metodo" style="display: none;">
+            <h4><i class="fas fa-calculator"></i> Resultados con el Método de Euler</h4>
+            <div id="eulerResultado"></div>
+          </div>
+          <div id="resultadoHeun" class="resultado-metodo" style="display: none;">
+            <h4><i class="fas fa-chart-line"></i> Resultados con el Método de Heun</h4>
+            <div id="heunResultado"></div>
+          </div>
+          <div id="resultadoRK4" class="resultado-metodo" style="display: none; background: linear-gradient(135deg, #6b4e9e10, #8b6cc908);">
+            <h4><i class="fas fa-star"></i> Resultados con el Método RK4 (Recomendado)</h4>
+            <div id="rk4Resultado"></div>
+          </div>
+        </div>
+        
+        <div class="graph-container" id="graficoContainer" style="display: none;">
+          <canvas id="grafico"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== COMPARACIÓN DE CASOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> Comparación entre los 3 casos de crisis</h2>
+      </div>
+      <div class="card-body">
+        <div id="comparacionCasosContainer"></div>
+      </div>
+    </section>
+
+    <!-- ==================== INTERPRETACIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-line"></i> Interpretación de resultados</h2>
+      </div>
+      <div class="card-body">
+        <div id="interpretacionFinal" class="interpretacion-contenido">
+          <p>Seleccione un caso y ejecute una simulación para ver la interpretación aquí.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Escenario B - Vaciado de reservas</strong> | Métodos: Euler (O(h)) | Heun (O(h²)) | RK4 (O(h⁴)) ⭐</p>
+    <p>📌 Haga clic en las tarjetas de los casos para cambiar los valores. También puede modificarlos manualmente.</p>
+  </footer>
+
+  <script>
+    let chart = null;
+    let casoActual = "ideal";
+    
+    // Valores predefinidos para cada caso
+    const valoresCasos = {
+      ideal: { consumo: 600, entrada: 500, color: "#27ae60", nombre: "Ideal", balance: -100, panico: 0 },
+      moderado: { consumo: 900, entrada: 350, color: "#e67e22", nombre: "Moderado", balance: -550, panico: 0 },
+      critico: { consumo: 1200, entrada: 250, color: "#e74c3c", nombre: "Crítico", balance: -950, panico: 50 }
+    };
+    
+    // Función para seleccionar un caso
+    function seleccionarCaso(caso) {
+      casoActual = caso;
+      const valores = valoresCasos[caso];
+      
+      // Actualizar estilos de las tarjetas
+      document.getElementById("casoIdealCard").classList.remove("caso-seleccionado");
+      document.getElementById("casoModeradoCard").classList.remove("caso-seleccionado");
+      document.getElementById("casoCriticoCard").classList.remove("caso-seleccionado");
+      document.getElementById(`caso${caso.charAt(0).toUpperCase() + caso.slice(1)}Card`).classList.add("caso-seleccionado");
+      
+      // Actualizar los inputs con los valores del caso
+      document.getElementById("consumoActualInput").value = valores.consumo;
+      document.getElementById("entradaActualInput").value = valores.entrada;
+      
+      // Actualizar el panel de valores actuales
+      document.getElementById("consumoActual").innerHTML = valores.consumo;
+      document.getElementById("entradaActual").innerHTML = valores.entrada;
+      document.getElementById("balanceActual").innerHTML = valores.balance;
+      document.getElementById("panicoActual").innerHTML = valores.panico;
+      
+      // Actualizar colores
+      const colorClass = caso === "ideal" ? "valor-ideal" : (caso === "moderado" ? "valor-moderado" : "valor-critico");
+      document.getElementById("consumoActual").className = `valor-destacado ${colorClass}`;
+      document.getElementById("entradaActual").className = `valor-destacado ${colorClass}`;
+      document.getElementById("balanceActual").className = `valor-destacado ${valores.balance < 0 ? 'valor-critico' : 'valor-ideal'}`;
+      
+      // Actualizar etiquetas de los inputs
+      const labelColor = caso === "ideal" ? "#27ae60" : (caso === "moderado" ? "#e67e22" : "#e74c3c");
+      document.getElementById("consumoLabel").innerHTML = valores.nombre;
+      document.getElementById("consumoLabel").style.color = labelColor;
+      document.getElementById("entradaLabel").innerHTML = valores.nombre;
+      document.getElementById("entradaLabel").style.color = labelColor;
+      
+      // Cambiar color del panel
+      const panel = document.getElementById("panelValoresActuales");
+      if (caso === "ideal") {
+        panel.style.borderLeftColor = "#27ae60";
+        panel.style.background = "linear-gradient(135deg, #27ae6010, #e8e0f8)";
+      } else if (caso === "moderado") {
+        panel.style.borderLeftColor = "#e67e22";
+        panel.style.background = "linear-gradient(135deg, #e67e2210, #e8e0f8)";
+      } else {
+        panel.style.borderLeftColor = "#e74c3c";
+        panel.style.background = "linear-gradient(135deg, #e74c3c10, #e8e0f8)";
+      }
+      
+      // Actualizar comparación y simulación
+      actualizarComparacionCasos();
+      const metodoActivo = document.querySelector('#resultadoEuler[style*="display: block"], #resultadoHeun[style*="display: block"], #resultadoRK4[style*="display: block"]');
+      if (metodoActivo) {
+        if (metodoActivo.id === "resultadoEuler") simular("euler");
+        else if (metodoActivo.id === "resultadoHeun") simular("heun");
+        else simular("rk4");
+      } else {
+        simular("rk4");
+      }
+    }
+    
+    // Función para obtener valores actuales (del input)
+    function obtenerValoresActuales() {
+      const consumo = parseFloat(document.getElementById("consumoActualInput").value);
+      const entrada = parseFloat(document.getElementById("entradaActualInput").value);
+      const balance = entrada - consumo;
+      
+      let colorCaso = "#6b4e9e";
+      let nombreCaso = "Personalizado";
+      if (consumo === 600 && entrada === 500) { colorCaso = "#27ae60"; nombreCaso = "Ideal"; }
+      else if (consumo === 900 && entrada === 350) { colorCaso = "#e67e22"; nombreCaso = "Moderado"; }
+      else if (consumo === 1200 && entrada === 250) { colorCaso = "#e74c3c"; nombreCaso = "Crítico"; }
+      
+      return { consumo, entrada, balance, colorCaso, nombreCaso };
+    }
+    
+    // Función principal de simulación
+    function simular(metodo) {
+      const R0 = parseFloat(document.getElementById("reservaInicial").value);
+      const factorPanico = parseFloat(document.getElementById("factorPanico").value);
+      const dias = parseFloat(document.getElementById("dias").value);
+      const h = parseFloat(document.getElementById("dt").value);
+      const n = Math.ceil(dias / h);
+      
+      const { consumo, entrada, colorCaso, nombreCaso } = obtenerValoresActuales();
+      
+      function dRdt(R, t) {
+        let cons = consumo;
+        if (nombreCaso === "Crítico" && R < R0 * 0.5) {
+          cons = consumo * (1 + factorPanico);
+        }
+        return entrada - cons;
+      }
+      
+      let t_arr = Array(n + 1).fill(0);
+      let R = Array(n + 1).fill(0);
+      R[0] = R0;
+      
+      for (let i = 0; i < n; i++) {
+        t_arr[i + 1] = t_arr[i] + h;
+        
+        if (metodo === "euler") {
+          R[i + 1] = R[i] + h * dRdt(R[i], t_arr[i]);
+        } else if (metodo === "heun") {
+          let k1 = dRdt(R[i], t_arr[i]);
+          let k2 = dRdt(R[i] + h * k1, t_arr[i] + h);
+          R[i + 1] = R[i] + (h / 2) * (k1 + k2);
+        } else {
+          let k1 = dRdt(R[i], t_arr[i]);
+          let k2 = dRdt(R[i] + (h/2) * k1, t_arr[i] + h/2);
+          let k3 = dRdt(R[i] + (h/2) * k2, t_arr[i] + h/2);
+          let k4 = dRdt(R[i] + h * k3, t_arr[i] + h);
+          R[i + 1] = R[i] + (h/6) * (k1 + 2*k2 + 2*k3 + k4);
+        }
+        if (R[i + 1] < 0) R[i + 1] = 0;
+      }
+      
+      let diaCritico = R.findIndex(v => v <= 0) * h;
+      if (diaCritico <= 0 || diaCritico > dias) diaCritico = null;
+      
+      let metodoNombre = metodo === "euler" ? "Euler" : (metodo === "heun" ? "Heun" : "RK4");
+      let metodoError = metodo === "euler" ? "O(h)" : (metodo === "heun" ? "O(h²)" : "O(h⁴)");
+      
+      let resultadoHtml = `
+        <div class="resultado-valor" style="color: ${colorCaso};">${R[n].toFixed(0)} litros</div>
+        <p><strong>Reserva final después de ${dias} días</strong></p>
+        <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 0.5rem;">
+          <span style="background: rgba(0,0,0,0.05); padding: 0.2rem 0.8rem; border-radius: 20px;">📉 Consumo: ${consumo} L/día</span>
+          <span style="background: rgba(0,0,0,0.05); padding: 0.2rem 0.8rem; border-radius: 20px;">📈 Entrada: ${entrada} L/día</span>
+          <span style="background: rgba(0,0,0,0.05); padding: 0.2rem 0.8rem; border-radius: 20px;">⚖️ Balance: ${(entrada - consumo).toFixed(0)} L/día</span>
+          ${diaCritico ? `<span style="background: #e74c3c20; padding: 0.2rem 0.8rem; border-radius: 20px; color: #e74c3c;">⚠️ Día crítico: ${diaCritico.toFixed(1)}</span>` : '<span style="background: #27ae6020; padding: 0.2rem 0.8rem; border-radius: 20px; color: #27ae60;">✅ Sin nivel crítico</span>'}
+        </div>
+        <p style="margin-top: 0.8rem; font-size: 0.85rem; color: #7a7596;">
+          🔍 <strong>Método de ${metodoNombre}</strong> (Error ${metodoError})<br>
+        </p>
+      `;
+      
+      document.getElementById(`${metodo}Resultado`).innerHTML = resultadoHtml;
+      document.getElementById(`resultado${metodo.charAt(0).toUpperCase() + metodo.slice(1)}`).style.display = "block";
+      
+      if (chart) chart.destroy();
+      const ctx = document.getElementById("grafico").getContext("2d");
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: t_arr.map(v => v.toFixed(1)),
+          datasets: [{
+            label: `${metodoNombre} - ${nombreCaso}`,
+            data: R,
+            borderColor: colorCaso,
+            backgroundColor: `${colorCaso}20`,
+            borderWidth: 3,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { labels: { color: '#4a3b7c' } } },
+          scales: { y: { beginAtZero: true, title: { text: 'Litros' } }, x: { title: { text: 'Días' } } }
+        }
+      });
+      document.getElementById("graficoContainer").style.display = "block";
+      
+      actualizarInterpretacion(nombreCaso, R[n], diaCritico, consumo, entrada);
+      actualizarComparacionCasos();
+    }
+    
+    function actualizarInterpretacion(caso, reservaFinal, diaCritico, consumo, entrada) {
+      const interpretacionDiv = document.getElementById("interpretacionFinal");
+      const perdidaDiaria = consumo - entrada;
+      const porcentajePerdida = (perdidaDiaria / entrada) * 100;
+      
+      let texto = "";
+      if (caso === "Ideal") {
+        texto = `
+          <p><strong><i class="fas fa-chart-line"></i> Análisis del caso IDEAL:</strong></p>
+          <p>La reserva final es de <strong>${reservaFinal.toFixed(0)} litros</strong> después de 30 días.</p>
+          <p>📊 <strong>Análisis matemático:</strong> En situación normal, el consumo (${consumo} L/día) supera a la entrada (${entrada} L/día) en ${perdidaDiaria} L/día (${porcentajePerdida.toFixed(0)}% de pérdida).</p>
+          <p>💡 <strong>Interpretación económica:</strong> Esta pérdida equivale a aproximadamente <strong>${(perdidaDiaria * 30).toFixed(0)} litros al mes</strong>. Aunque es manejable, se recomienda ajustar el consumo o aumentar la entrada a largo plazo.</p>
+          ${diaCritico ? `<p>⚠️ La reserva se agotaría en <strong>${diaCritico.toFixed(1)} días</strong> si la tendencia continúa.</p>` : '<p>✅ La reserva no llegó a niveles críticos en el período simulado.</p>'}
+        `;
+      } else if (caso === "Moderado") {
+        texto = `
+          <p><strong><i class="fas fa-chart-line"></i> Análisis del caso MODERADO:</strong></p>
+          <p>La reserva final es de <strong>${reservaFinal.toFixed(0)} litros</strong> después de 30 días.</p>
+          <p>📊 <strong>Análisis matemático:</strong> En crisis moderada, el consumo aumenta un 50% (${consumo} L/día) y la entrada disminuye un 30% (${entrada} L/día). La pérdida diaria es de ${perdidaDiaria} L/día (${porcentajePerdida.toFixed(0)}%).</p>
+          <p>💡 <strong>Interpretación económica:</strong> ¡La pérdida mensual sería de <strong>${(perdidaDiaria * 30).toFixed(0)} litros</strong>! Se requieren medidas urgentes para controlar la demanda.</p>
+          ${diaCritico ? `<p>🔴 <strong>ALERTA:</strong> La reserva llegaría a nivel crítico en <strong>${diaCritico.toFixed(1)} días</strong>. ¡Tiempo límite para actuar!</p>` : '<p>⚠️ La situación es delicada, se necesita monitoreo constante.</p>'}
+        `;
+      } else if (caso === "Crítico") {
+        texto = `
+          <p><strong><i class="fas fa-chart-line"></i> Análisis del caso CRÍTICO:</strong></p>
+          <p>La reserva final es de <strong>${reservaFinal.toFixed(0)} litros</strong> después de 30 días.</p>
+          <p>📊 <strong>Análisis matemático:</strong> En crisis crítica, el consumo se duplica (${consumo} L/día) y la entrada se reduce a la mitad (${entrada} L/día). La pérdida diaria es de ${perdidaDiaria} L/día (${porcentajePerdida.toFixed(0)}% de pérdida).</p>
+          <p>💡 <strong>Interpretación económica:</strong> ¡ESTO ES UNA EMERGENCIA NACIONAL! Por cada litro que entra, se consumen ${(consumo/entrada).toFixed(1)} litros. La pérdida mensual sería de <strong style="color:#e74c3c;">${(perdidaDiaria * 30).toFixed(0)} litros</strong>.</p>
+          ${diaCritico ? `<p>🔴🔴🔴 <strong>CRISIS INMINENTE:</strong> La reserva se agotará en <strong>${diaCritico.toFixed(1)} días</strong> si no se toman medidas inmediatas: racionamiento, control de precios y apertura de rutas de abastecimiento.</p>` : '<p>🔴 La situación es extremadamente crítica.</p>'}
+        `;
+      } else {
+        texto = `
+          <p><strong><i class="fas fa-chart-line"></i> Análisis del caso PERSONALIZADO:</strong></p>
+          <p>La reserva final es de <strong>${reservaFinal.toFixed(0)} litros</strong> después de 30 días con consumo=${consumo} L/día y entrada=${entrada} L/día.</p>
+          <p>📊 <strong>Balance diario:</strong> ${perdidaDiaria} L/día (${porcentajePerdida.toFixed(0)}% de pérdida).</p>
+          ${diaCritico ? `<p>⚠️ La reserva se agotaría en <strong>${diaCritico.toFixed(1)} días</strong>.</p>` : '<p>✅ La reserva no llegó a niveles críticos.</p>'}
+        `;
+      }
+      interpretacionDiv.innerHTML = texto;
+    }
+    
+    function actualizarComparacionCasos() {
+      const R0 = parseFloat(document.getElementById("reservaInicial").value);
+      const factorPanico = parseFloat(document.getElementById("factorPanico").value);
+      const dias = parseFloat(document.getElementById("dias").value);
+      const h = parseFloat(document.getElementById("dt").value);
+      const n = Math.ceil(dias / h);
+      
+      const casos = ["ideal", "moderado", "critico"];
+      const nombres = ["📈 Ideal", "⚠️ Moderado", "🔥 Crítico"];
+      const colores = ["#27ae60", "#e67e22", "#e74c3c"];
+      const consumos = [600, 900, 1200];
+      const entradas = [500, 350, 250];
+      
+      let resultados = [];
+      
+      for (let idx = 0; idx < casos.length; idx++) {
+        let consumo = consumos[idx];
+        let entrada = entradas[idx];
+        
+        function dRdtComparar(R, t, casoType) {
+          let cons = consumo;
+          if (casoType === "critico" && R < R0 * 0.5) {
+            cons = consumo * (1 + factorPanico);
+          }
+          return entrada - cons;
+        }
+        
+        let t_arr = Array(n + 1).fill(0);
+        let R_arr = Array(n + 1).fill(0);
+        R_arr[0] = R0;
+        
+        for (let i = 0; i < n; i++) {
+          t_arr[i + 1] = t_arr[i] + h;
+          let k1 = dRdtComparar(R_arr[i], t_arr[i], casos[idx]);
+          let k2 = dRdtComparar(R_arr[i] + (h/2) * k1, t_arr[i] + h/2, casos[idx]);
+          let k3 = dRdtComparar(R_arr[i] + (h/2) * k2, t_arr[i] + h/2, casos[idx]);
+          let k4 = dRdtComparar(R_arr[i] + h * k3, t_arr[i] + h, casos[idx]);
+          R_arr[i + 1] = R_arr[i] + (h/6) * (k1 + 2*k2 + 2*k3 + k4);
+          if (R_arr[i + 1] < 0) R_arr[i + 1] = 0;
+        }
+        
+        let diaCritico = R_arr.findIndex(v => v <= 0) * h;
+        if (diaCritico <= 0 || diaCritico > dias) diaCritico = null;
+        
+        resultados.push({
+          nombre: nombres[idx],
+          color: colores[idx],
+          consumo: consumo,
+          entrada: entrada,
+          reservaFinal: R_arr[n],
+          diaCritico: diaCritico
+        });
+      }
+      
+      let comparacionHtml = `
+        <h4 style="margin: 1rem 0 0.5rem;"><i class="fas fa-chart-simple"></i> Comparación entre los 3 casos predefinidos (usando RK4)</h4>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+      `;
+      
+      for (let res of resultados) {
+        comparacionHtml += `
+          <div style="background: white; border-radius: 16px; padding: 1rem; text-align: center; border-top: 4px solid ${res.color}; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <h4 style="color: ${res.color};">${res.nombre}</h4>
+            <p style="font-size: 0.7rem;">Consumo: ${res.consumo} | Entrada: ${res.entrada}</p>
+            <hr>
+            <p><strong>Reserva final:</strong> <span style="color: ${res.color}; font-weight:700;">${res.reservaFinal.toFixed(0)} L</span></p>
+            ${res.diaCritico ? `<p style="color: #e74c3c;"><strong>⚠️ Día crítico:</strong> ${res.diaCritico.toFixed(1)}</p>` : '<p style="color: #27ae60;"><strong>✅ Sin crisis</strong></p>'}
+          </div>
+        `;
+      }
+      
+      comparacionHtml += `</div>`;
+      comparacionHtml += `
+        <div class="comparison-summary" style="margin-top: 1rem;">
+          <strong><i class="fas fa-chart-line"></i> Conclusión:</strong><br>
+          • <strong>Ideal:</strong> La reserva disminuye lentamente. Hay tiempo para planificar.<br>
+          • <strong>Moderado:</strong> La crisis acelera el vaciado. Se requiere intervención.<br>
+          • <strong>Crítico:</strong> ¡Emergencia! La reserva se agota rápidamente. Acción inmediata.
+        </div>
+      `;
+      
+      document.getElementById("comparacionCasosContainer").innerHTML = comparacionHtml;
+    }
+    
+    // Eventos
+    document.getElementById("btnEuler").addEventListener("click", () => simular("euler"));
+    document.getElementById("btnHeun").addEventListener("click", () => simular("heun"));
+    document.getElementById("btnRK4").addEventListener("click", () => simular("rk4"));
+    
+    // Cuando el usuario modifica los valores manualmente
+    document.getElementById("consumoActualInput").addEventListener("change", () => {
+      const valores = obtenerValoresActuales();
+      document.getElementById("consumoActual").innerHTML = valores.consumo;
+      document.getElementById("entradaActual").innerHTML = valores.entrada;
+      document.getElementById("balanceActual").innerHTML = valores.balance;
+      document.getElementById("panicoActual").innerHTML = 0;
+      
+      actualizarComparacionCasos();
+      simular("rk4");
+    });
+    document.getElementById("entradaActualInput").addEventListener("change", () => {
+      const valores = obtenerValoresActuales();
+      document.getElementById("consumoActual").innerHTML = valores.consumo;
+      document.getElementById("entradaActual").innerHTML = valores.entrada;
+      document.getElementById("balanceActual").innerHTML = valores.balance;
+      
+      actualizarComparacionCasos();
+      simular("rk4");
+    });
+    
+    document.getElementById("reservaInicial").addEventListener("change", () => simular("rk4"));
+    document.getElementById("factorPanico").addEventListener("change", () => simular("rk4"));
+    document.getElementById("dias").addEventListener("change", () => simular("rk4"));
+    document.getElementById("dt").addEventListener("change", () => simular("rk4"));
+    
+    // Inicializar
+    actualizarComparacionCasos();
+    simular("rk4");
+  </script>
+</body>
+</html>

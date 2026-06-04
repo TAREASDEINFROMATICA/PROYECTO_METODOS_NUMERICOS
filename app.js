@@ -6,7 +6,7 @@ const modulos = [
     escenarios: ["A", "F"],
     descripcion:
       "Analiza abastecimiento, transporte, distribucion de recursos y rumores mediante Jacobi, Gauss-Seidel, SOR, Gradiente Conjugado y LU.",
-    responsable: "Persona 1 - editar nombre",
+    responsable: "Casilla Rengel Paola Nathaly",
     ruta: "MODULO1_SISTEMAS_ECUACIONES/Sistemasindex.html",
     color: "#2563eb",
     colorSuave: "rgba(37, 99, 235, 0.12)"
@@ -18,7 +18,7 @@ const modulos = [
     escenarios: ["E"],
     descripcion:
       "Encuentra el punto critico donde el gasto, abastecimiento o reserva llega a un limite usando Biseccion, Newton-Raphson y Secante.",
-    responsable: "Persona 2 - editar nombre",
+    responsable: "Persona 2 - Ronaldo Charca Condori",
     ruta: "MODULO2_RAICES/Raicesindex.html",
     color: "#7c3aed",
     colorSuave: "rgba(124, 58, 237, 0.12)"
@@ -30,7 +30,7 @@ const modulos = [
     escenarios: ["C"],
     descripcion:
       "Estima precios faltantes de productos basicos usando datos dispersos del mes mediante Lagrange, Newton Interpolacion y Splines Cubicos.",
-    responsable: "Persona 2 - editar nombre",
+    responsable: "Persona 2 - Ronaldo Charca Condori",
     ruta: "MODULO3_INTERPOLACION/Interpolacionindex.html",
     color: "#10b981",
     colorSuave: "rgba(16, 185, 129, 0.12)"
@@ -42,7 +42,7 @@ const modulos = [
     escenarios: ["D"],
     descripcion:
       "Calcula costos acumulados y perdida del poder adquisitivo familiar mediante metodos de integracion numerica.",
-    responsable: "Persona 3 - editar nombre",
+    responsable: "Persona 3 - Ericka Fabiola Barrionuevo Chavez",
     ruta: "MODULO4_INTEGRACION_NUMERICA/Integracionindex.html",
     color: "#f59e0b",
     colorSuave: "rgba(245, 158, 11, 0.14)"
@@ -54,7 +54,7 @@ const modulos = [
     escenarios: ["B", "G"],
     descripcion:
       "Modela cambios en el tiempo, como vaciado de reservas, abastecimiento o difusion del descontento social.",
-    responsable: "Persona 3 - editar nombre",
+    responsable: "Persona 3 - Ericka Fabiola Barrionuevo Chavez",
     ruta: "MODULO5_EDO/EDOindex.html",
     color: "#ef4444",
     colorSuave: "rgba(239, 68, 68, 0.12)"

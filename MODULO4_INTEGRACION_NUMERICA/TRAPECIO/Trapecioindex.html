@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trapecio - Método de Integración Numérica</title>
+  <link rel="stylesheet" href="../Integracionstyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Estilos adicionales específicos para Trapecio */
+    .explicacion-paso {
+      background: linear-gradient(135deg, rgba(107, 78, 158, 0.05), rgba(139, 108, 201, 0.03));
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-left: 4px solid #8b6cc9;
+    }
+    
+    .explicacion-paso h3 {
+      color: #4a3b7c;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .explicacion-paso h3 i {
+      color: #8b6cc9;
+    }
+    
+    .formula-destacada {
+      background: white;
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      margin: 1rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .formula-destacada .math {
+      font-family: monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #6b4e9e;
+    }
+    
+    .tabla-desarrollo {
+      font-size: 0.85rem;
+    }
+    
+    .tabla-desarrollo td {
+      padding: 0.5rem;
+    }
+    
+    .resultado-principal {
+      background: linear-gradient(135deg, #6b4e9e, #8b6cc9);
+      color: white;
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      margin: 1rem 0;
+    }
+    
+    .resultado-principal .valor {
+      font-size: 3rem;
+      font-weight: 800;
+      margin: 0.5rem 0;
+    }
+    
+    .resultado-principal small {
+      opacity: 0.9;
+    }
+    
+    .grid-comparacion {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    
+    .card-comparacion {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(107, 78, 158, 0.1);
+    }
+    
+    .card-comparacion .numero {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #6b4e9e;
+    }
+    
+    .card-comparacion .etiqueta {
+      font-size: 0.8rem;
+      color: #7a7596;
+      margin-top: 0.3rem;
+    }
+    
+    .alert-info {
+      background: rgba(107, 78, 158, 0.1);
+      border-radius: 13px;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-left: 3px solid #8b6cc9;
+    }
+    
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .step {
+      flex: 1;
+      text-align: center;
+      padding: 0.8rem;
+      background: rgba(107, 78, 158, 0.08);
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #7a7596;
+    }
+    
+    .step.active {
+      background: linear-gradient(135deg, #6b4e9e, #8b6cc9);
+      color: white;
+    }
+    
+    .badge-metodo {
+      display: inline-block;
+      background: rgba(107, 78, 158, 0.15);
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #6b4e9e;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Integracionindex.html" class="back-link">← Volver al módulo principal</a>
+      <span class="badge">Método del Trapecio | Error O(h²) = 1/12</span>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Método Numérico de Integración</p>
+      <h1>📐 Regla del Trapecio</h1>
+      <p class="hero-subtitle">Aproximación del área bajo la curva dividiendo en 30 trapecios</p>
+
+      <div class="formula-box">
+        <strong>📐 Fórmula general:</strong> ∫ₐᵇ f(x)dx ≈ (h/2)[f(x₀) + 2f(x₁) + 2f(x₂) + ... + 2f(x₂₉) + f(x₃₀)]
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== EXPLICACIÓN PASO A PASO ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">¿Cómo funciona?</p>
+      <h2><i class="fas fa-calculator"></i> Explicación del método</h2>
+
+      <div class="step-indicator">
+        <div class="step active">Paso 1: Dividir</div>
+        <div class="step">Paso 2: Calcular áreas</div>
+        <div class="step">Paso 3: Sumar</div>
+        <div class="step">Paso 4: Interpretar</div>
+      </div>
+
+      <div class="explicacion-paso">
+        <h3><i class="fas fa-chalkboard-teacher"></i> ¿Qué es el método del Trapecio?</h3>
+        <p>El método del Trapecio aproxima el área bajo una curva dividiendo el intervalo en varios <strong>trapecios</strong>. En nuestro caso, como tenemos datos diarios (30 días), dividimos el mes en <strong>30 trapecios</strong>, cada uno con ancho <strong>h = 1 día</strong>.</p>
+      </div>
+
+      <div class="explicacion-paso">
+        <h3><i class="fas fa-shapes"></i> Área de un trapecio</h3>
+        <p>El área de un trapecio se calcula como el promedio de las alturas (los precios) multiplicado por el ancho:</p>
+        <div class="formula-destacada">
+          <span class="math">Área del trapecio i = (h/2) × [Precio(día i) + Precio(día i+1)]</span>
+        </div>
+        <p>Donde <strong>h = 1 día</strong> es el ancho de cada trapecio.</p>
+      </div>
+
+      <div class="explicacion-paso">
+        <h3><i class="fas fa-chart-line"></i> Aplicación a nuestro problema</h3>
+        <p>Para calcular el gasto total del mes, sumamos las áreas de los 30 trapecios:</p>
+        <div class="formula-destacada">
+          <span class="math">Gasto total = Σ [ (1/2) × (Precio_día_i + Precio_día_i+1) ]</span>
+        </div>
+        <p>Simplificando, obtenemos la fórmula final donde los precios intermedios (días 2 al 29) se multiplican por 2 porque cada uno pertenece a dos trapecios:</p>
+        <div class="formula-destacada" style="background: rgba(107,78,158,0.1);">
+          <span class="math">Trapecio = (1/2) × [P₁ + 2P₂ + 2P₃ + ... + 2P₂₉ + P₃₀]</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SELECCIÓN DE ESCENARIO ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">Escenario económico</p>
+      <h2><i class="fas fa-chart-simple"></i> Seleccione un escenario</h2>
+
+      <div class="case-selector">
+        <button class="case-button active" data-case="ideal">
+          <i class="fas fa-chart-line"></i> Estado ideal
+          <small>+87% inflación</small>
+        </button>
+        <button class="case-button" data-case="moderado">
+          <i class="fas fa-exclamation-triangle"></i> Crisis moderada
+          <small>+300% inflación</small>
+        </button>
+        <button class="case-button" data-case="critico">
+          <i class="fas fa-fire"></i> Crisis crítica
+          <small>+680% inflación</small>
+        </button>
+      </div>
+
+      <div id="escenarioInfo" class="escenario-info"></div>
+    </section>
+
+    <!-- ==================== DATOS CONOCIDOS ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">Datos de entrada</p>
+      <h2><i class="fas fa-table-list"></i> Precios registrados</h2>
+
+      <div class="table-wrapper">
+        <table id="tablaDatos">
+          <thead>
+            <tr><th>📅 Día</th><th>💰 Precio (Bs/kg)</th><th>📝 Tipo de dato</th></tr>
+          </thead>
+          <tbody id="cuerpoDatos"></tbody>
+        </table>
+      </div>
+      <div class="alert-info">
+        <i class="fas fa-info-circle"></i> Estos son los únicos registros disponibles. Los precios de los días intermedios se calculan mediante <strong>interpolación lineal</strong> (Módulo 3).
+      </div>
+    </section>
+
+    <!-- ==================== TABLA COMPLETA DE PRECIOS ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">Precios diarios</p>
+      <h2><i class="fas fa-calendar-day"></i> Precios para cada día del mes</h2>
+      
+      <div class="table-wrapper" style="max-height: 400px; overflow-y: auto;">
+        <table class="tabla-desarrollo" id="tablaPreciosCompletos">
+          <thead>
+            <tr><th>Día</th><th>Precio (Bs)</th><th>Cálculo</th><th>Factor</th><th>Aporte</th></tr>
+          </thead>
+          <tbody id="cuerpoPreciosCompletos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== DESARROLLO DE LA SUMA ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">Resolución paso a paso</p>
+      <h2><i class="fas fa-calculator"></i> Aplicando la fórmula del Trapecio</h2>
+
+      <div class="grid-comparacion" id="resumenCalculos"></div>
+
+      <div class="explicacion-paso">
+        <h3><i class="fas fa-list-ol"></i> Desarrollo de la suma</h3>
+        <div id="desarrolloSuma" class="desarrollo-detalle" style="font-family: monospace; font-size: 0.85rem; line-height: 1.8;"></div>
+      </div>
+
+      <div class="resultado-principal" id="resultadoFinal">
+        <!-- Se llena con JS -->
+      </div>
+    </section>
+
+    <!-- ==================== INTERPRETACIÓN ECONÓMICA ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">Significado económico</p>
+      <h2><i class="fas fa-chart-line"></i> ¿Qué significa este resultado?</h2>
+      
+      <div id="interpretacionEconomica" class="interpretacion-contenido"></div>
+      
+      <div class="alert-info" style="margin-top: 1rem;">
+        <i class="fas fa-chart-pie"></i> <strong>Comparativa con Simpson 1/3:</strong> El método del Trapecio tiene un error de O(h²) = 1/12 ≈ 0.0833, mientras que Simpson 1/3 tiene error O(h⁴) = 1/90 ≈ 0.0111, siendo este último más preciso.
+      </div>
+    </section>
+
+    <!-- ==================== GRÁFICA ==================== -->
+    <section class="card graph-card">
+      <p class="eyebrow dark">Visualización</p>
+      <h2><i class="fas fa-chart-area"></i> Curva de precios y área bajo la curva</h2>
+      <div class="graph-container">
+        <canvas id="grafico" style="max-height: 350px; width: 100%;"></canvas>
+      </div>
+      <p class="graph-note">
+        El <strong>área sombreada en morado</strong> representa el gasto total calculado con el método del Trapecio.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Método del Trapecio</strong> | Error O(h²) = 1/12 ≈ 0.0833</p>
+    <p>Fórmula: (h/2)[f₀ + 2f₁ + 2f₂ + ... + 2f₂₉ + f₃₀] | h = 1 día</p>
+  </footer>
+
+  <script src="Trapecioapp.js"></script>
+</body>
+</html>

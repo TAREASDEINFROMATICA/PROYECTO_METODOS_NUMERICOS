@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 4 - Integración Numérica</title>
+  <link rel="stylesheet" href="Integracionstyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../index.html" class="back-link">← Volver al inicio</a>
+      <span class="badge">Persona 3 - Integración Numérica</span>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Desafío Final de Métodos Numéricos</p>
+      <h1>Módulo 4: Integración Numérica</h1>
+      <p class="hero-subtitle">Escenario D: Costo acumulado y pérdida del poder adquisitivo familiar</p>
+
+      <div class="formula-box">
+        <strong>📐 Fórmula general:</strong> Costo total = ∫₁³⁰ Precio(t) dt
+      </div>
+
+      <p class="hero-text">
+        La integración numérica permite calcular el gasto total mensual como el área bajo la curva de precios.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== CONTEXTO Y VARIABLES ==================== -->
+    <section class="card context-card">
+      <p class="eyebrow dark">Contexto del problema</p>
+      <h2>¿Qué problema estamos resolviendo?</h2>
+
+      <p>
+        En Bolivia, una familia compra papa (producto base de la canasta familiar) a diario. 
+        Durante un mes de crisis, los precios aumentan progresivamente. Solo se tienen registros 
+        de precios en algunos días. La <strong>integración numérica</strong> permite calcular el 
+        <strong>gasto total del mes</strong> (área bajo la curva de precios).
+      </p>
+
+      <!-- ==================== EXPLICACIÓN DE CADA VARIABLE ==================== -->
+      <div class="variables-explicacion">
+        <h3>📖 ¿Qué significa cada variable?</h3>
+        <div class="variable-grid">
+          <div class="variable-item">
+            <span class="var-simbolo">t</span>
+            <div class="var-info">
+              <strong>Día del mes</strong>
+              <p>Variable independiente que va desde 1 hasta 30. Representa cada día del mes.</p>
+            </div>
+          </div>
+          <div class="variable-item">
+            <span class="var-simbolo">P(t)</span>
+            <div class="var-info">
+              <strong>Precio en el día t</strong>
+              <p>Es el precio de la papa en bolivianos en un día específico. Ejemplo: P(10)=13 Bs.</p>
+            </div>
+          </div>
+          <div class="variable-item">
+            <span class="var-simbolo">∫ P(t) dt</span>
+            <div class="var-info">
+              <strong>Gasto total (área bajo la curva)</strong>
+              <p>Suma de todos los precios diarios. Representa cuánto gasta la familia en el mes.</p>
+            </div>
+          </div>
+          <div class="variable-item">
+            <span class="var-simbolo">h</span>
+            <div class="var-info">
+              <strong>Paso de integración</strong>
+              <p>En nuestro caso, h = 1 día. Es el intervalo entre cada medición de precio.</p>
+            </div>
+          </div>
+          <div class="variable-item">
+            <span class="var-simbolo">Pérdida</span>
+            <div class="var-info">
+              <strong>Pérdida del poder adquisitivo</strong>
+              <p>Diferencia entre el gasto real y lo que se gastaría si los precios no subieran.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-box">
+        <h3>📐 Modelo matemático</h3>
+        <p class="model-formula">Costo total = ∫₁³⁰ P(t) dt</p>
+        <p class="model-explicacion">El área bajo la curva de precios desde el día 1 hasta el día 30.</p>
+      </div>
+    </section>
+
+    <!-- ==================== ESCENARIOS ==================== -->
+<section class="card">
+  <p class="eyebrow dark">Tres escenarios de crisis</p>
+  <h2>Seleccione un escenario económico</h2>
+
+  <div class="escenario-layout">
+    <div class="escenario-principal">
+      <div class="case-selector">
+        <button class="case-button active" data-case="ideal">
+          <i class="fas fa-chart-line"></i> Caso I: Estado ideal
+          <small>Inflación controlada (+87%)</small>
+        </button>
+        <button class="case-button" data-case="moderado">
+          <i class="fas fa-exclamation-triangle"></i> Caso II: Crisis moderada
+          <small>Desabastecimiento (+300%)</small>
+        </button>
+        <button class="case-button" data-case="critico">
+          <i class="fas fa-fire"></i> Caso III: Crisis crítica
+          <small>Especulación (+680%)</small>
+        </button>
+      </div>
+
+      <!-- Información automática del escenario -->
+      <div id="escenarioInfo" class="escenario-info"></div>
+    </div>
+
+    <!-- Panel lateral con datos del escenario -->
+    <div class="escenario-datos-lateral" id="panelDatosLateral">
+      <h3><i class="fas fa-database"></i> Datos del escenario</h3>
+      <div id="listaPreciosEscenario" class="lista-precios-escenario">
+        <!-- Se llena con JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- ==================== DATOS CONOCIDOS ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">Datos disponibles</p>
+      <h2>📋 Precios conocidos durante el mes</h2>
+
+      <div class="table-wrapper">
+        <table id="tablaDatos">
+          <thead>
+            <tr><th>📅 Día</th><th>💰 Precio (Bs/kg)</th><th>📝 Nota</th></tr>
+          </thead>
+          <tbody id="cuerpoTablaDatos"></tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        🔍 Estos son los únicos registros disponibles. Los precios de los días intermedios 
+        los calcula el <strong>Módulo 3 (Interpolación)</strong>. Nosotros trabajamos con el resultado final.
+      </p>
+    </section>
+
+    <!-- ==================== RESULTADOS POR MÉTODO (automático) ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">Resultados de la integración</p>
+      <h2>💰 Gasto total mensual por cada método</h2>
+
+      <div class="resultados-automaticos" id="resultadosAutomaticos">
+        <!-- Se llena automáticamente con JS -->
+      </div>
+    </section>
+
+    <!-- ==================== COMPARACIÓN DE MÉTODOS (automática) ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">Comparación de métodos</p>
+      <h2>📊 ¿Qué método es más preciso?</h2>
+
+      <div class="table-wrapper">
+        <table id="tablaComparacion">
+          <thead>
+            <tr><th>Método</th><th>Fórmula</th><th>Error</th><th>Gasto total (Bs)</th><th>Precisión</th></tr>
+          </thead>
+          <tbody id="cuerpoComparacion"></tbody>
+        </table>
+      </div>
+      <div id="recomendacionMetodo" class="recomendacion-box"></div>
+    </section>
+
+    <!-- ==================== COMPARACIÓN DE ESCENARIOS (automática) ==================== -->
+    <section class="card">
+      <p class="eyebrow dark">Impacto económico</p>
+      <h2>📉 Comparación de los tres escenarios</h2>
+
+      <div class="table-wrapper">
+        <table id="tablaEscenarios">
+          <thead>
+            <tr>
+              <th>Escenario</th>
+              <th>Precio día 1</th>
+              <th>Precio día 30</th>
+              <th>Gasto real (Bs)</th>
+              <th>Sin inflación (Bs)</th>
+              <th>Pérdida (Bs)</th>
+              <th>% pérdida</th>
+              <th>Impacto</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoEscenarios"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== FÓRMULAS DE LOS MÉTODOS ==================== -->
+    <section class="card formulas-card">
+      <p class="eyebrow dark">Métodos numéricos utilizados</p>
+      <h2>📐 Fórmulas de integración</h2>
+
+      <div class="formulas-grid">
+        <div class="formula-item">
+          <h3>📐 Regla del Trapecio</h3>
+          <p class="formula-math">∫ f(x)dx ≈ (h/2)[f₀ + 2f₁ + 2f₂ + ... + 2f₂₉ + f₃₀]</p>
+          <p><strong>Error:</strong> O(h²) = 1/12 ≈ 0.0833</p>
+          <small>Aproxima el área como suma de trapecios. Es simple pero menos preciso.</small>
+        </div>
+
+        <div class="formula-item destacado">
+          <h3>📈 Simpson 1/3 ⭐ RECOMENDADO</h3>
+          <p class="formula-math">∫ f(x)dx ≈ (h/3)[f₀ + 4f₁ + 2f₂ + 4f₃ + ... + 4f₂₉ + f₃₀]</p>
+          <p><strong>Error:</strong> O(h⁴) = 1/90 ≈ 0.0111</p>
+          <small>Usa parábolas. Requiere número par de intervalos. Es el más preciso.</small>
+        </div>
+
+        <div class="formula-item">
+          <h3>📊 Simpson 3/8</h3>
+          <p class="formula-math">∫ f(x)dx ≈ (3h/8)[f₀ + 3f₁ + 3f₂ + 2f₃ + ... + f₃₀]</p>
+          <p><strong>Error:</strong> O(h⁴) = 1/90 ≈ 0.0111</p>
+          <small>Similar al 1/3, útil cuando el número de intervalos es múltiplo de 3.</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== BOTONES PARA ACCEDER A CADA MÉTODO ==================== -->
+    <section class="card methods-card">
+      <p class="eyebrow dark">Acceso a los métodos</p>
+      <h2>🔍 Explore cada método en detalle</h2>
+
+      <div class="methods-grid">
+        <a href="TRAPECIO/Trapecioindex.html" class="method-link">
+          <div class="method-card">
+            <div class="method-icon">1</div>
+            <h3>📐 Trapecio</h3>
+            <p>Ver resolución paso a paso, desarrollo manual y ejemplos.</p>
+            <span class="btn-method">Abrir →</span>
+          </div>
+        </a>
+        <a href="SIMPSON_13/Simpson13index.html" class="method-link">
+          <div class="method-card">
+            <div class="method-icon">2</div>
+            <h3>📈 Simpson 1/3</h3>
+            <p>Ver resolución paso a paso, desarrollo manual y ejemplos.</p>
+            <span class="btn-method">Abrir →</span>
+          </div>
+        </a>
+        <a href="SIMPSON_38/Simpson38index.html" class="method-link">
+          <div class="method-card">
+            <div class="method-icon">3</div>
+            <h3>📊 Simpson 3/8</h3>
+            <p>Ver resolución paso a paso, desarrollo manual y ejemplos.</p>
+            <span class="btn-method">Abrir →</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ==================== GRÁFICA ==================== -->
+    <section class="card graph-card">
+      <p class="eyebrow dark">Visualización</p>
+      <h2>📈 Curva de precios durante el mes</h2>
+      <div class="graph-container">
+        <canvas id="precioGraph" style="max-height: 350px; width: 100%;"></canvas>
+      </div>
+      <p class="graph-note">
+        La línea muestra la evolución del precio día a día. El <strong>área bajo la curva</strong> 
+        representa el gasto total del mes (calculado con Simpson 1/3).
+      </p>
+    </section>
+
+    <!-- ==================== INTERPRETACIÓN FINAL ==================== -->
+    <section class="card interpretation-final-card">
+      <p class="eyebrow dark">Interpretación de resultados</p>
+      <h2>💡 ¿Qué significa esto para una familia boliviana?</h2>
+      <div id="interpretacionFinal" class="interpretacion-contenido"></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Módulo 4 - Integración Numérica</strong> | Escenario D: Costo acumulado y pérdida del poder adquisitivo</p>
+    <p>Trapecio (O(h²)) | Simpson 1/3 (O(h⁴)) | Simpson 3/8 (O(h⁴))</p>
+  </footer>
+
+  <script src="Integracionapp.js"></script>
+</body>
+</html>

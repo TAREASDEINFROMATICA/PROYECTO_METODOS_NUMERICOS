@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escenario G - Difusión de descontento social</title>
+  <link rel="stylesheet" href="../EDOstyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .modelo-explicacion {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    .ecuacion {
+      font-family: monospace;
+      font-size: 1rem;
+      background: white;
+      padding: 0.8rem;
+      border-radius: 12px;
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+    .caso-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    .caso-card:hover { transform: translateY(-5px); }
+    .caso-ideal { border-top: 4px solid #27ae60; }
+    .caso-moderado { border-top: 4px solid #e67e22; }
+    .caso-critico { border-top: 4px solid #e74c3c; }
+    .caso-seleccionado { box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+    
+    .parametro-actual {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      border-radius: 16px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .tabla-social {
+      font-size: 0.75rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .tabla-social th {
+      background: #4a3b7c;
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+    .resumen-final {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    .valor-grande {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: monospace;
+    }
+    .badge-info {
+      display: inline-block;
+      background: #3498db20;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+    .comparacion-casos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .metodo-btn-ejecutar {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 40px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-euler { background: #3498db20; color: #3498db; border: 1px solid #3498db30; }
+    .btn-euler:hover { background: #3498db; color: white; }
+    .btn-heun { background: #e67e2220; color: #e67e22; border: 1px solid #e67e2230; }
+    .btn-heun:hover { background: #e67e22; color: white; }
+    .btn-rk4 { background: #6b4e9e20; color: #6b4e9e; border: 1px solid #6b4e9e30; }
+    .btn-rk4:hover { background: #6b4e9e; color: white; }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../EDOindex.html" class="back-link">← Volver al módulo</a>
+      <span class="badge">Escenario G - Difusión de descontento social</span>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">Ecuaciones Diferenciales</p>
+      <h1>👥 Difusión de descontento social</h1>
+      <p class="hero-subtitle">Modelo de dinámica social con 3 niveles de crisis</p>
+      <div class="formula-box">
+        <strong>📐 Modelo matemático:</strong> dN/dt = -a·N·M + b·D | dM/dt = a·N·M - c·M·D | dD/dt = k·M - r·D
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== PARTE 1: EXPLICACIÓN DEL MODELO ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-question-circle"></i> PARTE 1: ¿Qué estamos simulando?</h2>
+      </div>
+      <div class="card-body">
+        <div class="modelo-explicacion">
+          <h3><i class="fas fa-users"></i> Las 3 poblaciones del modelo</h3>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+            <div style="background: white; border-radius: 12px; padding: 1rem; text-align: center;">
+              <i class="fas fa-user-friends" style="font-size: 2rem; color: #4a3b7c;"></i>
+              <h4 style="color: #4a3b7c;">N(t)</h4>
+              <p><strong>Neutrales</strong></p>
+              <p style="font-size: 0.8rem;">Ciudadanos sin posición definida</p>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 1rem; text-align: center;">
+              <i class="fas fa-fist-raised" style="font-size: 2rem; color: #e74c3c;"></i>
+              <h4 style="color: #e74c3c;">M(t)</h4>
+              <p><strong>Manifestantes</strong></p>
+              <p style="font-size: 0.8rem;">Ciudadanos activos en protestas</p>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 1rem; text-align: center;">
+              <i class="fas fa-handshake" style="font-size: 2rem; color: #27ae60;"></i>
+              <h4 style="color: #27ae60;">D(t)</h4>
+              <p><strong>Mediadores</strong></p>
+              <p style="font-size: 0.8rem;">Actores que buscan diálogo/solución</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modelo-explicacion" style="margin-top: 1rem;">
+          <h3><i class="fas fa-chart-line"></i> Las ecuaciones del modelo</h3>
+          
+          <div class="ecuacion" style="border-left: 4px solid #4a3b7c;">
+            <strong>dN/dt = -a·N·M + b·D</strong>
+            <p style="font-size: 0.75rem; margin-top: 0.3rem;">Los neutrales disminuyen cuando se convierten en manifestantes (-a·N·M) y aumentan cuando los mediadores los recuperan (+b·D)</p>
+          </div>
+          
+          <div class="ecuacion" style="border-left: 4px solid #e74c3c;">
+            <strong>dM/dt = a·N·M - c·M·D</strong>
+            <p style="font-size: 0.75rem; margin-top: 0.3rem;">Los manifestantes aumentan por influencia social (+a·N·M) y disminuyen por el diálogo (-c·M·D)</p>
+          </div>
+          
+          <div class="ecuacion" style="border-left: 4px solid #27ae60;">
+            <strong>dD/dt = k·M - r·D</strong>
+            <p style="font-size: 0.75rem; margin-top: 0.3rem;">Los mediadores aumentan por reacción institucional (+k·M) y disminuyen por desgaste (-r·D)</p>
+          </div>
+        </div>
+
+        <div class="comparison-summary" style="margin-top: 1rem;">
+          <strong><i class="fas fa-lightbulb"></i> Interpretación del modelo:</strong><br>
+          • <strong>a</strong> (tasa de influencia): Qué tan rápido se contagia el descontento. ¡Más grande = más protestas!<br>
+          • <strong>b</strong> (tasa de recuperación): Qué tan rápido los mediadores calman a los neutrales.<br>
+          • <strong>c</strong> (efectividad del diálogo): Capacidad de los mediadores para reducir protestas.<br>
+          • <strong>k</strong> (reacción institucional): Qué tan rápido actúan los mediadores.<br>
+          • <strong>r</strong> (desgaste de mediadores): Qué tan rápido pierden efectividad.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 2: LOS 3 ESCENARIOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> PARTE 2: Los 3 escenarios de crisis social</h2>
+      </div>
+      <div class="card-body">
+        <div class="comparacion-casos">
+          <div id="cardIdeal" class="caso-card caso-ideal" onclick="seleccionarCaso('ideal')">
+            <h4 style="color: #27ae60;">📈 Estado de Calma</h4>
+            <p><strong>a (contagio):</strong> 0.004 (bajo)</p>
+            <p><strong>c (diálogo):</strong> 0.012 (alto)</p>
+            <p><strong>Resultado:</strong> Descontento controlado</p>
+          </div>
+          <div id="cardModerado" class="caso-card caso-moderado" onclick="seleccionarCaso('moderado')">
+            <h4 style="color: #e67e22;">⚠️ Tensión Social</h4>
+            <p><strong>a (contagio):</strong> 0.0096 (medio)</p>
+            <p><strong>c (diálogo):</strong> 0.0056 (bajo)</p>
+            <p><strong>Resultado:</strong> Crecimiento de protestas</p>
+          </div>
+          <div id="cardCritico" class="caso-card caso-critico" onclick="seleccionarCaso('critico')">
+            <h4 style="color: #e74c3c;">🔥 Crisis Social</h4>
+            <p><strong>a (contagio):</strong> 0.016 (alto)</p>
+            <p><strong>c (diálogo):</strong> 0.0024 (muy bajo)</p>
+            <p><strong>Resultado:</strong> ¡Explosión de protestas!</p>
+          </div>
+        </div>
+        
+        <div class="parametro-actual" id="panelValoresActuales">
+          <i class="fas fa-chart-line"></i> <strong>Valores actuales del caso seleccionado:</strong><br>
+          📈 <strong>a (contagio):</strong> <span id="aActual" style="font-weight:800;">0.0040</span><br>
+          🔄 <strong>b (recuperación):</strong> <span id="bActual">0.15</span><br>
+          💬 <strong>c (diálogo):</strong> <span id="cActual" style="font-weight:800;">0.0120</span><br>
+          🏛️ <strong>k (reacción):</strong> <span id="kActual">0.45</span><br>
+          ⏳ <strong>r (desgaste):</strong> <span id="rActual">0.14</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 3: PARÁMETROS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-sliders-h"></i> PARTE 3: Parámetros de la simulación</h2>
+      </div>
+      <div class="card-body">
+        <div class="parametros-grid">
+          <div class="parametro-card"><label>👤 Neutrales iniciales (N₀)</label><input type="number" id="neutrales0" value="900" step="50"></div>
+          <div class="parametro-card"><label>✊ Manifestantes iniciales (M₀)</label><input type="number" id="manifestantes0" value="100" step="10"></div>
+          <div class="parametro-card"><label>🤝 Mediadores iniciales (D₀)</label><input type="number" id="mediadores0" value="50" step="10"></div>
+          <div class="parametro-card"><label>📅 Días a simular</label><input type="number" id="dias" value="50"></div>
+          <div class="parametro-card"><label>📏 Paso de tiempo (dt)</label><input type="number" id="dt" value="0.5" step="0.1"></div>
+        </div>
+        <div class="parametros-grid" style="margin-top: 0;">
+          <div class="parametro-card"><label>📈 Tasa influencia (a) - BASE</label><input type="number" id="a_base" value="0.008" step="0.001" readonly style="background:#f0eef7;"></div>
+          <div class="parametro-card"><label>🔄 Tasa recuperación (b) - BASE</label><input type="number" id="b_base" value="0.1" step="0.05" readonly style="background:#f0eef7;"></div>
+          <div class="parametro-card"><label>💬 Efectividad diálogo (c) - BASE</label><input type="number" id="c_base" value="0.008" step="0.001" readonly style="background:#f0eef7;"></div>
+          <div class="parametro-card"><label>🏛️ Reacción institucional (k) - BASE</label><input type="number" id="k_base" value="0.3" step="0.05" readonly style="background:#f0eef7;"></div>
+          <div class="parametro-card"><label>⏳ Desgaste mediadores (r) - BASE</label><input type="number" id="r_base" value="0.2" step="0.05" readonly style="background:#f0eef7;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 4: BOTONES DE MÉTODOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-code-branch"></i> PARTE 4: Métodos numéricos</h2>
+      </div>
+      <div class="card-body">
+        <p>Cada botón ejecuta la simulación con un método diferente:</p>
+        
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
+          <button id="btnEuler" class="metodo-btn-ejecutar btn-euler"><i class="fas fa-calculator"></i> Ejecutar Euler</button>
+          <button id="btnHeun" class="metodo-btn-ejecutar btn-heun"><i class="fas fa-chart-line"></i> Ejecutar Heun</button>
+          <button id="btnRK4" class="metodo-btn-ejecutar btn-rk4"><i class="fas fa-star"></i> Ejecutar RK4 (Recomendado)</button>
+        </div>
+
+        <div class="methods-grid" style="margin-top: 1rem;">
+          <a href="EULER/Eulerindex.html" class="method-link" target="_blank">
+            <div class="method-card"><div class="method-icon">1</div><h3>📐 Método de Euler</h3><p>Ver explicación detallada</p><span class="btn-method">Ver →</span></div>
+          </a>
+          <a href="HEUN/Heunindex.html" class="method-link" target="_blank">
+            <div class="method-card"><div class="method-icon">2</div><h3>📈 Método de Heun</h3><p>Ver explicación detallada</p><span class="btn-method">Ver →</span></div>
+          </a>
+          <a href="RK4/RK4index.html" class="method-link" target="_blank">
+            <div class="method-card"><div class="method-icon">3</div><h3>⭐ Método RK4</h3><p>Ver explicación detallada</p><span class="btn-method">Ver →</span></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 5: RESULTADOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-line"></i> PARTE 5: Resultados de la simulación</h2>
+      </div>
+      <div class="card-body">
+        <div id="resultadosContainer">
+          <div id="resultadoEuler" class="resultado-metodo" style="display: none;">
+            <h4><i class="fas fa-calculator"></i> Resultados con Euler</h4>
+            <div id="eulerResultado"></div>
+          </div>
+          <div id="resultadoHeun" class="resultado-metodo" style="display: none;">
+            <h4><i class="fas fa-chart-line"></i> Resultados con Heun</h4>
+            <div id="heunResultado"></div>
+          </div>
+          <div id="resultadoRK4" class="resultado-metodo" style="display: none; background: linear-gradient(135deg, #6b4e9e10, #8b6cc908);">
+            <h4><i class="fas fa-star"></i> Resultados con RK4 (Recomendado)</h4>
+            <div id="rk4Resultado"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 6: TABLA DE EVOLUCIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-table"></i> PARTE 6: Evolución día por día</h2>
+      </div>
+      <div class="card-body">
+        <div class="table-wrapper tabla-social">
+          <table id="tablaSocial">
+            <thead>
+              <tr><th>Día</th><th>Neutrales (N)</th><th>Manifestantes (M)</th><th>Mediadores (D)</th><th>Estado</th></tr>
+            </thead>
+            <tbody id="cuerpoTabla"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 7: GRÁFICA ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-area"></i> PARTE 7: Visualización de la evolución</h2>
+      </div>
+      <div class="card-body">
+        <div class="graph-container">
+          <canvas id="graficoSocial" style="max-height: 350px;"></canvas>
+        </div>
+        <p class="graph-note">📈 Línea azul: Neutrales | Línea roja: Manifestantes | Línea verde: Mediadores</p>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 8: INTERPRETACIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-line"></i> PARTE 8: Interpretación de resultados</h2>
+      </div>
+      <div class="card-body">
+        <div id="interpretacionFinal" class="interpretacion-contenido">
+          <p>Seleccione un caso y ejecute una simulación para ver la interpretación aquí.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Escenario G - Difusión de descontento social</strong> | Métodos: Euler (O(h)) | Heun (O(h²)) | RK4 (O(h⁴))</p>
+    <p>📌 Modelo: N' = -a·N·M + b·D | M' = a·N·M - c·M·D | D' = k·M - r·D</p>
+  </footer>
+
+  <script>
+    let chart = null;
+    let casoActual = "ideal";
+    let metodoActual = "rk4";
+    
+    // Valores base
+    const a_base = 0.008, b_base = 0.1, c_base = 0.008, k_base = 0.3, r_base = 0.2;
+    
+    // Valores por caso
+    const valoresCasos = {
+      ideal: { 
+        a: a_base * 0.5, b: b_base * 1.5, c: c_base * 1.5, k: k_base * 1.5, r: r_base * 0.7,
+        color: "#27ae60", nombre: "Calma",
+        descripcion: "Bajo contagio, alta efectividad del diálogo. El conflicto se controla."
+      },
+      moderado: { 
+        a: a_base * 1.2, b: b_base * 0.8, c: c_base * 0.7, k: k_base * 0.8, r: r_base * 1.2,
+        color: "#e67e22", nombre: "Tensión",
+        descripcion: "Contagio medio, diálogo limitado. El descontento crece."
+      },
+      critico: { 
+        a: a_base * 2, b: b_base * 0.5, c: c_base * 0.3, k: k_base * 0.4, r: r_base * 1.8,
+        color: "#e74c3c", nombre: "Crisis",
+        descripcion: "Alto contagio, diálogo inefectivo. ¡Explosión de protestas!"
+      }
+    };
+    
+    function seleccionarCaso(caso) {
+      casoActual = caso;
+      const valores = valoresCasos[caso];
+      
+      document.getElementById("cardIdeal").style.border = "2px solid transparent";
+      document.getElementById("cardModerado").style.border = "2px solid transparent";
+      document.getElementById("cardCritico").style.border = "2px solid transparent";
+      document.getElementById(`card${caso.charAt(0).toUpperCase() + caso.slice(1)}`).style.border = `2px solid ${valores.color}`;
+      
+      // Actualizar panel de valores
+      document.getElementById("aActual").innerHTML = valores.a.toFixed(4);
+      document.getElementById("aActual").style.color = valores.color;
+      document.getElementById("bActual").innerHTML = valores.b.toFixed(2);
+      document.getElementById("cActual").innerHTML = valores.c.toFixed(4);
+      document.getElementById("cActual").style.color = valores.color;
+      document.getElementById("kActual").innerHTML = valores.k.toFixed(2);
+      document.getElementById("rActual").innerHTML = valores.r.toFixed(2);
+      
+      const panel = document.getElementById("panelValoresActuales");
+      if (caso === "ideal") panel.style.borderLeftColor = "#27ae60";
+      else if (caso === "moderado") panel.style.borderLeftColor = "#e67e22";
+      else panel.style.borderLeftColor = "#e74c3c";
+      
+      ejecutarSimulacion();
+    }
+    
+    function ejecutarSimulacion() {
+      const N0 = parseFloat(document.getElementById("neutrales0").value);
+      const M0 = parseFloat(document.getElementById("manifestantes0").value);
+      const D0 = parseFloat(document.getElementById("mediadores0").value);
+      const dias = parseFloat(document.getElementById("dias").value);
+      const h = parseFloat(document.getElementById("dt").value);
+      const n = Math.ceil(dias / h);
+      
+      const valores = valoresCasos[casoActual];
+      
+      function sistema(y) {
+        let [N, M, D] = y;
+        let dNdt = -valores.a * N * M + valores.b * D;
+        let dMdt = valores.a * N * M - valores.c * M * D;
+        let dDdt = valores.k * M - valores.r * D;
+        return [dNdt, dMdt, dDdt];
+      }
+      
+      let t = Array(n + 1).fill(0);
+      let N_arr = Array(n + 1).fill(0);
+      let M_arr = Array(n + 1).fill(0);
+      let D_arr = Array(n + 1).fill(0);
+      
+      N_arr[0] = N0;
+      M_arr[0] = M0;
+      D_arr[0] = D0;
+      
+      for (let i = 0; i < n; i++) {
+        t[i + 1] = t[i] + h;
+        let y = [N_arr[i], M_arr[i], D_arr[i]];
+        
+        if (metodoActual === "euler") {
+          let deriv = sistema(y);
+          N_arr[i+1] = y[0] + h * deriv[0];
+          M_arr[i+1] = y[1] + h * deriv[1];
+          D_arr[i+1] = y[2] + h * deriv[2];
+        } else if (metodoActual === "heun") {
+          let k1 = sistema(y);
+          let y_pred = [y[0] + h*k1[0], y[1] + h*k1[1], y[2] + h*k1[2]];
+          let k2 = sistema(y_pred);
+          N_arr[i+1] = y[0] + (h/2)*(k1[0] + k2[0]);
+          M_arr[i+1] = y[1] + (h/2)*(k1[1] + k2[1]);
+          D_arr[i+1] = y[2] + (h/2)*(k1[2] + k2[2]);
+        } else {
+          let k1 = sistema(y);
+          let k2 = sistema([y[0] + (h/2)*k1[0], y[1] + (h/2)*k1[1], y[2] + (h/2)*k1[2]]);
+          let k3 = sistema([y[0] + (h/2)*k2[0], y[1] + (h/2)*k2[1], y[2] + (h/2)*k2[2]]);
+          let k4 = sistema([y[0] + h*k3[0], y[1] + h*k3[1], y[2] + h*k3[2]]);
+          N_arr[i+1] = y[0] + (h/6)*(k1[0] + 2*k2[0] + 2*k3[0] + k4[0]);
+          M_arr[i+1] = y[1] + (h/6)*(k1[1] + 2*k2[1] + 2*k3[1] + k4[1]);
+          D_arr[i+1] = y[2] + (h/6)*(k1[2] + 2*k2[2] + 2*k3[2] + k4[2]);
+        }
+        
+        if (N_arr[i+1] < 0) N_arr[i+1] = 0;
+        if (M_arr[i+1] < 0) M_arr[i+1] = 0;
+        if (D_arr[i+1] < 0) D_arr[i+1] = 0;
+      }
+      
+      let maxM = Math.max(...M_arr);
+      let diaMax = t[M_arr.indexOf(maxM)];
+      let estado = M_arr[n] < 10 ? "✅ ESTABLE" : (M_arr[n] < 50 ? "⚠️ CONTROLADO" : "🔴 CRÍTICO");
+      let estadoColor = M_arr[n] < 10 ? "#27ae60" : (M_arr[n] < 50 ? "#e67e22" : "#e74c3c");
+      
+      let metodoNombre = metodoActual === "euler" ? "Euler" : (metodoActual === "heun" ? "Heun" : "RK4");
+      
+      // Resultado HTML
+      let resultadoHtml = `
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
+          <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+            <div style="font-size:0.7rem;">👥 Neutrales finales</div>
+            <div style="font-size:1.5rem; font-weight:800; color:#4a3b7c;">${N_arr[n].toFixed(0)}</div>
+          </div>
+          <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+            <div style="font-size:0.7rem;">✊ Manifestantes finales</div>
+            <div style="font-size:1.5rem; font-weight:800; color:${estadoColor};">${M_arr[n].toFixed(0)}</div>
+          </div>
+          <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+            <div style="font-size:0.7rem;">🤝 Mediadores finales</div>
+            <div style="font-size:1.5rem; font-weight:800; color:#27ae60;">${D_arr[n].toFixed(0)}</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+          <div class="badge-info">📊 Máximo manifestantes: ${maxM.toFixed(0)} (día ${diaMax.toFixed(1)})</div>
+          <div class="badge-info" style="background: ${estadoColor}20; color: ${estadoColor};">${estado}</div>
+        </div>
+      `;
+      
+      document.getElementById(`${metodoActual}Resultado`).innerHTML = resultadoHtml;
+      document.getElementById(`resultado${metodoActual.charAt(0).toUpperCase() + metodoActual.slice(1)}`).style.display = "block";
+      
+      // Tabla
+      const paso = Math.max(1, Math.floor(n / 15));
+      let tablaHtml = "";
+      for (let i = 0; i <= n; i += paso) {
+        let estadoTexto = "";
+        if (M_arr[i] > 100) estadoTexto = "🔴 CRISIS";
+        else if (M_arr[i] > 50) estadoTexto = "⚠️ TENSIÓN";
+        else estadoTexto = "✅ CALMA";
+        
+        tablaHtml += `<tr>
+          <td style="text-align:center;">${t[i].toFixed(1)}</td>
+          <td style="text-align:center;">${N_arr[i].toFixed(0)}</td>
+          <td style="text-align:center; font-weight:${M_arr[i] === maxM ? 'bold' : 'normal'}; color:${M_arr[i] === maxM ? '#e74c3c' : '#3d3a4a'};">${M_arr[i].toFixed(0)}</td>
+          <td style="text-align:center;">${D_arr[i].toFixed(0)}</td>
+          <td style="text-align:center;">${estadoTexto}</td>
+        <tr>`;
+      }
+      document.getElementById("cuerpoTabla").innerHTML = tablaHtml;
+      
+      // Interpretación
+      let interpretacion = "";
+      if (casoActual === "ideal") {
+        interpretacion = `
+          <p><strong><i class="fas fa-chart-line"></i> Interpretación - Estado de Calma</strong></p>
+          <p>📊 <strong>Resultados:</strong> Manifestantes finales: <strong>${M_arr[n].toFixed(0)}</strong> | Máximo: ${maxM.toFixed(0)} personas</p>
+          <p>💡 <strong>¿Qué significa para Bolivia?</strong> En un estado de calma, el descontento social se mantiene bajo control. Las medidas de diálogo son efectivas y los manifestantes no crecen significativamente.</p>
+          <p>📌 <strong>Recomendación:</strong> Mantener los canales de diálogo abiertos. La situación es manejable.</p>
+        `;
+      } else if (casoActual === "moderado") {
+        interpretacion = `
+          <p><strong><i class="fas fa-chart-line"></i> Interpretación - Tensión Social</strong></p>
+          <p>📊 <strong>Resultados:</strong> Manifestantes finales: <strong>${M_arr[n].toFixed(0)}</strong> | Máximo: ${maxM.toFixed(0)} personas</p>
+          <p>💡 <strong>¿Qué significa para Bolivia?</strong> En un escenario de tensión social, el descontento crece significativamente. Las filas para combustible, los bloqueos y las protestas aumentan.</p>
+          <p>📌 <strong>Recomendación:</strong> ¡Se necesitan medidas urgentes! Mejorar los canales de diálogo y atender las demandas sociales para evitar la escalada.</p>
+        `;
+      } else {
+        interpretacion = `
+          <p><strong><i class="fas fa-chart-line"></i> Interpretación - Crisis Social</strong></p>
+          <p>📊 <strong>Resultados:</strong> Manifestantes finales: <strong>${M_arr[n].toFixed(0)}</strong> | Máximo: ${maxM.toFixed(0)} personas</p>
+          <p>💡 <strong>¿Qué significa para Bolivia?</strong> ¡ESTO ES UNA CRISIS SOCIAL! El descontento explota, las protestas se masifican. Bloqueos de caminos, paros y conflictos sociales generalizados.</p>
+          <p>📌 <strong>Recomendación:</strong> ¡ACCIONES INMEDIATAS! Diálogo nacional urgente, concesiones para calmar el descontento y mediación internacional si es necesario.</p>
+        `;
+      }
+      document.getElementById("interpretacionFinal").innerHTML = interpretacion;
+      
+      // Gráfica
+      if (chart) chart.destroy();
+      const ctx = document.getElementById("graficoSocial").getContext("2d");
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: t.map(v => v.toFixed(1)),
+          datasets: [
+            { label: '👥 Neutrales', data: N_arr, borderColor: '#4a3b7c', backgroundColor: 'transparent', borderWidth: 2, tension: 0.3 },
+            { label: '✊ Manifestantes', data: M_arr, borderColor: valores.color, backgroundColor: 'transparent', borderWidth: 3, tension: 0.3 },
+            { label: '🤝 Mediadores', data: D_arr, borderColor: '#27ae60', backgroundColor: 'transparent', borderWidth: 2, tension: 0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { labels: { color: '#4a3b7c' } } },
+          scales: { y: { beginAtZero: true, title: { text: 'Personas' } }, x: { title: { text: 'Días' } } }
+        }
+      });
+    }
+    
+    // Eventos
+    document.getElementById("btnEuler").addEventListener("click", () => { metodoActual = "euler"; ejecutarSimulacion(); });
+    document.getElementById("btnHeun").addEventListener("click", () => { metodoActual = "heun"; ejecutarSimulacion(); });
+    document.getElementById("btnRK4").addEventListener("click", () => { metodoActual = "rk4"; ejecutarSimulacion(); });
+    
+    document.getElementById("neutrales0").addEventListener("change", ejecutarSimulacion);
+    document.getElementById("manifestantes0").addEventListener("change", ejecutarSimulacion);
+    document.getElementById("mediadores0").addEventListener("change", ejecutarSimulacion);
+    document.getElementById("dias").addEventListener("change", ejecutarSimulacion);
+    document.getElementById("dt").addEventListener("change", ejecutarSimulacion);
+    
+    seleccionarCaso("ideal");
+    ejecutarSimulacion();
+  </script>
+</body>
+</html>

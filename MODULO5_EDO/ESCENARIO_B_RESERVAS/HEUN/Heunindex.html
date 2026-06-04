@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método de Heun - Explicación SÚPER DETALLADA</title>
+  <link rel="stylesheet" href="../../EDOstyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .explicacion-paso {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-left: 5px solid;
+    }
+    .paso-1 { border-left-color: #3498db; }
+    .paso-2 { border-left-color: #e67e22; }
+    .paso-3 { border-left-color: #27ae60; }
+    .paso-4 { border-left-color: #e74c3c; }
+    .paso-5 { border-left-color: #8b6cc9; }
+    
+    .formula-resaltada {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .comparacion-euler {
+      background: #f0eef7;
+      border-radius: 16px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .numero-grande {
+      font-size: 2rem;
+      font-weight: 800;
+      font-family: monospace;
+    }
+    .comparacion-casos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .caso-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    .caso-card:hover { transform: translateY(-5px); }
+    .caso-ideal { border-top: 4px solid #27ae60; }
+    .caso-moderado { border-top: 4px solid #e67e22; }
+    .caso-critico { border-top: 4px solid #e74c3c; }
+    .caso-seleccionado { box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+    
+    .tabla-heun {
+      font-size: 0.75rem;
+      max-height: 450px;
+      overflow-y: auto;
+    }
+    .tabla-heun th {
+      background: #4a3b7c;
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+    .resumen-final {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    .badge-info {
+      display: inline-block;
+      background: #3498db20;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+    .predictor {
+      background: #3498db10;
+      border-left: 3px solid #3498db;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+    }
+    .corrector {
+      background: #e67e2210;
+      border-left: 3px solid #e67e22;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Reservasindex.html" class="back-link">← Volver al escenario</a>
+      <span class="badge">Método de Heun | Error O(h²) | Predictor-Corrector</span>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">Método Numérico - Heun</p>
+      <h1>📈 Método de Heun</h1>
+      <p class="hero-subtitle">El método "Predictor-Corrector" para mayor precisión</p>
+      <div class="formula-box">
+        <strong>🎯 Objetivo:</strong> Calcular la reserva de combustible con MÁS PRECISIÓN que Euler
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== PARTE 1: ¿POR QUÉ MEJORAR EULER? ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-question-circle"></i> PARTE 1: ¿Por qué necesitamos un método mejor que Euler?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-1">
+          <h3 style="color: #3498db;"><i class="fas fa-exclamation-triangle"></i> El problema de Euler</h3>
+          <p>El método de Euler usa <strong>SOLO la pendiente al inicio</strong> del intervalo. Esto es como:</p>
+          <div class="comparacion-euler">
+            <p>🚗 <strong>Analogía:</strong> Imagina que manejas un auto. Si usas Euler, <strong>solo miras la velocidad al inicio de la hora</strong> y asumes que irás a esa velocidad toda la hora.</p>
+            <p>❌ <strong>Problema:</strong> Si durante la hora aceleras o frenas, ¡tu cálculo será incorrecto!</p>
+          </div>
+          <p>El método de Heun resuelve esto <strong>promediando la pendiente al inicio Y al final</strong> del intervalo.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 2: ¿CÓMO FUNCIONA HEUN? ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-calculator"></i> PARTE 2: ¿Cómo funciona el método de Heun?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-2">
+          <h3 style="color: #e67e22;"><i class="fas fa-chalkboard-teacher"></i> Predictor-Corrector: Un método en DOS pasos</h3>
+          
+          <div class="predictor">
+            <h4><i class="fas fa-eye"></i> PASO 1: PREDICTOR (Euler)</h4>
+            <p>Primero, hacemos una <strong>predicción</strong> usando el método de Euler:</p>
+            <div class="formula-resaltada" style="font-size: 1rem;">
+              R<sub>predicho</sub> = R<sub>actual</sub> + h × (entrada - consumo)
+            </div>
+            <p>Esto nos da un <strong>valor aproximado</strong> de la reserva mañana.</p>
+          </div>
+          
+          <div class="corrector">
+            <h4><i class="fas fa-edit"></i> PASO 2: CORRECTOR (Promedio)</h4>
+            <p>Luego, <strong>corregimos</strong> usando el PROMEDIO de las pendientes:</p>
+            <div class="formula-resaltada" style="font-size: 1rem;">
+              R<sub>corregido</sub> = R<sub>actual</sub> + h × (pendiente_inicial + pendiente_predicha) / 2
+            </div>
+            <p>¡Esto es como mirar la velocidad al inicio Y al final, y usar el promedio!</p>
+          </div>
+        </div>
+
+        <div class="explicacion-paso paso-3">
+          <h3 style="color: #27ae60;"><i class="fas fa-chart-line"></i> La fórmula completa de Heun</h3>
+          <div class="formula-resaltada" style="font-size: 1.2rem;">
+            Rₙ₊₁ = Rₙ + (h/2) × [ (entrada - consumo) + (entrada - consumo)<sub>predicho</sub> ]
+          </div>
+          <p>Donde <strong>(entrada - consumo)<sub>predicho</sub></strong> se calcula usando la reserva predecida.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 3: EJEMPLO PRÁCTICO ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-play-circle"></i> PARTE 3: Ejemplo práctico paso a paso</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-4">
+          <h3 style="color: #e74c3c;"><i class="fas fa-calculator"></i> Aprendamos con números reales</h3>
+          <p><strong>Datos:</strong> Reserva inicial = 10,000 litros | Consumo = 600 L/día | Entrada = 500 L/día | h = 1 día</p>
+          
+          <div style="background: #f0eef7; border-radius: 16px; padding: 1rem; margin: 1rem 0;">
+            <h4>📌 DÍA 0 → DÍA 1</h4>
+            <div class="predictor" style="margin: 0.5rem 0;">
+              <strong>PASO 1 (Predictor):</strong> R₁ₚ = 10,000 + 1 × (500 - 600) = 10,000 - 100 = <strong>9,900 litros</strong>
+            </div>
+            <div class="corrector">
+              <strong>PASO 2 (Corrector):</strong><br>
+              Pendiente inicial = 500 - 600 = -100<br>
+              Pendiente predicha = 500 - 600 = -100 (¡aquí es igual porque consumo y entrada son constantes!)<br>
+              Pendiente promedio = (-100 + -100) / 2 = <strong>-100</strong><br>
+              R₁ = 10,000 + 1 × (-100) = <strong>9,900 litros</strong>
+            </div>
+            <p>⚠️ <strong>Importante:</strong> Cuando la derivada es constante, Euler y Heun dan el MISMO resultado.</p>
+          </div>
+          
+          <div style="background: #f0eef7; border-radius: 16px; padding: 1rem; margin: 1rem 0;">
+            <h4>📌 ¿Cuándo Heun es MEJOR que Euler?</h4>
+            <p>Cuando la derivada <strong>NO es constante</strong> (por ejemplo, en el caso CRÍTICO con pánico). Allí Heun es mucho más preciso.</p>
+            <div class="predictor" style="margin: 0.5rem 0;">
+              <strong>Ejemplo con derivada variable:</strong><br>
+              Supongamos que la pendiente cambia de -100 a -200 durante el día.<br>
+              • Euler usaría SOLO -100 → resultado menos preciso<br>
+              • Heun promedia (-100 + -200)/2 = -150 → resultado MÁS PRECISO
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 4: COMPARACIÓN EULER VS HEUN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-balance-scale"></i> PARTE 4: Comparación: Euler vs Heun</h2>
+      </div>
+      <div class="card-body">
+        <div class="comparacion-euler">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="background: white; border-radius: 12px; padding: 1rem; text-align: center;">
+              <h3 style="color: #3498db;">📐 Euler</h3>
+              <p>Usa 1 pendiente (solo al inicio)</p>
+              <p><strong>Error:</strong> O(h) = 0.1</p>
+              <p>✅ Simple y rápido</p>
+              <p>❌ Menos preciso</p>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 1rem; text-align: center;">
+              <h3 style="color: #e67e22;">📈 Heun</h3>
+              <p>Usa 2 pendientes (inicio y final)</p>
+              <p><strong>Error:</strong> O(h²) = 0.01</p>
+              <p>✅ Más preciso</p>
+              <p>❌ Requiere 2 cálculos por paso</p>
+            </div>
+          </div>
+          <p style="text-align: center; margin-top: 1rem;"><strong>Heun es 10 VECES más preciso que Euler</strong> (0.01 vs 0.1)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 5: LOS 3 ESCENARIOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> PARTE 5: Los 3 escenarios de crisis que simularemos</h2>
+      </div>
+      <div class="card-body">
+        <div class="comparacion-casos">
+          <div id="cardIdeal" class="caso-card caso-ideal" onclick="seleccionarCaso('ideal')">
+            <h4 style="color: #27ae60;">📈 Caso Ideal</h4>
+            <p><strong>Consumo:</strong> 600 L/día</p>
+            <p><strong>Entrada:</strong> 500 L/día</p>
+            <p><strong>Pérdida diaria:</strong> 100 L/día</p>
+          </div>
+          <div id="cardModerado" class="caso-card caso-moderado" onclick="seleccionarCaso('moderado')">
+            <h4 style="color: #e67e22;">⚠️ Caso Moderado</h4>
+            <p><strong>Consumo:</strong> 900 L/día (+50%)</p>
+            <p><strong>Entrada:</strong> 350 L/día (-30%)</p>
+            <p><strong>Pérdida diaria:</strong> 550 L/día</p>
+          </div>
+          <div id="cardCritico" class="caso-card caso-critico" onclick="seleccionarCaso('critico')">
+            <h4 style="color: #e74c3c;">🔥 Caso Crítico</h4>
+            <p><strong>Consumo:</strong> 1200 L/día (+100%)</p>
+            <p><strong>Entrada:</strong> 250 L/día (-50%)</p>
+            <p><strong>Pérdida diaria:</strong> 950 L/día + pánico</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 6: PARÁMETROS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-sliders-h"></i> PARTE 6: Parámetros de la simulación</h2>
+      </div>
+      <div class="card-body">
+        <div class="parametros-grid">
+          <div class="parametro-card">
+            <label><i class="fas fa-database"></i> Reserva inicial (litros)</label>
+            <input type="number" id="reservaInicial" value="10000" step="500">
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-gas-pump"></i> Consumo (L/día)</label>
+            <input type="number" id="consumo" value="600" step="50" readonly style="background:#f0eef7;">
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-truck"></i> Entrada (L/día)</label>
+            <input type="number" id="entrada" value="500" step="50" readonly style="background:#f0eef7;">
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-brain"></i> Factor pánico (crítico)</label>
+            <input type="number" id="factorPanico" value="0.5" step="0.1" min="0" max="2">
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-calendar-day"></i> Días a simular</label>
+            <input type="number" id="dias" value="15">
+          </div>
+          <div class="parametro-card">
+            <label><i class="fas fa-ruler"></i> Paso de tiempo (días)</label>
+            <input type="number" id="dt" value="1" step="0.5">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 7: CÁLCULO DÍA POR DÍA CON HEUN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-table"></i> PARTE 7: Cálculo día por día con el método de Heun</h2>
+      </div>
+      <div class="card-body">
+        <p>El método de Heun realiza <strong>DOS pasos por cada día</strong>: primero predice, luego corrige.</p>
+        
+        <div class="table-wrapper tabla-heun">
+          <table id="tablaHeun">
+            <thead>
+              <tr>
+                <th>Día</th>
+                <th>Reserva (L)</th>
+                <th>Paso Predictor</th>
+                <th>Paso Corrector</th>
+                <th>Resultado Final</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoTablaHeun"></tbody>
+          </table>
+        </div>
+        <p class="graph-note">📌 Cada fila muestra el proceso de PREDICCIÓN y CORRECCIÓN del método de Heun</p>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 8: RESULTADOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-line"></i> PARTE 8: Resultados de la simulación</h2>
+      </div>
+      <div class="card-body">
+        <div id="resultadosSimulacion" class="resumen-final">
+          <p style="text-align: center;">Selecciona un caso para ver los resultados detallados</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 9: GRÁFICA ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-area"></i> PARTE 9: Visualización de la evolución</h2>
+      </div>
+      <div class="card-body">
+        <div class="graph-container">
+          <canvas id="graficoHeun" style="max-height: 350px;"></canvas>
+        </div>
+        <p class="graph-note">📈 La línea muestra cómo disminuye la reserva usando el método de Heun (más preciso que Euler)</p>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 10: CONCLUSIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-lightbulb"></i> PARTE 10: ¿Qué aprendimos sobre el método de Heun?</h2>
+      </div>
+      <div class="card-body">
+        <div class="comparison-summary">
+          <h3><i class="fas fa-graduation-cap"></i> Resumen del método de Heun</h3>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>✅ Es un método <strong>"Predictor-Corrector"</strong> en dos pasos</li>
+            <li>✅ Primero <strong>predice</strong> con Euler, luego <strong>corrige</strong> promediando pendientes</li>
+            <li>✅ Es <strong>10 veces más preciso</strong> que Euler (error O(h²) vs O(h))</li>
+            <li>✅ Es ideal cuando la derivada NO es constante (como en el caso crítico con pánico)</li>
+            <li>❌ Requiere el doble de cálculos que Euler (pero vale la pena por la precisión)</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>📌 ¿Cuándo usar Heun?</strong> Cuando necesitas <strong>buena precisión</strong> pero no quieres la complejidad de RK4. Es el <strong>mejor balance</strong> entre simplicidad y exactitud.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Método de Heun</strong> | Rₙ₊₁ = Rₙ + (h/2)[f(tₙ,Rₙ) + f(tₙ₊₁, Rₙ + h·f(tₙ,Rₙ))]</p>
+    <p>📌 Método Predictor-Corrector | Error O(h²) | 10 veces más preciso que Euler</p>
+  </footer>
+
+  <script>
+    let chart = null;
+    let casoActual = "ideal";
+    
+    const valoresCasos = {
+      ideal: { consumo: 600, entrada: 500, color: "#27ae60", nombre: "Ideal", perdidaDiaria: 100 },
+      moderado: { consumo: 900, entrada: 350, color: "#e67e22", nombre: "Moderado", perdidaDiaria: 550 },
+      critico: { consumo: 1200, entrada: 250, color: "#e74c3c", nombre: "Crítico", perdidaDiaria: 950 }
+    };
+    
+    function seleccionarCaso(caso) {
+      casoActual = caso;
+      
+      document.getElementById("cardIdeal").style.border = "2px solid transparent";
+      document.getElementById("cardModerado").style.border = "2px solid transparent";
+      document.getElementById("cardCritico").style.border = "2px solid transparent";
+      document.getElementById(`card${caso.charAt(0).toUpperCase() + caso.slice(1)}`).style.border = `2px solid ${valoresCasos[caso].color}`;
+      
+      document.getElementById("consumo").value = valoresCasos[caso].consumo;
+      document.getElementById("entrada").value = valoresCasos[caso].entrada;
+      
+      const color = valoresCasos[caso].color;
+      document.getElementById("consumo").style.color = color;
+      document.getElementById("entrada").style.color = color;
+      
+      calcularHeun();
+    }
+    
+    function calcularHeun() {
+      const R0 = parseFloat(document.getElementById("reservaInicial").value);
+      let consumo = parseFloat(document.getElementById("consumo").value);
+      let entrada = parseFloat(document.getElementById("entrada").value);
+      const factorPanico = parseFloat(document.getElementById("factorPanico").value);
+      const dias = parseFloat(document.getElementById("dias").value);
+      const h = parseFloat(document.getElementById("dt").value);
+      const n = Math.ceil(dias / h);
+      
+      const color = valoresCasos[casoActual].color;
+      const nombreCaso = valoresCasos[casoActual].nombre;
+      
+      let t = Array(n + 1).fill(0);
+      let R = Array(n + 1).fill(0);
+      R[0] = R0;
+      
+      function dRdt(reserva) {
+        let cons = consumo;
+        if (casoActual === "critico" && reserva < R0 * 0.5) {
+          cons = consumo * (1 + factorPanico);
+        }
+        return entrada - cons;
+      }
+      
+      // Almacenar resultados de predictor y corrector para la tabla
+      let predictorValues = Array(n + 1).fill(null);
+      let correctorValues = Array(n + 1).fill(null);
+      predictorValues[0] = R0;
+      
+      for (let i = 0; i < n; i++) {
+        t[i + 1] = t[i] + h;
+        
+        // Paso 1: Predictor (Euler)
+        let pendienteActual = dRdt(R[i]);
+        let R_predicho = R[i] + h * pendienteActual;
+        predictorValues[i + 1] = R_predicho;
+        
+        // Paso 2: Corrector (promedio de pendientes)
+        let pendientePredicha = dRdt(R_predicho);
+        let pendientePromedio = (pendienteActual + pendientePredicha) / 2;
+        R[i + 1] = R[i] + h * pendientePromedio;
+        correctorValues[i + 1] = R[i + 1];
+        
+        if (R[i + 1] < 0) R[i + 1] = 0;
+      }
+      
+      let diaCritico = null;
+      for (let i = 0; i <= n; i++) {
+        if (R[i] <= 0) {
+          diaCritico = t[i];
+          break;
+        }
+      }
+      
+      // Generar tabla
+      const tbody = document.getElementById("cuerpoTablaHeun");
+      tbody.innerHTML = "";
+      
+      for (let i = 0; i <= n; i++) {
+        let predictorShow = i === 0 ? "—" : `${predictorValues[i].toFixed(0)} L`;
+        let correctorShow = i === 0 ? "—" : `${correctorValues[i].toFixed(0)} L`;
+        let explicacionPredictor = "";
+        let explicacionCorrector = "";
+        
+        if (i > 0) {
+          let pendienteActual = entrada - consumo;
+          if (casoActual === "critico" && R[i-1] < R0 * 0.5) {
+            pendienteActual = entrada - consumo * (1 + factorPanico);
+          }
+          let pendientePredicha = entrada - consumo;
+          if (casoActual === "critico" && predictorValues[i] < R0 * 0.5) {
+            pendientePredicha = entrada - consumo * (1 + factorPanico);
+          }
+          
+          explicacionPredictor = `R${i-1} + h × (${pendienteActual.toFixed(0)}) = ${predictorValues[i].toFixed(0)}`;
+          explicacionCorrector = `R${i-1} + h × (${pendienteActual.toFixed(0)} + ${pendientePredicha.toFixed(0)})/2 = ${correctorValues[i].toFixed(0)}`;
+        }
+        
+        tbody.innerHTML += `<tr>
+          <td style="text-align:center; font-weight:bold;">${t[i].toFixed(1)}</td>
+          <td style="text-align:center; font-weight:bold; color:${color};">${R[i].toFixed(0)}</td>
+          <td style="text-align:left; font-size:0.7rem;">${explicacionPredictor}</td>
+          <td style="text-align:left; font-size:0.7rem;">${explicacionCorrector}</td>
+          <td style="text-align:center; font-weight:bold; color:${color};">${R[i].toFixed(0)} L</td>
+        </tr>`;
+      }
+      
+      // Resultados
+      const perdidaDiaria = consumo - entrada;
+      
+      let resultadosHtml = `
+        <div style="border-left: 4px solid ${color}; padding-left: 1rem;">
+          <h3 style="color: ${color};">📊 Resultados de la simulación con Heun - Caso ${nombreCaso}</h3>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+            <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+              <div style="font-size:0.7rem;">Reserva inicial</div>
+              <div class="numero-grande" style="font-size:1.5rem;">${R0.toFixed(0)}</div>
+              <div>litros</div>
+            </div>
+            <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+              <div style="font-size:0.7rem;">Reserva final</div>
+              <div class="numero-grande" style="font-size:1.5rem; color:${color};">${R[n].toFixed(0)}</div>
+              <div>litros</div>
+            </div>
+            <div style="text-align:center; background:white; border-radius:12px; padding:0.8rem;">
+              <div style="font-size:0.7rem;">Pérdida por día</div>
+              <div class="numero-grande" style="font-size:1.5rem;">${perdidaDiaria}</div>
+              <div>litros/día</div>
+            </div>
+          </div>
+          <p><strong>📌 ¿Qué significa esto?</strong></p>
+          <p>${casoActual === "ideal" ? "En situación normal, la reserva disminuye lentamente." : (casoActual === "moderado" ? "En crisis moderada, la reserva se agota rápidamente." : "¡EMERGENCIA! El combustible se agotará en días.")}</p>
+          ${diaCritico ? `<p><strong style="color:#e74c3c;">⚠️ DÍA CRÍTICO:</strong> La reserva se agotaría en <strong>${diaCritico.toFixed(1)} días</strong> según Heun.</p>` : '<p>✅ La reserva no llegó a cero.</p>'}
+          <p><strong>💡 Ventaja de Heun sobre Euler:</strong> Heun es más preciso porque promedia pendientes, especialmente útil cuando hay cambios bruscos (como el pánico en caso crítico).</p>
+        </div>
+      `;
+      
+      document.getElementById("resultadosSimulacion").innerHTML = resultadosHtml;
+      
+      // Gráfica
+      if (chart) chart.destroy();
+      const ctx = document.getElementById("graficoHeun").getContext("2d");
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: t.map(v => v.toFixed(1)),
+          datasets: [{
+            label: `Reserva - Método de Heun (Caso ${nombreCaso})`,
+            data: R,
+            borderColor: color,
+            backgroundColor: `${color}20`,
+            borderWidth: 3,
+            fill: true,
+            tension: 0.1,
+            pointRadius: 3,
+            pointBackgroundColor: color
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { labels: { color: '#4a3b7c' } },
+            tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(0)} litros` } }
+          },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: 'Litros de combustible', color: '#7a7596' } },
+            x: { title: { display: true, text: 'Días', color: '#7a7596' } }
+          }
+        }
+      });
+    }
+    
+    document.getElementById("reservaInicial").addEventListener("change", calcularHeun);
+    document.getElementById("factorPanico").addEventListener("change", calcularHeun);
+    document.getElementById("dias").addEventListener("change", calcularHeun);
+    document.getElementById("dt").addEventListener("change", calcularHeun);
+    
+    calcularHeun();
+  </script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método RK4 - Difusión de descontento social</title>
+  <link rel="stylesheet" href="../../EDOstyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .explicacion-paso {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-left: 5px solid;
+    }
+    .paso-1 { border-left-color: #3498db; }
+    .paso-2 { border-left-color: #e67e22; }
+    .paso-3 { border-left-color: #27ae60; }
+    .paso-4 { border-left-color: #e74c3c; }
+    .paso-5 { border-left-color: #8b6cc9; }
+    
+    .formula-resaltada {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .k-card {
+      background: #f0eef7;
+      border-radius: 12px;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+    }
+    .k1 { border-left: 4px solid #3498db; }
+    .k2 { border-left: 4px solid #e67e22; }
+    .k3 { border-left: 4px solid #27ae60; }
+    .k4 { border-left: 4px solid #e74c3c; }
+    
+    .comparacion-metodos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .metodo-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .badge-excelente {
+      background: #27ae6020;
+      color: #27ae60;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: inline-block;
+    }
+    .ejemplo-box {
+      background: #f0eef7;
+      border-radius: 16px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Socialindex.html" class="back-link">← Volver al escenario</a>
+      <span class="badge">Método RK4 - Difusión de descontento social | Error O(h⁴) ⭐ EL MÁS PRECISO</span>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">Método Numérico - Runge-Kutta 4</p>
+      <h1>⭐ Método de Runge-Kutta 4 (RK4)</h1>
+      <p class="hero-subtitle">El método más preciso para simular la dinámica social</p>
+      <div class="formula-box">
+        <strong>⭐ Fórmula:</strong> yₙ₊₁ = yₙ + (h/6)(k₁ + 2k₂ + 2k₃ + k₄)
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== PARTE 1: ¿POR QUÉ RK4? ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-question-circle"></i> PARTE 1: ¿Por qué necesitamos el método más preciso?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-1">
+          <h3 style="color: #3498db;"><i class="fas fa-chart-line"></i> La evolución de los métodos numéricos</h3>
+          
+          <div class="comparacion-metodos">
+            <div class="metodo-card">
+              <h4 style="color: #3498db;">📐 Euler</h4>
+              <p>1 pendiente</p>
+              <p><strong>Error:</strong> O(h)</p>
+              <p>Precisión: ⭐</p>
+              <p style="font-size:0.7rem;">Solo mira al inicio</p>
+            </div>
+            <div class="metodo-card">
+              <h4 style="color: #e67e22;">📈 Heun</h4>
+              <p>2 pendientes</p>
+              <p><strong>Error:</strong> O(h²)</p>
+              <p>Precisión: ⭐⭐</p>
+              <p style="font-size:0.7rem;">Promedia inicio y final</p>
+            </div>
+            <div class="metodo-card" style="background: #8b6cc910;">
+              <h4 style="color: #8b6cc9;">⭐ RK4</h4>
+              <p>4 pendientes</p>
+              <p><strong>Error:</strong> O(h⁴)</p>
+              <p>Precisión: ⭐⭐⭐⭐⭐</p>
+              <p style="font-size:0.7rem;">Promedia 4 puntos</p>
+            </div>
+          </div>
+          
+          <p><strong class="badge-excelente">RK4 es 10,000 VECES más preciso que Euler</strong> (para h=0.1, error de Euler ~0.1, error de RK4 ~0.0001)</p>
+          <p style="margin-top: 0.5rem;">En modelos sociales donde pequeños cambios pueden desencadenar crisis, ¡esta precisión es CRUCIAL!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 2: ¿CÓMO FUNCIONA RK4? ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-calculator"></i> PARTE 2: ¿Cómo funciona el método RK4?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-2">
+          <h3 style="color: #e67e22;"><i class="fas fa-chalkboard-teacher"></i> La idea: Calcular 4 pendientes en diferentes puntos</h3>
+          <p>RK4 calcula <strong>CUATRO pendientes</strong> en diferentes puntos del intervalo y las promedia con pesos específicos:</p>
+          
+          <div class="k-card k1">
+            <strong>📌 k₁</strong> = f(tₙ, Nₙ, Mₙ, Dₙ)<br>
+            <span style="font-size:0.8rem;">Pendiente al <strong>INICIO</strong> del intervalo</span>
+          </div>
+          <div class="k-card k2">
+            <strong>📌 k₂</strong> = f(tₙ + h/2, Nₙ + (h/2)·k₁_N, Mₙ + (h/2)·k₁_M, Dₙ + (h/2)·k₁_D)<br>
+            <span style="font-size:0.8rem;">Pendiente en el <strong>PUNTO MEDIO</strong> (usando k₁)</span>
+          </div>
+          <div class="k-card k3">
+            <strong>📌 k₃</strong> = f(tₙ + h/2, Nₙ + (h/2)·k₂_N, Mₙ + (h/2)·k₂_M, Dₙ + (h/2)·k₂_D)<br>
+            <span style="font-size:0.8rem;">Pendiente en el <strong>PUNTO MEDIO</strong> (usando k₂)</span>
+          </div>
+          <div class="k-card k4">
+            <strong>📌 k₄</strong> = f(tₙ + h, Nₙ + h·k₃_N, Mₙ + h·k₃_M, Dₙ + h·k₃_D)<br>
+            <span style="font-size:0.8rem;">Pendiente al <strong>FINAL</strong> del intervalo</span>
+          </div>
+        </div>
+
+        <div class="explicacion-paso paso-3">
+          <h3 style="color: #27ae60;"><i class="fas fa-chart-line"></i> La fórmula completa de RK4 para el modelo social</h3>
+          
+          <div class="formula-resaltada">
+            <strong>Para CADA una de las tres variables (N, M, D):</strong><br><br>
+            yₙ₊₁ = yₙ + (h/6) × (k₁ + 2k₂ + 2k₃ + k₄)
+          </div>
+          
+          <p>Los pesos son: <strong>1, 2, 2, 1</strong> - ¡da más peso a las pendientes del punto medio (k₂ y k₃)!</p>
+          
+          <div class="formula-resaltada" style="font-size: 0.8rem;">
+            <strong>Para Neutrales (N):</strong><br>
+            Nₙ₊₁ = Nₙ + (h/6) × (k₁_N + 2k₂_N + 2k₃_N + k₄_N)<br><br>
+            <strong>Para Manifestantes (M):</strong><br>
+            Mₙ₊₁ = Mₙ + (h/6) × (k₁_M + 2k₂_M + 2k₃_M + k₄_M)<br><br>
+            <strong>Para Mediadores (D):</strong><br>
+            Dₙ₊₁ = Dₙ + (h/6) × (k₁_D + 2k₂_D + 2k₃_D + k₄_D)
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 3: EJEMPLO PRÁCTICO ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-play-circle"></i> PARTE 3: Ejemplo práctico paso a paso</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-4">
+          <h3 style="color: #e74c3c;"><i class="fas fa-calculator"></i> Aprendamos con números reales</h3>
+          <p><strong>Datos de ejemplo:</strong></p>
+          <ul style="margin-left: 1.5rem;">
+            <li>Neutrales iniciales (N₀) = <strong>900 personas</strong></li>
+            <li>Manifestantes iniciales (M₀) = <strong>100 personas</strong></li>
+            <li>Mediadores iniciales (D₀) = <strong>50 personas</strong></li>
+            <li>Parámetros: a = 0.008, b = 0.1, c = 0.008, k = 0.3, r = 0.2</li>
+            <li>Paso de tiempo h = 1 día</li>
+          </ul>
+          
+          <div class="ejemplo-box">
+            <h4>📌 Función del sistema (para recordar):</h4>
+            <p>dN/dt = -a·N·M + b·D</p>
+            <p>dM/dt = a·N·M - c·M·D</p>
+            <p>dD/dt = k·M - r·D</p>
+          </div>
+          
+          <div class="ejemplo-box">
+            <h4>📌 PASO 1: Calculamos k₁ (pendiente al inicio)</h4>
+            <p><strong>k₁_N</strong> = -0.008×900×100 + 0.1×50 = -720 + 5 = <strong style="color:#e74c3c;">-715</strong></p>
+            <p><strong>k₁_M</strong> = 0.008×900×100 - 0.008×100×50 = 720 - 40 = <strong style="color:#e74c3c;">+680</strong></p>
+            <p><strong>k₁_D</strong> = 0.3×100 - 0.2×50 = 30 - 10 = <strong style="color:#27ae60;">+20</strong></p>
+          </div>
+          
+          <div class="ejemplo-box">
+            <h4>📌 PASO 2: Calculamos k₂ (pendiente en el punto medio, usando k₁)</h4>
+            <p><strong>Valores en el punto medio:</strong></p>
+            <p>N_mid = 900 + (1/2)×(-715) = 900 - 357.5 = <strong>542.5</strong></p>
+            <p>M_mid = 100 + (1/2)×(680) = 100 + 340 = <strong>440</strong></p>
+            <p>D_mid = 50 + (1/2)×(20) = 50 + 10 = <strong>60</strong></p>
+            
+            <p><strong>k₂_N</strong> = -0.008×542.5×440 + 0.1×60 = -1909.6 + 6 = <strong style="color:#e74c3c;">-1903.6</strong></p>
+            <p><strong>k₂_M</strong> = 0.008×542.5×440 - 0.008×440×60 = 1909.6 - 211.2 = <strong style="color:#e74c3c;">+1698.4</strong></p>
+            <p><strong>k₂_D</strong> = 0.3×440 - 0.2×60 = 132 - 12 = <strong style="color:#27ae60;">+120</strong></p>
+          </div>
+          
+          <div class="ejemplo-box">
+            <h4>📌 PASO 3: Calculamos k₃ (pendiente en el punto medio, usando k₂)</h4>
+            <p><strong>Valores en el punto medio (usando k₂):</strong></p>
+            <p>N_mid2 = 900 + (1/2)×(-1903.6) = 900 - 951.8 = <strong>-51.8 → 0</strong></p>
+            <p>M_mid2 = 100 + (1/2)×(1698.4) = 100 + 849.2 = <strong>949.2</strong></p>
+            <p>D_mid2 = 50 + (1/2)×(120) = 50 + 60 = <strong>110</strong></p>
+            
+            <p><strong>k₃_N</strong> = -0.008×0×949.2 + 0.1×110 = 0 + 11 = <strong style="color:#27ae60;">+11</strong></p>
+            <p><strong>k₃_M</strong> = 0.008×0×949.2 - 0.008×949.2×110 = 0 - 835.3 = <strong style="color:#e74c3c;">-835.3</strong></p>
+            <p><strong>k₃_D</strong> = 0.3×949.2 - 0.2×110 = 284.8 - 22 = <strong style="color:#27ae60;">+262.8</strong></p>
+          </div>
+          
+          <div class="ejemplo-box">
+            <h4>📌 PASO 4: Calculamos k₄ (pendiente al final, usando k₃)</h4>
+            <p><strong>Valores al final:</strong></p>
+            <p>N_end = 900 + 1×(+11) = <strong>911</strong></p>
+            <p>M_end = 100 + 1×(-835.3) = <strong>-735.3 → 0</strong></p>
+            <p>D_end = 50 + 1×(262.8) = <strong>312.8</strong></p>
+            
+            <p><strong>k₄_N</strong> = -0.008×911×0 + 0.1×312.8 = 0 + 31.3 = <strong style="color:#27ae60;">+31.3</strong></p>
+            <p><strong>k₄_M</strong> = 0.008×911×0 - 0.008×0×312.8 = 0 - 0 = <strong>0</strong></p>
+            <p><strong>k₄_D</strong> = 0.3×0 - 0.2×312.8 = 0 - 62.6 = <strong style="color:#e74c3c;">-62.6</strong></p>
+          </div>
+          
+          <div class="ejemplo-box">
+            <h4>📌 PASO 5: Aplicamos la fórmula RK4</h4>
+            <p><strong>Para Neutrales (N):</strong></p>
+            <p>N₁ = 900 + (1/6)×[(-715) + 2×(-1903.6) + 2×(11) + 31.3]</p>
+            <p>N₁ = 900 + (1/6)×[-715 - 3807.2 + 22 + 31.3] = 900 + (1/6)×[-4468.9] = 900 - 744.8 = <strong style="color:#e74c3c;">155.2 personas</strong></p>
+            
+            <p><strong>Para Manifestantes (M):</strong></p>
+            <p>M₁ = 100 + (1/6)×[680 + 2×(1698.4) + 2×(-835.3) + 0]</p>
+            <p>M₁ = 100 + (1/6)×[680 + 3396.8 - 1670.6 + 0] = 100 + (1/6)×[2406.2] = 100 + 401 = <strong style="color:#e74c3c;">501 personas</strong></p>
+            
+            <p><strong>Para Mediadores (D):</strong></p>
+            <p>D₁ = 50 + (1/6)×[20 + 2×(120) + 2×(262.8) + (-62.6)]</p>
+            <p>D₁ = 50 + (1/6)×[20 + 240 + 525.6 - 62.6] = 50 + (1/6)×[723] = 50 + 120.5 = <strong style="color:#27ae60;">170.5 personas</strong></p>
+          </div>
+          
+          <div class="ejemplo-box">
+            <h4>📌 Comparación: Euler vs Heun vs RK4</h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+              <div style="background: #3498db10; border-radius: 12px; padding: 0.5rem;">
+                <strong>📐 Euler</strong><br>
+                N₁ = 185<br>
+                M₁ = 780<br>
+                D₁ = 70
+              </div>
+              <div style="background: #e67e2210; border-radius: 12px; padding: 0.5rem;">
+                <strong>📈 Heun</strong><br>
+                N₁ = 0<br>
+                M₁ = 799<br>
+                D₁ = 170
+              </div>
+              <div style="background: #8b6cc910; border-radius: 12px; padding: 0.5rem;">
+                <strong>⭐ RK4</strong><br>
+                N₁ = 155<br>
+                M₁ = 501<br>
+                D₁ = 171
+              </div>
+            </div>
+            <p style="margin-top: 0.5rem;"><strong>RK4 da un resultado intermedio entre Euler y Heun, pero es el MÁS PRECISO</strong> porque promedia 4 pendientes en lugar de 1 o 2.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 4: COMPARACIÓN DE MÉTODOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-balance-scale"></i> PARTE 4: Comparación: Euler vs Heun vs RK4</h2>
+      </div>
+      <div class="card-body">
+        <div class="table-wrapper">
+          <table style="width: 100%;">
+            <thead>
+              <tr><th>Método</th><th>Pendientes</th><th>Fórmula</th><th>Error</th><th>Precisión</th><th>Velocidad</th></tr>
+            </thead>
+            <tbody>
+              <tr><td style="background: #3498db10;"><strong>Euler</strong></td>
+                <td>1</td>
+                <td style="font-size:0.7rem;">yₙ₊₁ = yₙ + h·f(tₙ,yₙ)</td>
+                <td>O(h)</td>
+                <td style="color:#e74c3c;">Baja</td>
+                <td>Rápida</td>
+              </tr>
+              <tr>
+                <td style="background: #e67e2210;"><strong>Heun</strong></td>
+                <td>2</td>
+                <td style="font-size:0.7rem;">yₙ₊₁ = yₙ + (h/2)[f(tₙ) + f(tₙ₊₁)]</td>
+                <td>O(h²)</td>
+                <td style="color:#e67e22;">Media</td>
+                <td>Media</td>
+              </tr>
+              <tr style="background: #8b6cc910;">
+                <td><strong>RK4 ⭐</strong></td>
+                <td>4</td>
+                <td style="font-size:0.7rem;">yₙ₊₁ = yₙ + (h/6)[k₁ + 2k₂ + 2k₃ + k₄]</td>
+                <td>O(h⁴)</td>
+                <td style="color:#27ae60;">Excelente</td>
+                <td>Lenta</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="comparison-summary" style="margin-top: 1rem;">
+          <strong><i class="fas fa-chart-line"></i> ¿Por qué RK4 es el MEJOR para este modelo?</strong><br>
+          El modelo de difusión social es <strong>altamente no lineal</strong> (tiene términos como N×M). Esto significa que pequeños errores se amplifican rápidamente. RK4, con su error O(h⁴), minimiza estos errores.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 5: LOS 3 ESCENARIOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> PARTE 5: Los 3 escenarios de crisis social</h2>
+      </div>
+      <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+          <div style="background: white; border-radius: 16px; padding: 1rem; text-align: center; border-top: 4px solid #27ae60;">
+            <h4 style="color: #27ae60;">📈 Estado de Calma</h4>
+            <p><strong>a = 0.004</strong> (bajo contagio)</p>
+            <p><strong>c = 0.012</strong> (diálogo efectivo)</p>
+            <p><strong>k = 0.45</strong> (reacción rápida)</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">El conflicto se controla</p>
+          </div>
+          <div style="background: white; border-radius: 16px; padding: 1rem; text-align: center; border-top: 4px solid #e67e22;">
+            <h4 style="color: #e67e22;">⚠️ Tensión Social</h4>
+            <p><strong>a = 0.0096</strong> (contagio medio)</p>
+            <p><strong>c = 0.0056</strong> (diálogo limitado)</p>
+            <p><strong>k = 0.24</strong> (reacción lenta)</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">Las protestas crecen</p>
+          </div>
+          <div style="background: white; border-radius: 16px; padding: 1rem; text-align: center; border-top: 4px solid #e74c3c;">
+            <h4 style="color: #e74c3c;">🔥 Crisis Social</h4>
+            <p><strong>a = 0.016</strong> (alto contagio)</p>
+            <p><strong>c = 0.0024</strong> (diálogo inefectivo)</p>
+            <p><strong>k = 0.12</strong> (reacción muy lenta)</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">¡Explosión de protestas!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 6: VENTAJAS Y DESVENTAJAS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-balance-scale"></i> PARTE 6: Ventajas y desventajas de RK4</h2>
+      </div>
+      <div class="card-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div style="background: #27ae6010; border-radius: 16px; padding: 1rem; border-left: 4px solid #27ae60;">
+            <h3 style="color: #27ae60;"><i class="fas fa-check-circle"></i> Ventajas</h3>
+            <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+              <li>✅ <strong>Máxima precisión</strong> (error O(h⁴))</li>
+              <li>✅ <strong>10,000 veces más preciso</strong> que Euler</li>
+              <li>✅ Ideal para modelos <strong>no lineales</strong> como la difusión social</li>
+              <li>✅ Es el <strong>estándar en ingeniería y ciencias</strong></li>
+              <li>✅ Captura perfectamente los <strong>cambios bruscos</strong></li>
+            </ul>
+          </div>
+          <div style="background: #e74c3c10; border-radius: 16px; padding: 1rem; border-left: 4px solid #e74c3c;">
+            <h3 style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Desventajas</h3>
+            <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+              <li>❌ Requiere <strong>4 evaluaciones por paso</strong> (más costoso)</li>
+              <li>❌ Más complejo de implementar</li>
+              <li>❌ Puede ser más lento para simulaciones largas</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 7: CONCLUSIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-graduation-cap"></i> PARTE 7: ¿Qué aprendimos?</h2>
+      </div>
+      <div class="card-body">
+        <div class="comparison-summary">
+          <h3><i class="fas fa-lightbulb"></i> Resumen del método RK4 aplicado a la difusión social</h3>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>✅ RK4 calcula <strong>4 pendientes</strong> en diferentes puntos del intervalo</li>
+            <li>✅ Usa pesos <strong>1, 2, 2, 1</strong> para dar más importancia al punto medio</li>
+            <li>✅ Es <strong>10,000 veces más preciso</strong> que Euler (para h=0.1)</li>
+            <li>✅ Captura perfectamente los <strong>cambios bruscos</strong> en la dinámica social</li>
+            <li>✅ Es el <strong>estándar en ingeniería</strong> para simulaciones críticas</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>📌 RECOMENDACIÓN FINAL:</strong> Para este modelo de difusión social, <strong>USA RK4</strong> - la precisión extra vale la pena, especialmente en escenarios de crisis donde cada punto porcentual en la predicción de manifestantes puede significar la diferencia entre calma y caos social.</p>
+          <div class="badge-excelente" style="display: block; text-align: center; margin-top: 1rem;">
+            ⭐ RK4 es el método RECOMENDADO para este proyecto ⭐
+          </div>
+          <p style="text-align: center; margin-top: 1rem;">
+            Para volver al escenario principal y probar los métodos, <a href="../Socialindex.html" style="color: #6b4e9e; font-weight: bold;">haz clic aquí</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Método de Runge-Kutta 4 (RK4) - Difusión de descontento social</strong> | Error O(h⁴) ⭐</p>
+    <p>📌 Fórmula: yₙ₊₁ = yₙ + (h/6)(k₁ + 2k₂ + 2k₃ + k₄) | El método más preciso</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+/* ==================== ESTILOS BASE ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(135deg, #f0eef7 0%, #e8e4f0 100%);
+  color: #2d2a3e;
+  line-height: 1.5;
+}
+
+/* Header */
+.hero {
+  background: linear-gradient(135deg, #4a3b7c 0%, #6b4e9e 50%, #8b6cc9 100%);
+  padding: 2rem 2rem 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.navbar {
+  max-width: 1300px;
+  margin: 0 auto 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.back-link {
+  color: #c9b6ff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.back-link:hover { color: #e0d4ff; }
+
+.badge {
+  background: linear-gradient(135deg, #9b7bdc, #7c5cb8);
+  padding: 0.4rem 1rem;
+  border-radius: 40px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+}
+
+.hero-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.75rem;
+  color: #c9b6ff;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ffffff, #e0d4ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: #e0d4ff;
+  margin-bottom: 1.5rem;
+}
+
+.formula-box {
+  background: rgba(155, 123, 220, 0.25);
+  border-left: 3px solid #c9b6ff;
+  padding: 0.8rem 1.2rem;
+  display: inline-block;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+/* Container */
+.container {
+  max-width: 1300px;
+  margin: -2rem auto 3rem;
+  padding: 0 1.5rem;
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 24px;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(107, 78, 158, 0.15);
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(74, 59, 124, 0.08);
+}
+
+.card-header {
+  padding: 1.2rem 1.8rem;
+  border-bottom: 1px solid rgba(107, 78, 158, 0.1);
+  background: linear-gradient(135deg, rgba(107, 78, 158, 0.03), rgba(139, 108, 201, 0.05));
+}
+
+.card-header h2 {
+  color: #4a3b7c;
+  font-size: 1.4rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Variables */
+.variables-explicacion {
+  background: rgba(107, 78, 158, 0.06);
+  border-radius: 20px;
+  padding: 1.2rem;
+  margin-top: 1rem;
+}
+
+.variables-explicacion h4 {
+  margin: 0 0 0.5rem 0;
+  color: #4a3b7c;
+}
+
+.variable-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.8rem;
+}
+
+.variable-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  background: white;
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: 1px solid rgba(107, 78, 158, 0.1);
+}
+
+.var-simbolo {
+  background: linear-gradient(135deg, #6b4e9e, #8b6cc9);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: white;
+  min-width: 45px;
+  text-align: center;
+}
+
+.var-info strong { color: #4a3b7c; }
+.var-info p { font-size: 0.8rem; color: #7a7596; margin-top: 0.2rem; }
+
+/* Model box */
+.model-box {
+  background: #e8e0f8;
+  padding: 1rem;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.model-formula {
+  font-family: monospace;
+  font-size: 1.1rem;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: inline-block;
+  margin: 0.5rem 0;
+}
+
+/* Parámetros */
+.parametros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.parametro-card {
+  background: rgba(107, 78, 158, 0.04);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(107, 78, 158, 0.1);
+}
+
+.parametro-card label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b4e9e;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+}
+
+.parametro-card input {
+  width: 100%;
+  background: white;
+  border: 1px solid rgba(107, 78, 158, 0.2);
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-family: monospace;
+}
+
+/* Methods grid */
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.method-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.method-card {
+  background: rgba(107, 78, 158, 0.04);
+  padding: 1.5rem;
+  border-radius: 20px;
+  transition: 0.3s;
+  text-align: center;
+  border: 1px solid rgba(107, 78, 158, 0.08);
+}
+
+.method-card:hover {
+  transform: translateY(-5px);
+  background: rgba(107, 78, 158, 0.1);
+  box-shadow: 0 10px 24px rgba(107, 78, 158, 0.12);
+}
+
+.method-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #6b4e9e, #8b6cc9);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0 auto 1rem;
+  color: white;
+}
+
+.btn-method {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #6b4e9e;
+  font-weight: 700;
+}
+
+/* Graph */
+.graph-container {
+  background: #f8f7fc;
+  border-radius: 16px;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 1px solid rgba(107, 78, 158, 0.1);
+}
+
+/* Comparison summary */
+.comparison-summary {
+  background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+  padding: 1rem;
+  border-radius: 16px;
+  border-left: 4px solid #8b6cc9;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid rgba(107, 78, 158, 0.12);
+  font-size: 0.8rem;
+  color: #7a7596;
+  background: rgba(107, 78, 158, 0.02);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 1.8rem; }
+  .parametros-grid { grid-template-columns: 1fr; }
+  .methods-grid { grid-template-columns: 1fr; }
+  .comparacion-casos { grid-template-columns: 1fr; }
+}

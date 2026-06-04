@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método de Euler - Difusión de descontento social</title>
+  <link rel="stylesheet" href="../../EDOstyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .explicacion-paso {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-left: 5px solid;
+    }
+    .paso-1 { border-left-color: #3498db; }
+    .paso-2 { border-left-color: #e67e22; }
+    .paso-3 { border-left-color: #27ae60; }
+    .paso-4 { border-left-color: #e74c3c; }
+    
+    .formula-resaltada {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 1rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .formula-math {
+      font-family: monospace;
+      background: #f0eef7;
+      padding: 0.5rem;
+      border-radius: 8px;
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+    .badge-info {
+      display: inline-block;
+      background: #3498db20;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+    .ejemplo-box {
+      background: #f0eef7;
+      border-radius: 16px;
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+    .ventaja { color: #27ae60; }
+    .desventaja { color: #e74c3c; }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../Socialindex.html" class="back-link">← Volver al escenario</a>
+      <span class="badge">Método de Euler - Difusión de descontento social | Error O(h)</span>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">Método Numérico - Euler</p>
+      <h1>📐 Método de Euler</h1>
+      <p class="hero-subtitle">Aplicado al modelo de difusión de descontento social</p>
+      <div class="formula-box">
+        <strong>📐 Fórmula aplicada:</strong> Nₙ₊₁ = Nₙ + h·(-a·Nₙ·Mₙ + b·Dₙ)
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== PARTE 1: EL MODELO SOCIAL ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-question-circle"></i> PARTE 1: ¿Qué estamos simulando?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-1">
+          <h3 style="color: #3498db;"><i class="fas fa-users"></i> El modelo de difusión de descontento social</h3>
+          <p>Este modelo representa cómo se propaga el descontento en una sociedad. Divide a la población en <strong>TRES grupos</strong> que interactúan entre sí:</p>
+          
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+            <div style="background: white; border-radius: 12px; padding: 1rem; text-align: center; border: 1px solid #4a3b7c20;">
+              <i class="fas fa-user-friends" style="font-size: 2rem; color: #4a3b7c;"></i>
+              <h4 style="color: #4a3b7c; margin: 0.5rem 0;">N(t)</h4>
+              <p><strong>Neutrales</strong></p>
+              <p style="font-size: 0.75rem;">Ciudadanos sin posición definida. Pueden convertirse en manifestantes.</p>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 1rem; text-align: center; border: 1px solid #e74c3c20;">
+              <i class="fas fa-fist-raised" style="font-size: 2rem; color: #e74c3c;"></i>
+              <h4 style="color: #e74c3c; margin: 0.5rem 0;">M(t)</h4>
+              <p><strong>Manifestantes</strong></p>
+              <p style="font-size: 0.75rem;">Ciudadanos activos en protestas. Son los que generan presión social.</p>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 1rem; text-align: center; border: 1px solid #27ae6020;">
+              <i class="fas fa-handshake" style="font-size: 2rem; color: #27ae60;"></i>
+              <h4 style="color: #27ae60; margin: 0.5rem 0;">D(t)</h4>
+              <p><strong>Mediadores</strong></p>
+              <p style="font-size: 0.75rem;">Actores que buscan diálogo y solución al conflicto.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="explicacion-paso paso-2">
+          <h3 style="color: #e67e22;"><i class="fas fa-chart-line"></i> Las 3 ecuaciones del modelo</h3>
+          
+          <div class="formula-resaltada">
+            <p><strong>📌 Ecuación 1: Cambio de Neutrales</strong></p>
+            <p style="font-size: 1.1rem;">dN/dt = <span style="color: #e74c3c;">-a·N·M</span> + <span style="color: #27ae60;">b·D</span></p>
+            <p style="font-size: 0.8rem; margin-top: 0.3rem;">
+              <span style="color: #e74c3c;">🔴 Término negativo</span>: Los neutrales se convierten en manifestantes (influencia social)<br>
+              <span style="color: #27ae60;">🟢 Término positivo</span>: Los mediadores recuperan neutrales (diálogo efectivo)
+            </p>
+          </div>
+          
+          <div class="formula-resaltada">
+            <p><strong>📌 Ecuación 2: Cambio de Manifestantes</strong></p>
+            <p style="font-size: 1.1rem;">dM/dt = <span style="color: #e74c3c;">+a·N·M</span> - <span style="color: #27ae60;">c·M·D</span></p>
+            <p style="font-size: 0.8rem; margin-top: 0.3rem;">
+              <span style="color: #e74c3c;">🔴 Término positivo</span>: Nuevos manifestantes por influencia social<br>
+              <span style="color: #27ae60;">🟢 Término negativo</span>: Manifestantes que se calman por el diálogo
+            </p>
+          </div>
+          
+          <div class="formula-resaltada">
+            <p><strong>📌 Ecuación 3: Cambio de Mediadores</strong></p>
+            <p style="font-size: 1.1rem;">dD/dt = <span style="color: #e67e22;">+k·M</span> - <span style="color: #e67e22;">r·D</span></p>
+            <p style="font-size: 0.8rem; margin-top: 0.3rem;">
+              <span style="color: #e67e22;">🟡 Término positivo</span>: Reacción institucional ante las protestas<br>
+              <span style="color: #e67e22;">🟡 Término negativo</span>: Desgaste natural de los mediadores
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 2: PARÁMETROS DEL MODELO ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-sliders-h"></i> PARTE 2: ¿Qué significa cada parámetro?</h2>
+      </div>
+      <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <div style="background: #f0eef7; border-radius: 12px; padding: 0.8rem;">
+            <h4 style="color: #e74c3c;">a</h4>
+            <p><strong>Tasa de influencia</strong></p>
+            <p style="font-size: 0.75rem;">Qué tan rápido se contagia el descontento. ¡Más grande = más protestas!</p>
+          </div>
+          <div style="background: #f0eef7; border-radius: 12px; padding: 0.8rem;">
+            <h4 style="color: #27ae60;">b</h4>
+            <p><strong>Tasa de recuperación</strong></p>
+            <p style="font-size: 0.75rem;">Qué tan rápido los mediadores calman a los neutrales.</p>
+          </div>
+          <div style="background: #f0eef7; border-radius: 12px; padding: 0.8rem;">
+            <h4 style="color: #27ae60;">c</h4>
+            <p><strong>Efectividad del diálogo</strong></p>
+            <p style="font-size: 0.75rem;">Capacidad de los mediadores para reducir protestas.</p>
+          </div>
+          <div style="background: #f0eef7; border-radius: 12px; padding: 0.8rem;">
+            <h4 style="color: #e67e22;">k</h4>
+            <p><strong>Reacción institucional</strong></p>
+            <p style="font-size: 0.75rem;">Qué tan rápido actúan los mediadores ante las protestas.</p>
+          </div>
+          <div style="background: #f0eef7; border-radius: 12px; padding: 0.8rem;">
+            <h4 style="color: #e67e22;">r</h4>
+            <p><strong>Desgaste de mediadores</strong></p>
+            <p style="font-size: 0.75rem;">Qué tan rápido pierden efectividad los mediadores.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 3: EL MÉTODO DE EULER ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-calculator"></i> PARTE 3: ¿Cómo aplicamos Euler a este modelo?</h2>
+      </div>
+      <div class="card-body">
+        <div class="explicacion-paso paso-3">
+          <h3 style="color: #27ae60;"><i class="fas fa-chalkboard-teacher"></i> La fórmula de Euler para TRES ecuaciones</h3>
+          <p>El método de Euler se aplica a CADA una de las tres ecuaciones:</p>
+          
+          <div class="formula-resaltada" style="font-size: 0.9rem;">
+            <strong>📌 Neutrales:</strong> Nₙ₊₁ = Nₙ + h × (-a·Nₙ·Mₙ + b·Dₙ)<br><br>
+            <strong>📌 Manifestantes:</strong> Mₙ₊₁ = Mₙ + h × (a·Nₙ·Mₙ - c·Mₙ·Dₙ)<br><br>
+            <strong>📌 Mediadores:</strong> Dₙ₊₁ = Dₙ + h × (k·Mₙ - r·Dₙ)
+          </div>
+          
+          <p><strong>¿Qué significa esto?</strong> Cada día, calculamos cómo cambian las tres poblaciones usando su tasa de cambio actual.</p>
+        </div>
+
+        <div class="explicacion-paso paso-4">
+          <h3 style="color: #e74c3c;"><i class="fas fa-play-circle"></i> Ejemplo práctico paso a paso</h3>
+          <p><strong>Datos de ejemplo:</strong></p>
+          <ul style="margin-left: 1.5rem;">
+            <li>Neutrales iniciales (N₀) = <strong>900 personas</strong></li>
+            <li>Manifestantes iniciales (M₀) = <strong>100 personas</strong></li>
+            <li>Mediadores iniciales (D₀) = <strong>50 personas</strong></li>
+            <li>Parámetros: a = 0.008, b = 0.1, c = 0.008, k = 0.3, r = 0.2</li>
+            <li>Paso de tiempo h = 1 día</li>
+          </ul>
+          
+          <div class="ejemplo-box">
+            <h4>📌 Calculamos las tasas de cambio:</h4>
+            <p><strong>dN/dt =</strong> -0.008 × 900 × 100 + 0.1 × 50 = <span style="color: #e74c3c;">-720</span> + <span style="color: #27ae60;">5</span> = <strong style="color: #e74c3c;">-715 personas/día</strong></p>
+            <p><strong>dM/dt =</strong> 0.008 × 900 × 100 - 0.008 × 100 × 50 = <span style="color: #e74c3c;">720</span> - <span style="color: #27ae60;">40</span> = <strong style="color: #e74c3c;">+680 personas/día</strong></p>
+            <p><strong>dD/dt =</strong> 0.3 × 100 - 0.2 × 50 = 30 - 10 = <strong style="color: #27ae60;">+20 personas/día</strong></p>
+          </div>
+          
+          <div class="ejemplo-box">
+            <h4>📌 Aplicamos Euler para el día siguiente:</h4>
+            <p><strong>N₁ =</strong> 900 + 1 × (-715) = <strong style="color: #e74c3c;">185 personas</strong> (¡los neutrales disminuyen drásticamente!)</p>
+            <p><strong>M₁ =</strong> 100 + 1 × (680) = <strong style="color: #e74c3c;">780 personas</strong> (¡los manifestantes aumentan muchísimo!)</p>
+            <p><strong>D₁ =</strong> 50 + 1 × (20) = <strong style="color: #27ae60;">70 personas</strong> (los mediadores aumentan un poco)</p>
+          </div>
+          
+          <div class="ejemplo-box">
+            <h4>📌 Interpretación de este resultado:</h4>
+            <p><strong>¡En un solo día, los manifestantes pasaron de 100 a 780!</strong> Esto muestra cómo el descontento puede crecer explosivamente si la tasa de influencia (a) es alta y la efectividad del diálogo (c) es baja.</p>
+            <p>Los neutrales (gente sin posición) se convierten rápidamente en manifestantes por influencia social.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 4: LOS 3 ESCENARIOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> PARTE 4: Los 3 escenarios de crisis social</h2>
+      </div>
+      <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+          <div style="background: white; border-radius: 16px; padding: 1rem; text-align: center; border-top: 4px solid #27ae60;">
+            <h4 style="color: #27ae60;">📈 Estado de Calma</h4>
+            <p><strong>a = 0.004</strong> (bajo contagio)</p>
+            <p><strong>c = 0.012</strong> (diálogo efectivo)</p>
+            <p><strong>k = 0.45</strong> (reacción rápida)</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">El descontento se controla</p>
+          </div>
+          <div style="background: white; border-radius: 16px; padding: 1rem; text-align: center; border-top: 4px solid #e67e22;">
+            <h4 style="color: #e67e22;">⚠️ Tensión Social</h4>
+            <p><strong>a = 0.0096</strong> (contagio medio)</p>
+            <p><strong>c = 0.0056</strong> (diálogo limitado)</p>
+            <p><strong>k = 0.24</strong> (reacción lenta)</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">Las protestas crecen</p>
+          </div>
+          <div style="background: white; border-radius: 16px; padding: 1rem; text-align: center; border-top: 4px solid #e74c3c;">
+            <h4 style="color: #e74c3c;">🔥 Crisis Social</h4>
+            <p><strong>a = 0.016</strong> (alto contagio)</p>
+            <p><strong>c = 0.0024</strong> (diálogo inefectivo)</p>
+            <p><strong>k = 0.12</strong> (reacción muy lenta)</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">¡Explosión de protestas!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 5: VENTAJAS Y DESVENTAJAS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-balance-scale"></i> PARTE 5: Ventajas y desventajas de Euler en este modelo</h2>
+      </div>
+      <div class="card-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div style="background: #27ae6010; border-radius: 16px; padding: 1rem; border-left: 4px solid #27ae60;">
+            <h3 class="ventaja"><i class="fas fa-check-circle"></i> Ventajas</h3>
+            <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+              <li>✅ Muy simple de implementar</li>
+              <li>✅ Fácil de entender conceptualmente</li>
+              <li>✅ Útil para prototipado rápido</li>
+              <li>✅ Permite ver la dirección del cambio</li>
+            </ul>
+          </div>
+          <div style="background: #e74c3c10; border-radius: 16px; padding: 1rem; border-left: 4px solid #e74c3c;">
+            <h3 class="desventaja"><i class="fas fa-times-circle"></i> Desventajas</h3>
+            <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+              <li>❌ Menos preciso que otros métodos</li>
+              <li>❌ Error O(h) - se acumula día a día</li>
+              <li>❌ Puede sobreestimar o subestimar el crecimiento</li>
+              <li>❌ Para decisiones críticas, usar RK4</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 6: COMPARACIÓN CON OTROS MÉTODOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-line"></i> PARTE 6: Comparación con otros métodos</h2>
+      </div>
+      <div class="card-body">
+        <div class="table-wrapper">
+          <table style="width: 100%;">
+            <thead>
+              <tr><th>Método</th><th>Pendientes</th><th>Error</th><th>Precisión</th><th>Velocidad</th><th>Recomendación</th></tr>
+            </thead>
+            <tbody>
+              <tr><td style="background: #3498db10;"><strong>Euler</strong></td><td>1</td><td>O(h)</td><td style="color:#e74c3c;">Baja</td><td>Rápida</td><td>Estimaciones iniciales</td></tr>
+              <tr><td style="background: #e67e2210;"><strong>Heun</strong></td><td>2</td><td>O(h²)</td><td style="color:#e67e22;">Media</td><td>Media</td><td>Buen balance</td></tr>
+              <tr style="background: #6b4e9e10;"><td><strong>RK4 ⭐</strong></td><td>4</td><td>O(h⁴)</td><td style="color:#27ae60;">Alta</td><td>Lenta</td><td><strong>Recomendado</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="comparison-summary" style="margin-top: 1rem;">
+          <strong><i class="fas fa-lightbulb"></i> ¿Por qué este modelo es sensible?</strong><br>
+          El modelo de difusión social tiene términos <strong>no lineales</strong> (N×M). Esto significa que pequeños cambios pueden tener grandes efectos. Euler, al usar solo una pendiente, puede acumular errores rápidamente.<br><br>
+          <strong>📌 Recomendación:</strong> Para este modelo, se recomienda usar <strong>RK4</strong> que es mucho más preciso y captura mejor la dinámica no lineal.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PARTE 7: CONCLUSIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-graduation-cap"></i> PARTE 7: ¿Qué aprendimos?</h2>
+      </div>
+      <div class="card-body">
+        <div class="comparison-summary">
+          <h3><i class="fas fa-lightbulb"></i> Resumen del método de Euler aplicado a la difusión social</h3>
+          <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>✅ Euler es <strong>simple y fácil de entender</strong></li>
+            <li>✅ Nos permite <strong>simular la evolución</strong> de neutrales, manifestantes y mediadores</li>
+            <li>✅ Podemos <strong>visualizar tendencias</strong> (¿el descontento crece o disminuye?)</li>
+            <li>❌ Pero es <strong>menos preciso</strong> debido al error O(h)</li>
+            <li>❌ En modelos <strong>no lineales</strong> como este, el error se acumula rápidamente</li>
+          </ul>
+          <p style="margin-top: 1rem;"><strong>📌 Conclusión final:</strong> Euler es útil para <strong>estimaciones rápidas y prototipado</strong>. Para simulaciones <strong>críticas</strong> donde se necesita precisión (como predecir el estallido de protestas), se recomienda usar <strong>RK4</strong>.</p>
+          <div class="badge-info" style="display: block; text-align: center; margin-top: 1rem;">
+            ⭐ Para volver al escenario principal y probar los métodos, <a href="../Socialindex.html" style="color: #6b4e9e;">haz clic aquí</a> ⭐
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Método de Euler - Difusión de descontento social</strong> | Error O(h)</p>
+    <p>📌 Fórmulas: Nₙ₊₁ = Nₙ + h·(-a·Nₙ·Mₙ + b·Dₙ) | Mₙ₊₁ = Mₙ + h·(a·Nₙ·Mₙ - c·Mₙ·Dₙ) | Dₙ₊₁ = Dₙ + h·(k·Mₙ - r·Dₙ)</p>
+  </footer>
+
+</body>
+</html>

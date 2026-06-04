@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 5 - Ecuaciones Diferenciales</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ==================== CSS COMPLETO ==================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #f0eef7 0%, #e8e4f0 100%);
+      color: #2d2a3e;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    .hero {
+      background: linear-gradient(135deg, #4a3b7c 0%, #6b4e9e 50%, #8b6cc9 100%);
+      padding: 2rem 2rem 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .navbar {
+      max-width: 1300px;
+      margin: 0 auto 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .back-link {
+      color: #c9b6ff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover { color: #e0d4ff; }
+
+    .badge {
+      background: linear-gradient(135deg, #9b7bdc, #7c5cb8);
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .hero-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 0.75rem;
+      color: #c9b6ff;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff, #e0d4ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: #e0d4ff;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-text {
+      font-size: 1rem;
+      color: #e0d4ff;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .formula-box {
+      background: rgba(155, 123, 220, 0.25);
+      border-left: 3px solid #c9b6ff;
+      padding: 0.8rem 1.2rem;
+      display: inline-block;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1300px;
+      margin: -2rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 24px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(107, 78, 158, 0.15);
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(74, 59, 124, 0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 28px rgba(74, 59, 124, 0.12);
+    }
+
+    .card-header {
+      padding: 1.2rem 1.8rem;
+      border-bottom: 1px solid rgba(107, 78, 158, 0.1);
+      background: linear-gradient(135deg, rgba(107, 78, 158, 0.03), rgba(139, 108, 201, 0.05));
+    }
+
+    .card-header h2 {
+      color: #4a3b7c;
+      font-size: 1.4rem;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* Grids */
+    .escenarios-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin: 1rem 0;
+    }
+
+    .escenario-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      border: 1px solid rgba(107,78,158,0.1);
+    }
+
+    .escenario-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 30px rgba(107,78,158,0.2);
+    }
+
+    .escenario-header-card {
+      padding: 1.5rem;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(107,78,158,0.05), rgba(139,108,201,0.03));
+    }
+
+    .escenario-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .escenario-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #4a3b7c;
+      margin-bottom: 0.5rem;
+    }
+
+    .escenario-subtitle {
+      font-size: 0.85rem;
+      color: #7a7596;
+    }
+
+    .escenario-body-card {
+      padding: 1.2rem 1.5rem 1.5rem;
+    }
+
+    .modelo-math {
+      font-family: monospace;
+      background: #f0eef7;
+      padding: 0.5rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+
+    .casos-lista {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+
+    .caso-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .caso-ideal { background: #27ae6020; color: #27ae60; }
+    .caso-moderado { background: #e67e2220; color: #e67e22; }
+    .caso-critico { background: #e74c3c20; color: #e74c3c; }
+
+    .metodos-grid-peq {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .metodo-badge {
+      background: rgba(107,78,158,0.1);
+      padding: 0.2rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #6b4e9e;
+    }
+
+    .btn-escenario {
+      display: inline-block;
+      background: linear-gradient(135deg, #6b4e9e, #8b6cc9);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: 0.3s;
+      text-align: center;
+      width: 100%;
+    }
+
+    .btn-escenario:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(107,78,158,0.3);
+    }
+
+    /* Tablas */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    th {
+      background: rgba(107, 78, 158, 0.12);
+      padding: 0.8rem;
+      text-align: center;
+      color: #4a3b7c;
+      font-weight: 700;
+    }
+
+    td {
+      padding: 0.6rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(107, 78, 158, 0.08);
+    }
+
+    /* Fórmulas */
+    .formulas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .formula-item {
+      background: rgba(107, 78, 158, 0.04);
+      padding: 1.2rem;
+      border-radius: 16px;
+      border: 1px solid rgba(107, 78, 158, 0.08);
+      transition: all 0.2s;
+    }
+
+    .formula-item:hover {
+      background: rgba(107, 78, 158, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .formula-item.destacado {
+      background: linear-gradient(135deg, rgba(107, 78, 158, 0.12), rgba(139, 108, 201, 0.08));
+      border: 1px solid #8b6cc9;
+    }
+
+    .formula-item h3 {
+      color: #4a3b7c;
+      margin-bottom: 0.8rem;
+      font-size: 1rem;
+    }
+
+    .formula-math {
+      font-family: monospace;
+      background: white;
+      padding: 0.5rem;
+      border-radius: 8px;
+      margin: 0.5rem 0;
+      font-size: 0.75rem;
+      overflow-x: auto;
+      color: #4a3b7c;
+    }
+
+    /* Comparación */
+    .comparison-summary {
+      background: linear-gradient(135deg, #f0ebff, #e8e0f8);
+      padding: 1rem;
+      border-radius: 16px;
+      margin-top: 1rem;
+      border-left: 4px solid #8b6cc9;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid rgba(107, 78, 158, 0.12);
+      font-size: 0.8rem;
+      color: #7a7596;
+      background: rgba(107, 78, 158, 0.02);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.8rem; }
+      .escenarios-container { grid-template-columns: 1fr; }
+      .formulas-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <nav class="navbar">
+      <a href="../index.html" class="back-link">← Volver al inicio</a>
+      <span class="badge">Módulo 5 - Ecuaciones Diferenciales</span>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">Desafío Final de Métodos Numéricos</p>
+      <h1>📈 Módulo 5: Ecuaciones Diferenciales</h1>
+      <p class="hero-subtitle">Simulación de fenómenos que cambian en el tiempo</p>
+      <div class="formula-box">
+        <strong>📐 Modelo general:</strong> dY/dt = f(t, Y) | Métodos: Euler · Heun · RK4
+      </div>
+      <p class="hero-text" style="margin-top: 1rem;">
+        Las ecuaciones diferenciales nos permiten modelar cómo evolucionan sistemas dinámicos: 
+        desde el vaciado de reservas de combustible hasta la propagación del descontento social.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== INTRODUCCIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-info-circle"></i> ¿Qué son las ecuaciones diferenciales y para qué sirven?</h2>
+      </div>
+      <div class="card-body">
+        <p>
+          Una <strong>ecuación diferencial</strong> es una ecuación que relaciona una función con sus derivadas. 
+          En términos prácticos, nos permite describir <strong>cómo cambia un sistema a lo largo del tiempo</strong>.
+        </p>
+        <p style="margin-top: 0.8rem;">
+          En este módulo aplicaremos estos métodos a <strong>dos problemas reales en Bolivia</strong>:
+        </p>
+        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+          <li><strong>⛽ Escenario B:</strong> ¿En cuántos días se agota el combustible en una planta si el consumo aumenta?</li>
+          <li><strong>👥 Escenario G:</strong> ¿Cómo se propaga el descontento social y cómo afectan los mediadores?</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== MÉTODOS NUMÉRICOS ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-code-branch"></i> Métodos numéricos que utilizaremos</h2>
+      </div>
+      <div class="card-body">
+        <p>Para resolver estas ecuaciones diferenciales, utilizaremos tres métodos numéricos con diferente precisión:</p>
+        
+        <div class="formulas-grid">
+          <div class="formula-item">
+            <h3><i class="fas fa-calculator"></i> Método de Euler</h3>
+            <p class="formula-math">yₙ₊₁ = yₙ + h·f(tₙ, yₙ)</p>
+            <p><strong>Error:</strong> O(h) - El más simple</p>
+            <small>Usa la pendiente al inicio del intervalo. Rápido pero menos preciso.</small>
+          </div>
+          <div class="formula-item">
+            <h3><i class="fas fa-chart-line"></i> Método de Heun</h3>
+            <p class="formula-math">yₙ₊₁ = yₙ + (h/2)[f(tₙ, yₙ) + f(tₙ₊₁, yₙ + h·f(tₙ, yₙ))]</p>
+            <p><strong>Error:</strong> O(h²) - Predictor-Corrector</p>
+            <small>Promedia pendientes al inicio y final. Mejor precisión.</small>
+          </div>
+          <div class="formula-item destacado">
+            <h3><i class="fas fa-star"></i> Método de Runge-Kutta 4 (RK4)</h3>
+            <p class="formula-math">yₙ₊₁ = yₙ + (h/6)[k₁ + 2k₂ + 2k₃ + k₄]</p>
+            <p><strong>Error:</strong> O(h⁴) - El más preciso</p>
+            <small>⭐ Recomendado para simulaciones críticas. Usado en ingeniería y ciencias.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== COMPARACIÓN DE PRECISIÓN ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-line"></i> Comparativa de precisión de los métodos</h2>
+      </div>
+      <div class="card-body">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Método</th><th>Fórmula</th><th>Error</th><th>Orden</th><th>Precisión</th><th>Uso recomendado</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Euler</strong></td><td><code>yₙ₊₁ = yₙ + h·f(tₙ, yₙ)</code></td><td>O(h)</td><td>1</td><td style="color:#e74c3c;">Baja</td><td>Estimaciones rápidas</td></tr>
+              <tr><td><strong>Heun</strong></td><td><code>yₙ₊₁ = yₙ + (h/2)[f(tₙ, yₙ) + f(tₙ₊₁, yₙ + h·f(tₙ, yₙ))]</code></td><td>O(h²)</td><td>2</td><td style="color:#e67e22;">Media</td><td>Buen balance</td></tr>
+              <tr style="background:rgba(107,78,158,0.05);"><td><strong>RK4 ⭐</strong></td><td><code>yₙ₊₁ = yₙ + (h/6)[k₁ + 2k₂ + 2k₃ + k₄]</code></td><td>O(h⁴)</td><td>4</td><td style="color:#27ae60;">Alta</td><td><strong>⭐ Recomendado</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="comparison-summary">
+          <strong><i class="fas fa-chart-line"></i> Conclusión:</strong> RK4 es el método más preciso (error O(h⁴)), seguido de Heun (O(h²)) y Euler (O(h)). 
+          Para simulaciones críticas como reservas de combustible o dinámica social, se recomienda usar <strong>RK4</strong>.
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ESCENARIOS DISPONIBLES ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-chart-simple"></i> Escenarios disponibles</h2>
+      </div>
+      <div class="card-body">
+        <p style="margin-bottom: 1.5rem;">Seleccione uno de los siguientes escenarios para explorar la simulación:</p>
+        
+        <div class="escenarios-container">
+          <!-- Escenario B: Reservas -->
+          <a href="ESCENARIO_B_RESERVAS/Reservasindex.html" class="escenario-card">
+            <div class="escenario-header-card">
+              <div class="escenario-icon"><i class="fas fa-gas-pump"></i></div>
+              <div class="escenario-title">⛽ Escenario B</div>
+              <div class="escenario-subtitle">Vaciado crítico de reservas de carburantes</div>
+            </div>
+            <div class="escenario-body-card">
+              <div class="modelo-math">dR/dt = entrada - consumo</div>
+              <p style="font-size: 0.8rem; margin: 0.5rem 0;">R(t) = reserva disponible (litros)</p>
+              <div class="casos-lista">
+                <span class="caso-badge caso-ideal">📈 Ideal (600 L/día | 500 L/día)</span>
+                <span class="caso-badge caso-moderado">⚠️ Moderado (900 L/día | 350 L/día)</span>
+                <span class="caso-badge caso-critico">🔥 Crítico (1200 L/día | 250 L/día + pánico)</span>
+              </div>
+              <div class="metodos-grid-peq">
+                <span class="metodo-badge">Euler</span>
+                <span class="metodo-badge">Heun</span>
+                <span class="metodo-badge">RK4 ⭐</span>
+              </div>
+              <div class="btn-escenario">Ver simulación →</div>
+            </div>
+          </a>
+
+          <!-- Escenario G: Difusión Social -->
+          <a href="ESCENARIO_G_SOCIAL/Socialindex.html" class="escenario-card">
+            <div class="escenario-header-card">
+              <div class="escenario-icon"><i class="fas fa-users"></i></div>
+              <div class="escenario-title">👥 Escenario G</div>
+              <div class="escenario-subtitle">Difusión de descontento social</div>
+            </div>
+            <div class="escenario-body-card">
+              <div class="modelo-math">dN/dt = -a·N·M + b·D<br>dM/dt = a·N·M - c·M·D<br>dD/dt = k·M - r·D</div>
+              <p style="font-size: 0.7rem; margin: 0.5rem 0;">N: Neutrales | M: Manifestantes | D: Mediadores</p>
+              <div class="casos-lista">
+                <span class="caso-badge caso-ideal">📈 Calma (a=0.004 | c=0.012)</span>
+                <span class="caso-badge caso-moderado">⚠️ Tensión (a=0.0096 | c=0.0056)</span>
+                <span class="caso-badge caso-critico">🔥 Crisis (a=0.016 | c=0.0024)</span>
+              </div>
+              <div class="metodos-grid-peq">
+                <span class="metodo-badge">Euler</span>
+                <span class="metodo-badge">Heun</span>
+                <span class="metodo-badge">RK4 ⭐</span>
+              </div>
+              <div class="btn-escenario">Ver simulación →</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== QUÉ ENCONTRARÁS EN CADA ESCENARIO ==================== -->
+    <section class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-folder-open"></i> ¿Qué encontrarás en cada página de escenario?</h2>
+      </div>
+      <div class="card-body">
+        <p>Al seleccionar un escenario, accederás a una página interactiva que incluye:</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <div style="background: rgba(107,78,158,0.05); border-radius: 16px; padding: 1rem;">
+            <i class="fas fa-sliders-h" style="color: #6b4e9e; font-size: 1.5rem; margin-bottom: 0.5rem; display: inline-block;"></i>
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">📊 Parámetros ajustables</h3>
+            <p style="font-size: 0.8rem;">Podrás modificar las variables del modelo (reserva inicial, consumo, entrada, etc.) y ver cómo cambian los resultados.</p>
+          </div>
+          <div style="background: rgba(107,78,158,0.05); border-radius: 16px; padding: 1rem;">
+            <i class="fas fa-chart-line" style="color: #6b4e9e; font-size: 1.5rem; margin-bottom: 0.5rem; display: inline-block;"></i>
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">📈 Gráficas interactivas</h3>
+            <p style="font-size: 0.8rem;">Visualiza la evolución de la reserva o de las poblaciones a lo largo del tiempo con gráficos dinámicos.</p>
+          </div>
+          <div style="background: rgba(107,78,158,0.05); border-radius: 16px; padding: 1rem;">
+            <i class="fas fa-table" style="color: #6b4e9e; font-size: 1.5rem; margin-bottom: 0.5rem; display: inline-block;"></i>
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">📋 Tablas de resultados</h3>
+            <p style="font-size: 0.8rem;">Consulta los valores paso a paso de la simulación para entender la evolución del sistema.</p>
+          </div>
+          <div style="background: rgba(107,78,158,0.05); border-radius: 16px; padding: 1rem;">
+            <i class="fas fa-code-branch" style="color: #6b4e9e; font-size: 1.5rem; margin-bottom: 0.5rem; display: inline-block;"></i>
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">🔍 Métodos individuales</h3>
+            <p style="font-size: 0.8rem;">Cada escenario tiene páginas dedicadas a Euler, Heun y RK4 con explicaciones paso a paso.</p>
+          </div>
+        </div>
+        
+        <div class="comparison-summary" style="margin-top: 1.5rem;">
+          <strong><i class="fas fa-info-circle"></i> Navegación sugerida:</strong> Explora primero el escenario, ajusta los parámetros, compara los resultados entre los 3 casos (Ideal/Moderado/Crítico), y luego visita las páginas de cada método para entender cómo funcionan internamente.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>Módulo 5 - Ecuaciones Diferenciales</strong> | Escenario B: Vaciado de reservas | Escenario G: Difusión social</p>
+    <p>Métodos: Euler (O(h)) | Heun (O(h²)) | RK4 (O(h⁴)) ⭐</p>
+    <p style="margin-top: 0.5rem;">📌 En cada escenario podrás simular 3 niveles de crisis y comparar los 3 métodos numéricos</p>
+  </footer>
+
+</body>
+</html>
