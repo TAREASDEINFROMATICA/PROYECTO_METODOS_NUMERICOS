@@ -18,7 +18,7 @@ const modulos = [
     escenarios: ["E"],
     descripcion:
       "Encuentra el punto critico donde el gasto, abastecimiento o reserva llega a un limite usando Biseccion, Newton-Raphson y Secante.",
-    responsable: "Persona 2 - Ronaldo Charca Condori",
+    responsable: "Ronaldo Charca Condori",
     ruta: "MODULO2_RAICES/Raicesindex.html",
     color: "#7c3aed",
     colorSuave: "rgba(124, 58, 237, 0.12)"
@@ -30,7 +30,7 @@ const modulos = [
     escenarios: ["C"],
     descripcion:
       "Estima precios faltantes de productos basicos usando datos dispersos del mes mediante Lagrange, Newton Interpolacion y Splines Cubicos.",
-    responsable: "Persona 2 - Ronaldo Charca Condori",
+    responsable: "Ronaldo Charca Condori",
     ruta: "MODULO3_INTERPOLACION/Interpolacionindex.html",
     color: "#10b981",
     colorSuave: "rgba(16, 185, 129, 0.12)"
@@ -42,7 +42,7 @@ const modulos = [
     escenarios: ["D"],
     descripcion:
       "Calcula costos acumulados y perdida del poder adquisitivo familiar mediante metodos de integracion numerica.",
-    responsable: "Persona 3 - Ericka Fabiola Barrionuevo Chavez",
+    responsable: "Ericka Fabiola Barrionuevo Chavez",
     ruta: "MODULO4_INTEGRACION_NUMERICA/Integracionindex.html",
     color: "#f59e0b",
     colorSuave: "rgba(245, 158, 11, 0.14)"
@@ -54,23 +54,23 @@ const modulos = [
     escenarios: ["B", "G"],
     descripcion:
       "Modela cambios en el tiempo, como vaciado de reservas, abastecimiento o difusion del descontento social.",
-    responsable: "Persona 3 - Ericka Fabiola Barrionuevo Chavez",
+    responsable: "Ericka Fabiola Barrionuevo Chavez",
     ruta: "MODULO5_EDO/EDOindex.html",
     color: "#ef4444",
     colorSuave: "rgba(239, 68, 68, 0.12)"
   },
   {
-    numero: 6,
-    titulo: "Sistemas de ecuaciones lineales mal condicionados",
-    etiqueta: "MODULO6_SISTEMAS_MAL_CONDICIONADOS",
-    escenarios: ["F"],
-    descripcion:
-      "Modela sistemas sensibles o mal condicionados donde pequenos cambios producen resultados muy diferentes.",
-    responsable: "Persona 1 - Casilla Rengel Paola Nathaly",
-    ruta: "MODULO6_SEE/index.html",
-    color: "#3f0606",
-    colorSuave: "rgba(108, 5, 5, 0.12)"
-  }
+  numero: 6,
+  titulo: "Sistemas mal condicionados",
+  etiqueta: "MODULO6_SEE",
+  escenarios: ["F"],
+  descripcion:
+    "Analiza sistemas sensibles donde pequenos cambios en los datos producen resultados muy diferentes.",
+  responsable: "Casilla Rengel Paola Nathaly",
+  ruta: "MODULO6_SEE/index.html",
+  color: "#7f1d1d",
+  colorSuave: "rgba(127, 29, 29, 0.12)"
+}
 ];
 
 const escenarios = [
